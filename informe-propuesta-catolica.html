@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta Estratégica — Universidad Católica de Colombia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+<style>
+:root {
+  --black:#0A0A0A; --white:#FFFFFF; --yellow:#FFC000; --yellow-light:#FFF8E1;
+  --gray-50:#F8F8F8; --gray-100:#F0F0F0; --gray-200:#E0E0E0;
+  --gray-400:#9E9E9E; --gray-600:#555555;
+  --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-xl:32px;
+  --red:#C0392B; --green:#1E7C43;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 28px 80px;display:flex;
+  flex-direction:column;gap:36px}
+
+.top{background:var(--black);border-radius:var(--radius-xl);padding:44px 44px 0;overflow:hidden}
+.eyebrow{font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;
+  letter-spacing:.16em;margin-bottom:14px}
+h1{font-size:40px;font-weight:900;color:var(--white);line-height:1.06;letter-spacing:-.02em;
+  max-width:22ch}
+.dek{font-size:13px;color:var(--gray-400);font-weight:300;margin-top:14px;max-width:74ch}
+.dek code{font-family:'Poppins',sans-serif;color:var(--yellow);font-weight:600}
+.dek b{color:rgba(255,255,255,.8);font-weight:600}
+.cifras{display:grid;grid-template-columns:repeat(5,1fr);
+  border-top:1px solid rgba(255,255,255,.08);margin:32px -44px 0}
+.cifra{padding:24px 22px;border-right:1px solid rgba(255,255,255,.07);
+  display:flex;flex-direction:column;gap:5px}
+.cifra:last-child{border-right:none}
+.cifra b{font-size:24px;font-weight:900;color:var(--white);line-height:1;letter-spacing:-.02em}
+.cifra span{font-size:9.5px;font-weight:600;color:var(--gray-400);text-transform:uppercase;
+  letter-spacing:.1em;order:-1}
+.cifra em{font-style:normal;font-size:11px;color:rgba(255,255,255,.35);font-weight:300}
+
+.copy{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  border-bottom:3px solid var(--yellow);padding:26px 28px}
+.copy .lbl{font-size:9.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+  color:#A07400;margin-bottom:11px}
+.copy h2{font-size:21px;font-weight:800;margin-bottom:11px;line-height:1.28}
+.copy p{font-size:13px;color:var(--gray-600);font-weight:300;margin-bottom:9px;max-width:70ch}
+.copy p:last-child{margin-bottom:0}
+
+.pend{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.p{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  border-bottom:3px solid var(--gray-200);padding:20px 22px}
+.p.alerta{background:var(--yellow-light);border-color:var(--yellow);
+  border-bottom-color:var(--yellow)}
+.p h4{font-size:14px;font-weight:800;margin-bottom:7px}
+.p p{font-size:12.5px;color:var(--gray-600);font-weight:300}
+.p.alerta p{color:#5E4A16}
+.p code{font-family:'Poppins',sans-serif;font-weight:600;color:var(--black);
+  background:var(--gray-100);padding:1px 6px;border-radius:4px;font-size:11.5px}
+
+h2.sec{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+.sec-n{font-size:13.5px;color:var(--gray-600);font-weight:300;max-width:82ch;margin-bottom:20px}
+
+.acc{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  border-bottom:3px solid var(--yellow);padding:24px 26px;margin-bottom:16px}
+.acc header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.acc h3{font-size:19px;font-weight:800;margin:0}
+.badge{display:inline-block;padding:4px 11px;border-radius:100px;font-size:9.5px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.b-ok,.b-ok-r{background:#E8F5EC;color:var(--green)}
+.b-med{background:var(--yellow-light);color:#A07400}
+.b-no{background:#FBEAE8;color:var(--red)}
+.pedido{font-size:11.5px;color:var(--gray-400);font-style:italic;margin:0 0 15px;
+  border-left:2px solid var(--gray-100);padding-left:12px;line-height:1.5}
+.acc dl{margin:0;display:grid;grid-template-columns:128px 1fr;gap:10px 20px}
+.acc dt{font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:#A07400;padding-top:3px}
+.acc dd{margin:0;font-size:12.5px;color:var(--gray-600);font-weight:300}
+.acc dd b{color:var(--black);font-weight:700}
+dd.ojo{background:var(--yellow-light);border-left:3px solid var(--yellow);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:13px 16px;color:#5E4A16}
+@media (max-width:700px){.acc dl{grid-template-columns:1fr;gap:3px 0}.acc dt{margin-top:11px}}
+
+.tw{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--black);color:var(--white);font-weight:700;font-size:9.5px;
+  text-transform:uppercase;letter-spacing:.07em;padding:13px 14px;text-align:left;white-space:nowrap}
+th.n,th.c-num{text-align:right}
+tr.grp th{background:#1C1C1C;color:var(--yellow);text-align:center;border-left:1px solid #333}
+td{padding:11px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
+tbody tr:last-child td{border-bottom:none}
+td.c-num,td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mes,td.c-prog{color:var(--black);font-weight:500}
+.prog{display:block;color:var(--black);font-weight:500;line-height:1.35}
+.cid,.fname{display:block;font-size:10px;color:var(--gray-400);margin-top:2px;font-weight:300}
+.tot,.fuerte{color:var(--black);font-weight:700}
+.of{color:var(--gray-400)}
+.bien{color:var(--green);font-weight:700}
+.mal{color:var(--red);font-weight:700}
+.med{color:#A07400;font-weight:700}
+.warnnum{display:block;font-size:10px;font-weight:600;color:var(--red)}
+.obj,.old{font-size:11px;color:var(--gray-400);font-weight:300}
+.fid{font-size:11px;color:#A07400;font-weight:600}
+.barra{width:100px;padding-right:16px}
+.barra span{display:block;height:6px;background:var(--yellow);border-radius:3px;min-width:2px}
+.barra span.s-bien{background:var(--green)}
+.barra span.s-med{background:var(--yellow)}
+.barra span.s-mal{background:var(--red)}
+.sup{display:block;font-size:10px;color:var(--gray-400);margin-top:3px;font-weight:300}
+.seg{display:inline-block;margin-right:8px;font-size:9px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 8px;border-radius:100px;vertical-align:2px}
+.seg-pregrado{background:#E8F5EC;color:var(--green)}
+.seg-posgrado{background:var(--yellow-light);color:#A07400}
+
+.grupo{margin-bottom:26px}
+.grupo-h{display:flex;align-items:baseline;gap:12px;padding-bottom:9px;
+  border-bottom:2px solid var(--black);margin-bottom:0}
+.grupo-h h3{font-size:16px;font-weight:800;margin:0}
+.grupo-n{font-size:11.5px;color:var(--gray-400);flex:1;font-weight:300}
+.grupo-c{font-size:11.5px;font-weight:700;color:var(--gray-400);font-variant-numeric:tabular-nums}
+.tag{display:inline-block;margin-top:5px;font-size:9px;font-weight:800;letter-spacing:.05em;
+  text-transform:uppercase;padding:3px 8px;border-radius:100px}
+.tag-fix{background:#E8F5EC;color:var(--green)}
+.tag-hold{background:var(--gray-100);color:var(--gray-400)}
+
+.dos{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+ul.lst{margin:0;padding-left:20px;color:var(--gray-600);font-size:13px;font-weight:300}
+ul.lst li{margin-bottom:10px}
+ul.lst b{color:var(--black);font-weight:700}
+.crm{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
+  border-bottom:3px solid var(--yellow);padding:22px 24px}
+.crm ol{margin:0;padding:0;list-style:none;columns:2;column-gap:32px}
+.crm li{padding:6px 0;border-bottom:1px solid var(--gray-100);break-inside:avoid}
+@media (max-width:720px){.crm ol{columns:1}.cifras{grid-template-columns:repeat(2,1fr)}}
+
+footer{border-top:1px solid var(--gray-200);padding-top:20px;color:var(--gray-400);
+  font-size:11px;font-weight:300}
+footer code{font-family:'Poppins',sans-serif;font-weight:600;color:var(--gray-600)}
+:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Universidad Católica de Colombia · Adcom · 03 de septiembre de 2026</div>
+  <h1>Estado de la propuesta estratégica</h1>
+  <p class="dek">Cronograma, estado actual y próximos pasos de las siete acciones contempladas,
+  con los indicadores del período <b>15 de febrero al 31 de agosto de 2026</b> medidos contra las
+  metas por programa de la fuente de datos. Cubre Meta Ads y Google Ads sobre datos leídos
+  directamente de cada plataforma. TikTok está configurado en la estructura de cuenta pero no
+  registró inversión en el período (0 COP, 0 conversiones). La programática, que tiene
+  presupuesto asignado en las metas, no se lee por API y queda fuera de este corte.</p>
+  <div class="cifras">
+    <div class="cifra"><b>20.664</b><span>Leads del período</span><em>90.6% de la meta</em></div>
+    <div class="cifra"><b>571.004.607</b><span>Inversión</span><em>103.2% del presupuesto</em></div>
+    <div class="cifra"><b>27.632</b><span>CPL del período</span><em>meta implícita 23.845</em></div>
+    <div class="cifra"><b>24.426</b><span>CPL agosto</span><em>desde 40.434 en julio</em></div>
+    <div class="cifra"><b>15%</b><span>Maestría vs su meta</span><em>195 de 1.165 leads</em></div>
+  </div>
+</header>
+
+<div>
+  <h2 class="sec">Las siete acciones</h2>
+  <p class="sec-n">El estado de cada una sale de auditar la cuenta, no de la planeación: audiencias
+  y su uso real en los conjuntos activos, antigüedad de los creativos al aire, estructura de
+  pruebas, y uso de las listas de remarketing.</p>
+<section class="acc">
+  <header>
+    <span class="badge b-med">Parcial</span>
+    <h3>Generación de demanda</h3>
+  </header>
+  <p class="pedido">Implementación de audiencias similares y estrategias de remarketing.</p>
+  <dl>
+    <dt>Cronograma</dt><dd>Audiencias construidas entre nov-2025 y ago-2026; despliegue pendiente.</dd>
+    <dt>Estado actual</dt><dd>La cuenta tiene <b>117 audiencias construidas</b>: 63 similares (lookalike), 31 personalizadas desde bases del CRM, 12 de interacción, 7 de sitio web y 4 de Instagram. La infraestructura está lista y bien alimentada — hay similares sembradas desde el píxel de registro completado, desde quienes abrieron el formulario y desde bases de admitidos e inscritos.</dd>
+    <dt>Brecha</dt><dd>Solo <b>5 de los 55 conjuntos de anuncios activos</b> usan alguna de esas audiencias. 40 de 55 segmentan únicamente por intereses y 10 van con segmentación amplia. El activo existe pero no está en circulación.</dd>
+    <dt>Próximos pasos</dt><dd>Desplegar las similares del píxel de registro completado en los programas de mayor volumen, empezando por los cinco de mejor CPL, con un conjunto paralelo al de intereses para poder comparar.</dd>
+  </dl>
+</section>
+<section class="acc">
+  <header>
+    <span class="badge b-med">Parcial</span>
+    <h3>Seguimiento de resultados</h3>
+  </header>
+  <p class="pedido">Reporte semanal de leads y CPL frente al objetivo establecido.</p>
+  <dl>
+    <dt>Cronograma</dt><dd>Serie semanal disponible desde jun-2026; entregable recurrente sin formalizar.</dd>
+    <dt>Estado actual</dt><dd>La serie de leads y CPL por semana está disponible y se incluye en este informe, junto con el avance contra la meta de cada uno de los 36 programas que tienen objetivo registrado. La cuenta tiene además alertas configuradas con canal propio.</dd>
+    <dt>Brecha</dt><dd>No existe un reporte semanal formalizado como entregable con fecha fija. El seguimiento se ha hecho por consulta puntual, no por cadencia, y por eso el desvío de programas como la maestría se detectó tarde en el vuelo.</dd>
+    <dt>Próximos pasos</dt><dd>Dejar el reporte semanal automatizado con corte los lunes: leads, CPL y avance contra meta por programa, con alerta cuando un programa baje del 70% de su ritmo.</dd>
+  </dl>
+</section>
+<section class="acc">
+  <header>
+    <span class="badge b-ok-r">Implementado, con reserva</span>
+    <h3>Optimización de creatividades</h3>
+  </header>
+  <p class="pedido">Rotación de piezas según su desempeño.</p>
+  <dl>
+    <dt>Cronograma</dt><dd>Rotación continua; último lote nuevo en ago-2026 (5 piezas).</dd>
+    <dt>Estado actual</dt><dd>Hay rotación real y sostenida: <b>139 anuncios activos</b> frente a <b>1.497 pausados o archivados</b> en la historia de la cuenta.</dd>
+    <dt>Brecha</dt><dd>La antigüedad de lo que está al aire es el problema: <b>61 de los 139 anuncios activos se crearon en diciembre de 2025</b> y solo 5 en agosto de 2026. Además 13 de las 42 campañas tienen un único anuncio activo, así que ahí no hay rotación posible. El desgaste ya se está midiendo: en la maestría el CPM de Meta subió de 8.163 a 11.961 (+47%) entre julio y agosto con el CTR plano en 0,60%.</dd>
+    <dt>Próximos pasos</dt><dd>Reemplazar las piezas con más de seis meses al aire en los programas de mayor inversión y llevar a mínimo dos anuncios activos por campaña.</dd>
+  </dl>
+</section>
+<section class="acc">
+  <header>
+    <span class="badge b-med">Parcial</span>
+    <h3>Pruebas A/B</h3>
+  </header>
+  <p class="pedido">Evaluación de copies y segmentaciones para identificar las combinaciones más eficientes.</p>
+  <dl>
+    <dt>Cronograma</dt><dd>Estructura pareada vigente; sin lectura estadística formal.</dd>
+    <dt>Estado actual</dt><dd>Hay una estructura de prueba deliberada y consistente: <b>12 campañas</b> corren con conjuntos pareados, <b>16 por intereses</b> contra <b>15 con Advantage+</b>, lo que permite comparar segmentación manual contra automática programa por programa.</dd>
+    <dt>Brecha</dt><dd>No hay <b>ninguna prueba A/B formal registrada</b> en la plataforma, así que las comparaciones no tienen control de reparto ni lectura de significancia. Y la prueba es de segmentación, no de copy: los textos no se están contrastando.</dd>
+    <dt>Próximos pasos</dt><dd>Formalizar como prueba A/B de plataforma la comparación intereses vs Advantage+ en tres programas, y abrir una prueba de copy sobre el mensaje que ya se unificó en los formularios de agosto.</dd>
+  </dl>
+</section>
+<section class="acc">
+  <header>
+    <span class="badge b-ok">Implementado</span>
+    <h3>Optimización de inversión</h3>
+  </header>
+  <p class="pedido">Concentración del presupuesto en las campañas con mejor desempeño.</p>
+  <dl>
+    <dt>Cronograma</dt><dd>Reencauzado el 18-ago; ajuste fino el 28-ago.</dd>
+    <dt>Estado actual</dt><dd>Agosto venía a un ritmo de 3,2 millones diarios, con proyección de cierre en 99,4 millones. Se reencauzó en dos pasos y cerró en <b>77,6 millones</b>. La maestría se separó en bolsa propia para que su gasto no consumiera el presupuesto del resto de la oferta. El CPL de la cuenta bajó de 40.434 en julio a <b>24.426 en agosto</b>.</dd>
+    <dt>Brecha</dt><dd>La concentración se hizo por pacing, no por desempeño: el ajuste fue proporcional para respetar la estructura vigente. La dispersión de CPL entre programas sigue siendo de 43 veces, de 1.710 a 73.995.</dd>
+    <dt>Próximos pasos</dt><dd>Redistribuir sobre el ranking de CPL en lugar de proporcionalmente, con un piso por programa para no apagar los de matrícula estratégica aunque su CPL sea alto.</dd>
+  </dl>
+</section>
+<section class="acc">
+  <header>
+    <span class="badge b-no">No implementado</span>
+    <h3>Retargeting</h3>
+  </header>
+  <p class="pedido">Acciones dirigidas a leads que aún no cuentan con una conversión confirmada.</p>
+  <dl>
+    <dt>Cronograma</dt><dd>Sin implementar a la fecha.</dd>
+    <dt>Estado actual</dt><dd>Las listas necesarias existen y están cargadas: base de remarketing del CRM, «personas que enviaron formularios», matriculados de pregrado y posgrado, y el público del píxel de registro completado a 180 días.</dd>
+    <dt>Brecha</dt><dd>Están operando <b>al revés de lo que pide la acción</b>: se usan como <b>exclusión en 27 conjuntos</b> activos, para no volver a pagar por quien ya convirtió. Eso es higiene de prospección y es correcto, pero no es retargeting. Solo <b>un conjunto activo</b> hace retargeting real.</dd>
+    <dt>Próximos pasos</dt><dd>Montar una campaña de retargeting sobre quienes abrieron el formulario y no lo enviaron, y sobre los leads que el CRM marque sin conversión confirmada. Lo segundo necesita que el cliente entregue ese segmento, porque el estado de la conversión vive en el CRM y no en la plataforma.</dd>
+  </dl>
+</section>
+  <section class="acc">
+    <header>
+      <span class="badge b-ok">Entregado</span>
+      <h3>Cierre de campaña</h3>
+    </header>
+    <p class="pedido">Reporte final con los resultados obtenidos frente a la meta establecida de 314 leads.</p>
+    <dl>
+      <dt>Resultado del período</dt><dd>Del 15 de febrero al 31 de agosto de 2026 la pauta en Meta y
+      Google generó <b>20.664 leads</b> con una inversión de
+      <b>571.004.607 COP</b> y un CPL de <b>27.632</b>. Frente a la meta
+      registrada de 22.798 leads para el período, eso es un
+      <b>90.6% de cumplimiento</b> con un
+      103.2% del presupuesto ejecutado.</dd>
+      <dt>Maestría en Gestión Económica</dt><dd>Su vuelo cerró el 3 de septiembre y las campañas
+      quedaron pausadas. Aportó <b>195 leads</b> con 10.644.536 de inversión y un
+      CPL de 54.531. Es el programa de menor cumplimiento del período: alcanzó el
+      <b>15%</b> de su meta registrada de 1.165 leads habiendo ejecutado el 66% de su presupuesto.</dd>
+      <dt>Sobre la meta citada</dt><dd class="ojo">La cifra de <b>314 leads</b> que
+      menciona la solicitud no corresponde a ninguna meta registrada en la hoja «Metas» de la fuente
+      de datos. Allí la maestría tiene <b>1.164,6 leads</b> y el período completo
+      <b>22.798</b>. Los objetivos por programa más cercanos a 314 son Economía
+      (312,5), Administración de Empresas (310,9) y Derecho Penal (310,8). <b>Necesitamos que se
+      confirme a qué alcance corresponde</b> para dejar el cierre cuadrado contra la referencia
+      contractual correcta; el resto del informe no depende de ese dato.</dd>
+      <dt>Próximos pasos</dt><dd>Devolver la puja de Google al objetivo de CPA de 50.000 antes de
+      reactivar la maestría, y renovar creativos en Meta antes de volver a escalar.</dd>
+    </dl>
+  </section>
+</div>
+
+<div>
+  <h2 class="sec">Avance por programa contra la meta</h2>
+  <p class="sec-n">Período 15 de febrero al 31 de agosto de 2026, los 36 programas con meta
+  registrada y ejecución. Inversión y leads de Meta y Google Ads; metas de la hoja «Metas» de la
+  fuente de datos, cruzadas por la hoja «Homologación». La barra llega al 100% en la mitad del
+  ancho, así que lo que la pasa está sobre meta.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Programa</th><th>Tipo</th><th class="n">Inversión</th><th class="n">Leads</th>
+      <th class="n">Meta</th><th class="n">Avance</th><th class="n">CPL</th><th>&nbsp;</th></tr></thead>
+      <tbody>
+<tr>
+  <td>Especializacion en Inteligencia Artificial y Derecho</td>
+  <td class="pl">Especializació</td>
+  <td class="n">21.632.386</td>
+  <td class="n">1.366</td>
+  <td class="n">409</td>
+  <td class="n bien">334%</td>
+  <td class="n">15.840</td>
+  <td class="barra"><span class="s-bien" style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Gobierno y Gestión del Desarrollo</td>
+  <td class="pl">Especializació</td>
+  <td class="n">16.719.884</td>
+  <td class="n">485</td>
+  <td class="n">170</td>
+  <td class="n bien">286%</td>
+  <td class="n">34.462</td>
+  <td class="barra"><span class="s-bien" style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td>Administracion de Empresas e Inteligencia de Negocio</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">24.128.209</td>
+  <td class="n">746</td>
+  <td class="n">311</td>
+  <td class="n bien">240%</td>
+  <td class="n">32.321</td>
+  <td class="barra"><span class="s-bien" style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td>Ingeniería Industrial</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">18.325.999</td>
+  <td class="n">471</td>
+  <td class="n">200</td>
+  <td class="n bien">236%</td>
+  <td class="n">38.937</td>
+  <td class="barra"><span class="s-bien" style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Ingeniería de Pavimentos</td>
+  <td class="pl">Especializació</td>
+  <td class="n">11.357.774</td>
+  <td class="n">256</td>
+  <td class="n">113</td>
+  <td class="n bien">226%</td>
+  <td class="n">44.450</td>
+  <td class="barra"><span class="s-bien" style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td>Ingeniería de Datos e Inteligencia Artificial</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">27.977.739</td>
+  <td class="n">1.081</td>
+  <td class="n">509</td>
+  <td class="n bien">212%</td>
+  <td class="n">25.880</td>
+  <td class="barra"><span class="s-bien" style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td>Doctorado en Psicología</td>
+  <td class="pl">Doctorado</td>
+  <td class="n">11.928.241</td>
+  <td class="n">236</td>
+  <td class="n">121</td>
+  <td class="n bien">195%</td>
+  <td class="n">50.487</td>
+  <td class="barra"><span class="s-bien" style="width:97.3%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Analítica de Datos</td>
+  <td class="pl">Especializació</td>
+  <td class="n">15.886.188</td>
+  <td class="n">1.107</td>
+  <td class="n">584</td>
+  <td class="n bien">190%</td>
+  <td class="n">14.350</td>
+  <td class="barra"><span class="s-bien" style="width:94.8%"></span></td>
+</tr>
+<tr>
+  <td>Economía</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">22.718.207</td>
+  <td class="n">557</td>
+  <td class="n">312</td>
+  <td class="n bien">178%</td>
+  <td class="n">40.771</td>
+  <td class="barra"><span class="s-bien" style="width:89.2%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Derecho Probatorio</td>
+  <td class="pl">Especializació</td>
+  <td class="n">11.365.034</td>
+  <td class="n">501</td>
+  <td class="n">284</td>
+  <td class="n bien">177%</td>
+  <td class="n">22.703</td>
+  <td class="barra"><span class="s-bien" style="width:88.3%"></span></td>
+</tr>
+<tr>
+  <td>Especializacion en Compliance y Derecho de los Negoc</td>
+  <td class="pl">Especializació</td>
+  <td class="n">18.527.711</td>
+  <td class="n">545</td>
+  <td class="n">310</td>
+  <td class="n bien">176%</td>
+  <td class="n">34.013</td>
+  <td class="barra"><span class="s-bien" style="width:88.0%"></span></td>
+</tr>
+<tr>
+  <td>Maestría en Derecho y Ciencias Políticas</td>
+  <td class="pl">Doctorado</td>
+  <td class="n">14.335.151</td>
+  <td class="n">627</td>
+  <td class="n">375</td>
+  <td class="n bien">167%</td>
+  <td class="n">22.862</td>
+  <td class="barra"><span class="s-bien" style="width:83.5%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en psicología de las Organizaciones</td>
+  <td class="pl">Especializació</td>
+  <td class="n">11.690.343</td>
+  <td class="n">264</td>
+  <td class="n">192</td>
+  <td class="n bien">138%</td>
+  <td class="n">44.269</td>
+  <td class="barra"><span class="s-bien" style="width:68.8%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Alta Gerencia Estratégica</td>
+  <td class="pl">Especializació</td>
+  <td class="n">13.234.736</td>
+  <td class="n">787</td>
+  <td class="n">589</td>
+  <td class="n bien">134%</td>
+  <td class="n">16.825</td>
+  <td class="barra"><span class="s-bien" style="width:66.8%"></span></td>
+</tr>
+<tr>
+  <td>Psicología</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">17.147.707</td>
+  <td class="n">998</td>
+  <td class="n">780</td>
+  <td class="n bien">128%</td>
+  <td class="n">17.190</td>
+  <td class="barra"><span class="s-bien" style="width:64.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Derecho Penal y Ciencias Forenses</td>
+  <td class="pl">Especializació</td>
+  <td class="n">16.687.690</td>
+  <td class="n">384</td>
+  <td class="n">311</td>
+  <td class="n bien">124%</td>
+  <td class="n">43.400</td>
+  <td class="barra"><span class="s-bien" style="width:61.9%"></span></td>
+</tr>
+<tr>
+  <td>Doctorado en Derecho</td>
+  <td class="pl">Doctorado</td>
+  <td class="n">11.311.594</td>
+  <td class="n">370</td>
+  <td class="n">303</td>
+  <td class="n bien">122%</td>
+  <td class="n">30.576</td>
+  <td class="barra"><span class="s-bien" style="width:61.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en psicología Jurídica y Criminológi</td>
+  <td class="pl">Especializació</td>
+  <td class="n">8.522.263</td>
+  <td class="n">271</td>
+  <td class="n">226</td>
+  <td class="n bien">120%</td>
+  <td class="n">31.484</td>
+  <td class="barra"><span class="s-bien" style="width:60.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en psicología Educativa</td>
+  <td class="pl">Especializació</td>
+  <td class="n">4.949.956</td>
+  <td class="n">234</td>
+  <td class="n">231</td>
+  <td class="n bien">101%</td>
+  <td class="n">21.154</td>
+  <td class="barra"><span class="s-bien" style="width:50.6%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Derecho Procesal y Litigio Estrat</td>
+  <td class="pl">Especializació</td>
+  <td class="n">18.428.089</td>
+  <td class="n">429</td>
+  <td class="n">456</td>
+  <td class="n med">94%</td>
+  <td class="n">42.950</td>
+  <td class="barra"><span class="s-med" style="width:47.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Recursos Hídricos</td>
+  <td class="pl">Especializació</td>
+  <td class="n">9.243.538</td>
+  <td class="n">235</td>
+  <td class="n">253</td>
+  <td class="n med">93%</td>
+  <td class="n">39.409</td>
+  <td class="barra"><span class="s-med" style="width:46.3%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Seguridad de la Información</td>
+  <td class="pl">Especializació</td>
+  <td class="n">11.598.614</td>
+  <td class="n">207</td>
+  <td class="n">226</td>
+  <td class="n med">92%</td>
+  <td class="n">56.009</td>
+  <td class="barra"><span class="s-med" style="width:45.8%"></span></td>
+</tr>
+<tr>
+  <td>Derecho</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">30.097.272</td>
+  <td class="n">1.374</td>
+  <td class="n">1.559</td>
+  <td class="n med">88%</td>
+  <td class="n">21.910</td>
+  <td class="barra"><span class="s-med" style="width:44.0%"></span></td>
+</tr>
+<tr>
+  <td>Arquitectura</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">21.949.728</td>
+  <td class="n">744</td>
+  <td class="n">867</td>
+  <td class="n med">86%</td>
+  <td class="n">29.497</td>
+  <td class="barra"><span class="s-med" style="width:42.9%"></span></td>
+</tr>
+<tr>
+  <td>Ingeniería Civil</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">20.672.279</td>
+  <td class="n">743</td>
+  <td class="n">987</td>
+  <td class="n med">75%</td>
+  <td class="n">27.810</td>
+  <td class="barra"><span class="s-med" style="width:37.6%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Gerencia de Obras</td>
+  <td class="pl">Especializació</td>
+  <td class="n">8.863.778</td>
+  <td class="n">362</td>
+  <td class="n">506</td>
+  <td class="n med">72%</td>
+  <td class="n">24.467</td>
+  <td class="barra"><span class="s-med" style="width:35.8%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Contrato Estatal de Infraestructu</td>
+  <td class="pl">Especializació</td>
+  <td class="n">7.354.291</td>
+  <td class="n">315</td>
+  <td class="n">451</td>
+  <td class="n mal">70%</td>
+  <td class="n">23.329</td>
+  <td class="barra"><span class="s-mal" style="width:35.0%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Derecho Tributario y Aduanero</td>
+  <td class="pl">Especializació</td>
+  <td class="n">6.838.328</td>
+  <td class="n">407</td>
+  <td class="n">652</td>
+  <td class="n mal">62%</td>
+  <td class="n">16.805</td>
+  <td class="barra"><span class="s-mal" style="width:31.2%"></span></td>
+</tr>
+<tr>
+  <td>Ingeniería de Sistemas y Computación</td>
+  <td class="pl">Pregrados</td>
+  <td class="n">19.413.207</td>
+  <td class="n">587</td>
+  <td class="n">964</td>
+  <td class="n mal">61%</td>
+  <td class="n">33.091</td>
+  <td class="barra"><span class="s-mal" style="width:30.4%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Sistema Penal Acusatorio</td>
+  <td class="pl">Especializació</td>
+  <td class="n">6.443.958</td>
+  <td class="n">359</td>
+  <td class="n">678</td>
+  <td class="n mal">53%</td>
+  <td class="n">17.944</td>
+  <td class="barra"><span class="s-mal" style="width:26.4%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Psicología Clinica</td>
+  <td class="pl">Especializació</td>
+  <td class="n">14.844.402</td>
+  <td class="n">936</td>
+  <td class="n">1.918</td>
+  <td class="n mal">49%</td>
+  <td class="n">15.854</td>
+  <td class="barra"><span class="s-mal" style="width:24.4%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Formulación, Evaluación Social y </td>
+  <td class="pl">Especializació</td>
+  <td class="n">14.654.927</td>
+  <td class="n">282</td>
+  <td class="n">678</td>
+  <td class="n mal">42%</td>
+  <td class="n">51.897</td>
+  <td class="barra"><span class="s-mal" style="width:20.8%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Derecho Constitucional y Administ</td>
+  <td class="pl">Especializació</td>
+  <td class="n">13.580.456</td>
+  <td class="n">588</td>
+  <td class="n">1.550</td>
+  <td class="n mal">38%</td>
+  <td class="n">23.093</td>
+  <td class="barra"><span class="s-mal" style="width:18.9%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Administración Financiera</td>
+  <td class="pl">Especializació</td>
+  <td class="n">8.862.566</td>
+  <td class="n">280</td>
+  <td class="n">796</td>
+  <td class="n mal">35%</td>
+  <td class="n">31.712</td>
+  <td class="barra"><span class="s-mal" style="width:17.6%"></span></td>
+</tr>
+<tr>
+  <td>Especialización en Derecho del Trabajo y Seguridad S</td>
+  <td class="pl">Especializació</td>
+  <td class="n">10.386.585</td>
+  <td class="n">312</td>
+  <td class="n">1.186</td>
+  <td class="n mal">26%</td>
+  <td class="n">33.238</td>
+  <td class="barra"><span class="s-mal" style="width:13.2%"></span></td>
+</tr>
+<tr>
+  <td>Maestria en gestión económica y evaluación de impact</td>
+  <td class="pl">Maestría</td>
+  <td class="n">9.893.454</td>
+  <td class="n">178</td>
+  <td class="n">1.165</td>
+  <td class="n mal">15%</td>
+  <td class="n">55.503</td>
+  <td class="barra"><span class="s-mal" style="width:7.7%"></span></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-n" style="margin-top:14px">Fuera de este cruce quedan
+  17 campañas con 39.432.323 de inversión y
+  1.040 leads que no tienen meta registrada —eventos, branding, quiz
+  vocacional y las campañas generales—, y 5 metas por
+  1.574 leads que no tienen ejecución asociada porque su nombre no
+  homologa con ninguna campaña. Esa conciliación de nomenclatura es un pendiente de datos, no de
+  pauta.</p>
+</div>
+
+<div>
+  <h2 class="sec">Indicadores por mes</h2>
+  <p class="sec-n">Cuenta completa, ambos canales. Los leads de Meta corresponden a formulario
+  instantáneo; los de Google, a la acción de conversión «registro completado» medida en GA4.</p>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr class="grp"><th></th><th colspan="3">Meta Ads</th><th colspan="3">Google Ads</th><th colspan="3">Total</th></tr>
+        <tr><th>Mes</th><th class="n">Inversión</th><th class="n">Leads</th><th class="n">CPL</th>
+        <th class="n">Inversión</th><th class="n">Leads</th><th class="n">CPL</th>
+        <th class="n">Inversión</th><th class="n">Leads</th><th class="n">CPL</th></tr>
+      </thead>
+      <tbody>
+<tr>
+  <td class="mes">Junio</td>
+  <td class="n">27.554.715</td><td class="n">1.198</td>
+  <td class="n">23.001</td>
+  <td class="n">107.116.769</td><td class="n">2.572</td>
+  <td class="n">41.655</td>
+  <td class="n tot">134.671.484</td><td class="n tot">3.770</td>
+  <td class="n tot">35.727</td>
+</tr>
+<tr>
+  <td class="mes">Julio</td>
+  <td class="n">77.446.067</td><td class="n">2.094</td>
+  <td class="n">36.985</td>
+  <td class="n">78.361.250</td><td class="n">1.759</td>
+  <td class="n">44.539</td>
+  <td class="n tot">155.807.317</td><td class="n tot">3.853</td>
+  <td class="n tot">40.434</td>
+</tr>
+<tr>
+  <td class="mes">Agosto</td>
+  <td class="n">48.656.014</td><td class="n">2.185</td>
+  <td class="n">22.268</td>
+  <td class="n">28.932.545</td><td class="n">992</td>
+  <td class="n">29.181</td>
+  <td class="n tot">77.588.559</td><td class="n tot">3.176</td>
+  <td class="n tot">24.426</td>
+</tr>
+<tr>
+  <td class="mes">Sep 1-3</td>
+  <td class="n">916.355</td><td class="n">176</td>
+  <td class="n">5.207</td>
+  <td class="n">731.940</td><td class="n">38</td>
+  <td class="n">19.363</td>
+  <td class="n tot">1.648.295</td><td class="n tot">214</td>
+  <td class="n tot">7.710</td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div>
+  <h2 class="sec">Serie semanal de leads y CPL</h2>
+  <p class="sec-n">Cuenta completa. Este es el corte que se propone dejar como reporte recurrente.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Semana del</th><th class="n">Inversión</th><th class="n">Leads</th>
+      <th class="n">CPL</th><th>Volumen</th></tr></thead>
+      <tbody>
+<tr>
+  <td class="mes">2026-06-01</td>
+  <td class="n">29.940.711</td>
+  <td class="n">972</td>
+  <td class="n">30.803</td>
+  <td class="barra"><span style="width:76.9%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-06-08</td>
+  <td class="n">31.157.631</td>
+  <td class="n">939</td>
+  <td class="n">33.182</td>
+  <td class="barra"><span style="width:74.3%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-06-15</td>
+  <td class="n">30.771.916</td>
+  <td class="n">794</td>
+  <td class="n">38.780</td>
+  <td class="barra"><span style="width:62.8%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-06-22</td>
+  <td class="n">32.522.225</td>
+  <td class="n">813</td>
+  <td class="n">39.998</td>
+  <td class="barra"><span style="width:64.3%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-06-29</td>
+  <td class="n">41.216.357</td>
+  <td class="n">937</td>
+  <td class="n">43.983</td>
+  <td class="barra"><span style="width:74.1%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-07-06</td>
+  <td class="n">59.032.377</td>
+  <td class="n">1.264</td>
+  <td class="n">46.688</td>
+  <td class="barra"><span style="width:100.0%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-07-13</td>
+  <td class="n">35.093.420</td>
+  <td class="n">887</td>
+  <td class="n">39.551</td>
+  <td class="barra"><span style="width:70.2%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-07-20</td>
+  <td class="n">18.330.276</td>
+  <td class="n">593</td>
+  <td class="n">30.901</td>
+  <td class="barra"><span style="width:46.9%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-07-27</td>
+  <td class="n">17.421.677</td>
+  <td class="n">565</td>
+  <td class="n">30.840</td>
+  <td class="barra"><span style="width:44.7%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-08-03</td>
+  <td class="n">19.186.008</td>
+  <td class="n">634</td>
+  <td class="n">30.248</td>
+  <td class="barra"><span style="width:50.2%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-08-10</td>
+  <td class="n">26.160.764</td>
+  <td class="n">709</td>
+  <td class="n">36.909</td>
+  <td class="barra"><span style="width:56.1%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-08-17</td>
+  <td class="n">15.890.828</td>
+  <td class="n">783</td>
+  <td class="n">20.300</td>
+  <td class="barra"><span style="width:61.9%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-08-24</td>
+  <td class="n">10.812.304</td>
+  <td class="n">826</td>
+  <td class="n">13.087</td>
+  <td class="barra"><span style="width:65.3%"></span></td>
+</tr>
+<tr>
+  <td class="mes">2026-08-31</td>
+  <td class="n">2.179.161</td>
+  <td class="n">297</td>
+  <td class="n">7.347</td>
+  <td class="barra"><span style="width:23.5%"></span></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-n" style="margin-top:14px">Las dos últimas semanas muestran el CPL más bajo del
+  período, pero conviene leerlas con cuidado: el 28 de agosto la inversión se llevó al mínimo y
+  los leads siguieron entrando con rezago, así que parte de esa mejora es efecto del corte y no
+  de eficiencia sostenible. La semana del 31 de agosto además está incompleta.</p>
+</div>
+
+<div>
+  <h2 class="sec">Dónde conviene concentrar la inversión</h2>
+  <p class="sec-n">Campañas de agosto con al menos 5 leads, ordenadas por CPL. La dispersión entre
+  el mejor y el peor es de 43 veces, y ahí está la oportunidad más directa de optimización.</p>
+  <div class="dos">
+    <div>
+      <h3 style="font-family:Petrona,Georgia,serif;font-size:17px;margin:0 0 10px">Mejor CPL</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Campaña</th><th>Canal</th><th class="n">Inversión</th><th class="n">Leads</th><th class="n">CPL</th></tr></thead>
+        <tbody>
+<tr><td>2.4 - Adcom - Posgrados - Especialización en psicología </td><td class="pl">Meta</td><td class="n">232.628</td><td class="n">136</td><td class="n bien">1.710</td></tr>
+<tr><td>1.6 - Adcom - Posgrados - Especialización en Inteligenci</td><td class="pl">Meta</td><td class="n">469.835</td><td class="n">149</td><td class="n bien">3.153</td></tr>
+<tr><td>4.3 - Adcom - Posgrados - Especialización en Analítica d</td><td class="pl">Meta</td><td class="n">228.948</td><td class="n">71</td><td class="n bien">3.225</td></tr>
+<tr><td>2.1 - Adcom - Posgrados - Especialización en psicología </td><td class="pl">Meta</td><td class="n">223.299</td><td class="n">52</td><td class="n bien">4.294</td></tr>
+<tr><td>adcom_catolica_gg_leads_search_blogs_generales_nov_2025</td><td class="pl">Google Ads</td><td class="n">217.743</td><td class="n">46</td><td class="n bien">4.719</td></tr>
+<tr><td>4.4 - Adcom - Posgrados - Especialización en Alta Gerenc</td><td class="pl">Meta</td><td class="n">233.885</td><td class="n">48</td><td class="n bien">4.873</td></tr>
+<tr><td>adcom_catolica_gg_trafico_search_Branding_blogs derecho</td><td class="pl">Google Ads</td><td class="n">461.623</td><td class="n">73</td><td class="n bien">6.338</td></tr>
+<tr><td>2.4 - Adcom - Posgrados - Especialización en Derecho Con</td><td class="pl">Meta</td><td class="n">353.631</td><td class="n">51</td><td class="n bien">6.934</td></tr>
+        </tbody></table></div>
+    </div>
+    <div>
+      <h3 style="font-family:Petrona,Georgia,serif;font-size:17px;margin:0 0 10px">Peor CPL</h3>
+      <div class="tw"><table>
+        <thead><tr><th>Campaña</th><th>Canal</th><th class="n">Inversión</th><th class="n">Leads</th><th class="n">CPL</th></tr></thead>
+        <tbody>
+<tr><td>2.9.4 - Adcom - Posgrados - Especialización en Recursos </td><td class="pl">Google Ads</td><td class="n">661.221</td><td class="n">9</td><td class="n mal">73.995</td></tr>
+<tr><td>4.3 - Adcom - Posgrados - Maestría en Gestión Económica </td><td class="pl">Google Ads</td><td class="n">3.486.225</td><td class="n">48</td><td class="n mal">72.253</td></tr>
+<tr><td>2.9.1 - Adcom - Posgrados - Especialización en Sistema P</td><td class="pl">Google Ads</td><td class="n">492.960</td><td class="n">7</td><td class="n mal">70.528</td></tr>
+<tr><td>4.1 - Adcom - Posgrados - Doctorado en Psicología - 2024</td><td class="pl">Google Ads</td><td class="n">338.638</td><td class="n">5</td><td class="n mal">64.354</td></tr>
+<tr><td>2.9 - Adcom - Posgrados - Especialización en Gobierno y </td><td class="pl">Google Ads</td><td class="n">1.075.310</td><td class="n">18</td><td class="n mal">61.428</td></tr>
+<tr><td>2.9.6 - Adcom - Posgrados - Especialización en Seguridad</td><td class="pl">Meta</td><td class="n">994.869</td><td class="n">17</td><td class="n mal">58.522</td></tr>
+<tr><td>2.9.2 - Adcom - Posgrados - Especialización en Gerencia </td><td class="pl">Google Ads</td><td class="n">331.338</td><td class="n">6</td><td class="n mal">51.525</td></tr>
+<tr><td>Adcom - Posgrados - Maestria en gestión económica y eval</td><td class="pl">Meta</td><td class="n">3.937.967</td><td class="n">81</td><td class="n mal">48.617</td></tr>
+        </tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <h2 class="sec">Avance semanal de la maestría</h2>
+  <p class="sec-n">Vuelo completo contra la meta de 314 leads. La barra muestra el acumulado
+  sobre la meta.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Semana del</th><th class="n">Inversión</th><th class="n">Leads</th>
+      <th class="n">CPL</th><th class="n">Acumulado</th><th>Avance vs meta</th></tr></thead>
+      <tbody>
+<tr><td class="mes">2026-07-06</td><td class="n">894.074</td><td class="n">25</td><td class="n">35.763</td><td class="n tot">25</td><td class="barra"><span style="width:8.0%"></span></td></tr>
+<tr><td class="mes">2026-07-13</td><td class="n">770.849</td><td class="n">12</td><td class="n">64.237</td><td class="n tot">37</td><td class="barra"><span style="width:11.8%"></span></td></tr>
+<tr><td class="mes">2026-07-20</td><td class="n">442.445</td><td class="n">7</td><td class="n">63.206</td><td class="n tot">44</td><td class="barra"><span style="width:14.0%"></span></td></tr>
+<tr><td class="mes">2026-07-27</td><td class="n">520.211</td><td class="n">9</td><td class="n">57.801</td><td class="n tot">53</td><td class="barra"><span style="width:16.9%"></span></td></tr>
+<tr><td class="mes">2026-08-03</td><td class="n">1.106.215</td><td class="n">18</td><td class="n">61.456</td><td class="n tot">71</td><td class="barra"><span style="width:22.6%"></span></td></tr>
+<tr><td class="mes">2026-08-10</td><td class="n">2.281.465</td><td class="n">34</td><td class="n">68.103</td><td class="n tot">104</td><td class="barra"><span style="width:33.3%"></span></td></tr>
+<tr><td class="mes">2026-08-17</td><td class="n">1.844.605</td><td class="n">26</td><td class="n">72.337</td><td class="n tot">130</td><td class="barra"><span style="width:41.4%"></span></td></tr>
+<tr><td class="mes">2026-08-24</td><td class="n">1.846.204</td><td class="n">39</td><td class="n">46.977</td><td class="n tot">169</td><td class="barra"><span style="width:53.9%"></span></td></tr>
+<tr><td class="mes">2026-08-31</td><td class="n">938.468</td><td class="n">26</td><td class="n">36.095</td><td class="n tot">195</td><td class="barra"><span style="width:62.2%"></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div>
+  <h2 class="sec">Hallazgos del período</h2>
+  <ul class="lst">
+    <li><b>El ajuste de puja en Google costó volumen.</b> El 18 de agosto se subió el objetivo de
+    CPA de la maestría de 50.000 a 70.000 para capturar el 90% de impresiones que se perdían por
+    ranking. Funcionó en lo que buscaba —esa pérdida bajó a 58,8%— pero el inventario que compró
+    convirtió mucho peor: el CPL pasó de 55.802 a 94.858.
+    Al CPL anterior, esa misma inversión habría traído del orden de <b>20 leads más</b>.
+    La decisión se revierte antes de reactivar el programa.</li>
+    <li><b>Recortar Meta mejoró su eficiencia.</b> La maestría en Meta pasó de 239.264 diarios con
+    CPL de 83.742 a cerca de 100.000 diarios con CPL de 34.013 en el mismo período. El programa
+    tiene un punto de saturación claro y está por debajo de los 120.000 diarios.</li>
+    <li><b>Las dos campañas generales no reportan leads de formulario.</b> «Campaña General_Lead»
+    de pregrados y posgrados invirtió 3.922.270 en agosto optimizando conversión en
+    sitio, sin formulario instantáneo. Sus 130 conversiones llegan por un evento de píxel propio,
+    así que no aparecen en el conteo de leads de formulario y su desempeño se lee aparte.</li>
+    <li><b>El activo de audiencias está construido y sin usar.</b> 63 audiencias similares
+    disponibles, 5 conjuntos activos usándolas. Es la palanca de mayor efecto disponible sin
+    inversión adicional.</li>
+    <li><b>El retargeting está operando invertido.</b> Las listas de leads y convertidos se usan
+    para excluir, no para perseguir. La higiene de prospección está bien resuelta; la acción de
+    retargeting que pide la propuesta no está montada.</li>
+  </ul>
+</div>
+
+<div>
+  <h2 class="sec">Acciones previstas para las próximas semanas</h2>
+  <ul class="lst">
+    <li><b>Semana 1.</b> Devolver el objetivo de CPA de Google a 50.000. Desplegar las audiencias
+    similares del píxel de registro completado en los cinco programas de mejor CPL, en conjunto
+    paralelo al de intereses. Montar la campaña de retargeting sobre quienes abrieron el
+    formulario y no lo enviaron.</li>
+    <li><b>Semana 2.</b> Reemplazar los creativos con más de seis meses al aire en los programas
+    de mayor inversión y llevar a mínimo dos anuncios activos por campaña. Formalizar como prueba
+    A/B de plataforma la comparación intereses vs Advantage+ en tres programas.</li>
+    <li><b>Semana 3.</b> Redistribuir el presupuesto sobre el ranking de CPL con piso por programa,
+    en lugar del reparto proporcional actual. Primera entrega del reporte semanal automatizado.</li>
+    <li><b>Requiere insumo del cliente.</b> El segmento de leads sin conversión confirmada vive en
+    el CRM y no en las plataformas: sin ese archivo, el retargeting solo puede apuntar a
+    comportamiento en plataforma. También hace falta la meta de leads por programa para poder
+    reportar avance por programa y no solo agregado.</li>
+  </ul>
+</div>
+
+<footer>
+  Informe construido sobre datos leídos directamente de las API de Meta Ads y Google Ads el
+  2026-09-03. Cuenta Meta act_183541688796141, cuenta Google 7619086431.
+  Período de indicadores: 1 de junio al 3 de septiembre de 2026. Vuelo de la maestría:
+  6 de julio al 3 de septiembre de 2026.
+</footer>
+
+</div>
+</body>
+</html>
