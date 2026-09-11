@@ -27,7 +27,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 h1{font-size:40px;font-weight:900;color:var(--fg-muted);line-height:1.06;letter-spacing:-.02em;
   max-width:22ch}
 .dek{font-size:13px;color:var(--gray-400);font-weight:300;margin-top:14px;max-width:74ch}
-.dek code{font-family:'Poppins',sans-serif;color:var(--yellow);font-weight:600}
+.dek code{font-family:'Poppins',sans-serif;color:var(--accent-fg);font-weight:600}
 .dek b{color:rgba(255,255,255,.8);font-weight:600}
 .cifras{display:grid;grid-template-columns:repeat(5,1fr);
   border-top:1px solid rgba(255,255,255,.08);margin:32px -44px 0}
@@ -49,8 +49,8 @@ h1{font-size:40px;font-weight:900;color:var(--fg-muted);line-height:1.06;letter-
 .pend{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
 .p{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
   border-bottom:3px solid var(--gray-200);padding:20px 22px}
-.p.alerta{background:var(--yellow-light);border-color:var(--yellow);
-  border-bottom-color:var(--yellow)}
+.p.alerta{background:var(--yellow-light);border-color:var(--accent-fg);
+  border-bottom-color:var(--accent-fg)}
 .p h4{font-size:14px;font-weight:800;margin-bottom:7px}
 .p p{font-size:12.5px;color:var(--gray-600);font-weight:300}
 .p.alerta p{color:#5E4A16}
@@ -65,9 +65,9 @@ h2.sec{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
 .acc header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
 .acc h3{font-size:19px;font-weight:800;margin:0}
 .badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
-.b-ok,.b-ok-r{background:#E8F5EC;color:var(--green)}
+.b-ok,.b-ok-r{background:#E8F5EC;color:var(--pos)}
 .b-med{background:var(--yellow-light);color:var(--accent-fg)}
-.b-no{background:#FBEAE8;color:var(--red)}
+.b-no{background:#FBEAE8;color:var(--neg)}
 .pedido{font-size:var(--fs-body-min);color:var(--gray-400);font-style:italic;margin:0 0 15px;
   border-left:2px solid var(--gray-100);padding-left:12px;line-height:1.5}
 .acc dl{margin:0;display:grid;grid-template-columns:128px 1fr;gap:10px 20px}
@@ -84,7 +84,7 @@ dd.ojo{background:var(--yellow-light);
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{font-weight:700;font-size:12px;padding:13px 14px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:1px solid var(--rule-strong)}
 th.n,th.c-num{text-align:right}
-tr.grp th{background:#1C1C1C;color:var(--yellow);text-align:center;border-left:1px solid #333}
+tr.grp th{background:#1C1C1C;color:var(--accent);text-align:center;border-left:1px solid #333}
 td{padding:11px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
 tbody tr:last-child td{border-bottom:none}
 td.c-num,td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -93,10 +93,10 @@ td.mes,td.c-prog{color:var(--black);font-weight:500}
 .cid,.fname{display:block;font-size:12px;color:var(--gray-400);margin-top:2px;font-weight:300}
 .tot,.fuerte{color:var(--black);font-weight:700}
 .of{color:var(--gray-400)}
-.bien{color:var(--green);font-weight:700}
-.mal{color:var(--red);font-weight:700}
+.bien{color:var(--pos);font-weight:700}
+.mal{color:var(--neg);font-weight:700}
 .med{color:var(--accent-fg);font-weight:700}
-.warnnum{display:block;font-size:12px;font-weight:600;color:var(--red)}
+.warnnum{display:block;font-size:12px;font-weight:600;color:var(--neg)}
 .obj,.old{font-size:12px;color:var(--gray-400);font-weight:300}
 .fid{font-size:12px;color:#A07400;font-weight:600}
 .barra{width:100px;padding-right:16px}
@@ -106,7 +106,7 @@ td.mes,td.c-prog{color:var(--black);font-weight:500}
 .barra span.s-mal{background:var(--red)}
 .sup{display:block;font-size:12px;color:var(--gray-400);margin-top:3px;font-weight:300}
 .seg{display:inline-block;margin-right:8px;font-size:12px;font-weight:800;padding:3px 8px;border-radius:999px;vertical-align:2px}
-.seg-pregrado{background:#E8F5EC;color:var(--green)}
+.seg-pregrado{background:#E8F5EC;color:var(--pos)}
 .seg-posgrado{background:var(--yellow-light);color:#A07400}
 
 .grupo{margin-bottom:26px}
@@ -116,7 +116,7 @@ td.mes,td.c-prog{color:var(--black);font-weight:500}
 .grupo-n{font-size:12px;color:var(--gray-400);flex:1;font-weight:300}
 .grupo-c{font-size:12px;font-weight:700;color:var(--gray-400);font-variant-numeric:tabular-nums}
 .tag{display:inline-block;margin-top:5px;font-size:12px;font-weight:800;padding:3px 8px;border-radius:999px}
-.tag-fix{background:#E8F5EC;color:var(--green)}
+.tag-fix{background:#E8F5EC;color:var(--pos)}
 .tag-hold{background:var(--gray-100);color:var(--gray-400)}
 
 .dos{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}

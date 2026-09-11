@@ -51,7 +51,7 @@ h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
 table{width:100%;border-collapse:collapse;font-size:var(--fs-body-min)}
 th{font-weight:700;font-size:12px;padding:13px 14px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:1px solid var(--rule-strong)}
 th.n{text-align:right}
-th.grp{background:#1C1C1C;color:var(--yellow);text-align:center;border-left:1px solid #333}
+th.grp{background:#1C1C1C;color:var(--accent);text-align:center;border-left:1px solid #333}
 td{padding:12px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:var(--gray-50)}
@@ -59,7 +59,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 td.prog{color:var(--black);font-weight:600}
 td.prog .sub{display:block;font-size:13px;color:var(--gray-400);font-weight:300;margin-top:2px;max-width:var(--measure)}
 td.fuerte{color:var(--black);font-weight:700}
-td.t-ok{color:var(--green);font-weight:700}
+td.t-ok{color:var(--pos);font-weight:700}
 td.t-med{color:var(--accent-fg);font-weight:700}
 tr.total td{background:var(--yellow);color:var(--black);font-weight:800;border-bottom:none}
 
@@ -79,7 +79,7 @@ tr.destacada td b{color:var(--black);font-weight:700}
   display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ico svg{width:21px;height:21px}
 .badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.05em}
-.b-ok{background:#E8F5EC;color:var(--green)}
+.b-ok{background:#E8F5EC;color:var(--pos)}
 .accion h4{font-size:16px;font-weight:800;margin-bottom:8px}
 .pedido{font-size:13px;color:var(--gray-400);font-style:italic;border-left:2px solid var(--gray-100);
   padding-left:11px;margin-bottom:14px;line-height:1.5}
@@ -165,8 +165,8 @@ tr.destacada td b{color:var(--black);font-weight:700}
 
 /* El fondo lo pinta el suelo declarado, no una regla a mano. */
 .cierre{border-radius:var(--radius-xl);padding:38px 40px}
-.cierre h2{color:var(--fg);margin-bottom:16px}
-.cierre p{font-size:13.5px;color:var(--fg-secondary);font-weight:400;margin-bottom:14px;max-width:88ch}
+.cierre h2{color:var(--fg-muted);margin-bottom:16px}
+.cierre p{font-size:13.5px;color:var(--fg-muted);font-weight:400;margin-bottom:14px;max-width:88ch}
 .cierre p:last-child{margin-bottom:0}
 .cierre b{color:var(--accent-fg);font-weight:700}
 
@@ -189,7 +189,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
 </head>
 <body>
 
-<section class="portada" data-suelo="tinta">
+<section class="portada">
   <div class="portada-wrap">
   <div class="portada-copy">
     <span class="portada-kicker">U. Católica · Cierre</span>
@@ -292,7 +292,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
     <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2">Acumulado vs meta</button>
   </div>
   <div class="chart-box">
-    <div id="tip" data-suelo="tinta"></div>
+    <div id="tip"></div>
     <div class="panel" id="p1" role="tabpanel" aria-labelledby="t1">
       <svg viewBox="0 0 860 300" class="chart" role="img"
   aria-label="Leads por semana y costo por lead">
@@ -450,7 +450,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   </div>
 
   <div class="chart-box" style="margin-bottom:22px">
-    <div id="tip2" data-suelo="tinta"></div>
+    <div id="tip2"></div>
     <svg viewBox="0 0 860 300" class="chart" role="img"
   aria-label="Costo por lead semanal de Meta y de Google">
   <line x1="60" y1="22.0" x2="836" y2="22.0" class="rej"/><line x1="60" y1="80.5" x2="836" y2="80.5" class="rej"/><line x1="60" y1="139.0" x2="836" y2="139.0" class="rej"/><line x1="60" y1="197.5" x2="836" y2="197.5" class="rej"/><line x1="60" y1="256.0" x2="836" y2="256.0" class="rej"/><text x="50" y="26.0" class="lbl-y">118k</text><text x="50" y="84.5" class="lbl-y">88k</text><text x="50" y="143.0" class="lbl-y">59k</text><text x="50" y="201.5" class="lbl-y">29k</text><text x="50" y="260.0" class="lbl-y">0k</text>
@@ -569,7 +569,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   </div>
 </section>
 
-<section class="cierre" data-suelo="tinta">
+<section class="cierre">
   <h2>Conclusión y siguiente etapa</h2>
   <p>El lanzamiento cerró con <b>195,2 leads</b> y una inversión de <b>10.644.545</b>,
   el 67,8% de lo presupuestado. El aprendizaje más valioso del periodo es

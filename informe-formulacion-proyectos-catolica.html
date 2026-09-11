@@ -23,7 +23,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 
 .hero{background:var(--black);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:34px}
 .hero-in{padding:44px 44px 0}
-.eyebrow{font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:14px}
+.eyebrow{font-size:12px;font-weight:700;color:var(--accent-fg);margin-bottom:14px}
 h1{font-size:42px;font-weight:900;color:var(--white);line-height:1.05;letter-spacing:-.02em;
   max-width:19ch}
 .hero-sub{font-size:13px;color:var(--fg-muted);margin-top:14px;font-weight:300;max-width:var(--measure)}
@@ -35,7 +35,7 @@ h1{font-size:42px;font-weight:900;color:var(--white);line-height:1.05;letter-spa
 .kpi:last-child{border-right:none}
 .kpi-label{font-size:12px;font-weight:600;color:var(--fg-muted);margin-bottom:9px}
 .kpi-value{font-size:28px;font-weight:900;color:var(--white);line-height:1;margin-bottom:6px}
-.kpi-value.acc{color:var(--yellow)}
+.kpi-value.acc{color:var(--accent-fg)}
 .kpi-sub{font-size:12px;color:rgba(255,255,255,.35);font-weight:300}
 .kpi-sub b{color:rgba(255,255,255,.7);font-weight:600}
 
@@ -49,7 +49,7 @@ h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{font-weight:700;font-size:12px;padding:13px 14px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:1px solid var(--rule-strong)}
 th.n{text-align:right}
-th.grp{background:#1C1C1C;color:var(--yellow);text-align:center;border-left:1px solid #333}
+th.grp{background:#1C1C1C;color:var(--accent-fg);text-align:center;border-left:1px solid #333}
 td{padding:12px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:var(--gray-50)}
@@ -57,7 +57,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 td.prog{color:var(--black);font-weight:600}
 td.prog .sub{display:block;font-size:12px;color:var(--gray-400);font-weight:300;margin-top:2px;max-width:var(--measure)}
 td.fuerte{color:var(--black);font-weight:700}
-td.t-ok{color:var(--green);font-weight:700}
+td.t-ok{color:var(--pos);font-weight:700}
 td.t-med{color:#A07400;font-weight:700}
 tr.total td{background:var(--yellow);color:var(--black);font-weight:800;border-bottom:none}
 
@@ -77,7 +77,7 @@ tr.destacada td b{color:var(--black);font-weight:700}
   display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ico svg{width:21px;height:21px}
 .badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.05em}
-.b-ok{background:#E8F5EC;color:var(--green)}
+.b-ok{background:#E8F5EC;color:var(--pos)}
 .accion h4{font-size:16px;font-weight:800;margin-bottom:8px}
 .pedido{font-size:var(--fs-body-min);color:var(--gray-400);font-style:italic;border-left:2px solid var(--gray-100);
   padding-left:11px;margin-bottom:14px;line-height:1.5}
@@ -92,7 +92,7 @@ tr.destacada td b{color:var(--black);font-weight:700}
 .tab{background:var(--white);border:1px solid var(--gray-200);border-radius:999px;
   padding:8px 18px;font-family:inherit;font-size:12px;font-weight:600;color:var(--gray-600);
   cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-.tab:hover{border-color:var(--yellow)}
+.tab:hover{border-color:var(--accent-fg)}
 .tab[aria-selected="true"]{background:var(--black);color:var(--white);border-color:var(--black)}
 .panel[hidden]{display:none}
 
@@ -126,7 +126,7 @@ tr.destacada td b{color:var(--black);font-weight:700}
 #tip,#tip2{position:absolute;background:var(--black);color:var(--white);border-radius:var(--radius-sm);
   padding:9px 12px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .12s;
   white-space:nowrap;z-index:5;font-weight:300;line-height:1.5}
-#tip b,#tip2 b{color:var(--yellow);font-weight:700}
+#tip b,#tip2 b{color:var(--accent-fg);font-weight:700}
 #tip .t,#tip2 .t{font-weight:700;color:var(--white);display:block;margin-bottom:3px}
 
 /* ---- previews ---- */
@@ -161,7 +161,7 @@ tr.destacada td b{color:var(--black);font-weight:700}
 .cierre h2{color:var(--white);margin-bottom:16px}
 .cierre p{font-size:13.5px;color:rgba(255,255,255,.62);font-weight:300;margin-bottom:14px;max-width:88ch}
 .cierre p:last-child{margin-bottom:0}
-.cierre b{color:var(--yellow);font-weight:700}
+.cierre b{color:var(--accent-fg);font-weight:700}
 
 footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   font-size:var(--fs-body-min);color:var(--gray-400);font-weight:300}
@@ -203,7 +203,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
 <body>
 <div class="wrap">
 
-<div class="hero" data-suelo="tinta">
+<div class="hero" data-roles="tinta">
   <div class="hero-in">
     <div class="eyebrow">Universidad Católica de Colombia · Informe de resultados</div>
     <h1>Especialización en Formulación, Evaluación Social y Económica de Proyectos</h1>
@@ -410,7 +410,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
         </article></div>
 </section>
 
-<section class="cierre" data-suelo="tinta">
+<section class="cierre" data-roles="tinta">
   <h2>Conclusión</h2>
   <p>En 6,5 meses el programa invirtió $14.654.927 y generó 226 leads en CRM, pero solo <b>1 matrícula</b>. El cuello de botella no es de medios ni de presupuesto total — es de calidad de lead y de claridad del mensaje: el 100% del avance real del embudo (preinscrito → matrícula) ocurrió en Google, mientras Facebook aportó el 67% del volumen de leads y 0 matrículas.</p><p>La causa más probable es que <b>“Formulación, Evaluación Social y Económica de Proyectos” no se explica solo</b> a una audiencia fría de interés (Facebook), a diferencia de un nombre autoexplicativo como “Administración Financiera”. Las piezas actuales tampoco lo compensan: solo repiten el nombre del programa y el sello de años de experiencia.</p><p>La propuesta para el siguiente periodo es doble: <b>más presupuesto concentrado en Google</b> (más barato por lead y el único canal que matricula) y <b>piezas de Meta que expliquen la salida laboral</b> con ejemplos concretos de sector y rol, no solo el nombre del programa.</p>
 </section>
