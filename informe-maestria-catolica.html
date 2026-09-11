@@ -4,52 +4,52 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cierre Maestría en Gestión Económica — Universidad Católica de Colombia</title>
+<link rel="stylesheet" href="assets/css/adcom-tokens.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 <style>
 :root {
-  --black:#0A0A0A; --white:#FFFFFF; --yellow:#FFC000; --yellow-light:#FFF8E1;
-  --gray-50:#F8F8F8; --gray-100:#F0F0F0; --gray-200:#E0E0E0;
-  --gray-400:#9E9E9E; --gray-600:#555555;
-  --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-xl:32px;
-  --red:#C0392B; --green:#1E7C43;
+  --black:#050505; --white:#fcfcfa; --yellow:var(--accent); --yellow-light:#FFF8E1;
+  --gray-50:var(--ground); --gray-100:var(--sunken); --gray-200:var(--rule);
+  --gray-400:var(--fg-muted); --gray-600:var(--fg-secondary);
+ --radius-md:var(--radius); --radius-lg:var(--radius); --radius-xl:var(--radius);
+  --red:var(--neg); --green:var(--pos)
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);
   font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+/* Ojo: .wrap tambien existe en el sistema. Aqui gana esta por orden. */
 .wrap{max-width:1180px;margin:0 auto;padding:32px 28px 80px}
 
-.hero{background:var(--black);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:34px}
-.hero-in{padding:44px 44px 0}
-.eyebrow{font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;
-  letter-spacing:.16em;margin-bottom:14px}
-h1{font-size:42px;font-weight:900;color:var(--white);line-height:1.05;letter-spacing:-.02em;
-  max-width:19ch}
-.hero-sub{font-size:13px;color:var(--gray-400);margin-top:14px;font-weight:300}
-.chip{display:inline-block;margin:18px 0 36px;background:var(--yellow);color:var(--black);
-  font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
-  padding:7px 15px;border-radius:100px}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.08)}
-.kpi{padding:26px 28px;border-right:1px solid rgba(255,255,255,.07)}
-.kpi:last-child{border-right:none}
-.kpi-label{font-size:10px;font-weight:600;color:var(--gray-400);text-transform:uppercase;
-  letter-spacing:.1em;margin-bottom:9px}
-.kpi-value{font-size:28px;font-weight:900;color:var(--white);line-height:1;margin-bottom:6px}
-.kpi-value.acc{color:var(--yellow)}
-.kpi-sub{font-size:11px;color:rgba(255,255,255,.35);font-weight:300}
-.kpi-sub b{color:rgba(255,255,255,.7);font-weight:600}
+
+
+
+/* El unico h1 del documento es el de la portada, y lo resuelve el componente
+   del sistema: escala de titular, tracking y color heredado del suelo. Esta
+   regla de elemento desnudo venia del hero oscuro viejo y su color absoluto
+   ganaba por herencia directa. */
+
+
+
+
+
+
+
+
+
+
 
 section{margin-bottom:38px}
 h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
 .intro{font-size:13.5px;color:var(--gray-600);font-weight:300;max-width:82ch;margin-bottom:20px}
 
-.tbl{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
-  overflow:hidden}
+/* La tabla va abierta, como en el sistema (.table-wrap): sin caja, sin
+   esquina redonda. La estructura la da el encabezado, no un marco. */
+.tbl{background:none;border:0}
 .scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:var(--black);color:var(--white);font-weight:700;font-size:9.5px;
-  text-transform:uppercase;letter-spacing:.07em;padding:13px 14px;text-align:left;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:var(--fs-body-min)}
+th{font-weight:700;font-size:12px;padding:13px 14px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:1px solid var(--rule-strong)}
 th.n{text-align:right}
 th.grp{background:#1C1C1C;color:var(--yellow);text-align:center;border-left:1px solid #333}
 td{padding:12px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
@@ -57,52 +57,52 @@ tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:var(--gray-50)}
 td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 td.prog{color:var(--black);font-weight:600}
-td.prog .sub{display:block;font-size:10.5px;color:var(--gray-400);font-weight:300;margin-top:2px}
+td.prog .sub{display:block;font-size:13px;color:var(--gray-400);font-weight:300;margin-top:2px;max-width:var(--measure)}
 td.fuerte{color:var(--black);font-weight:700}
 td.t-ok{color:var(--green);font-weight:700}
-td.t-med{color:#A07400;font-weight:700}
+td.t-med{color:var(--accent-fg);font-weight:700}
 tr.total td{background:var(--yellow);color:var(--black);font-weight:800;border-bottom:none}
 
 .card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
-  padding:24px 22px;border-bottom:3px solid var(--yellow)}
+  padding:24px 22px}
 .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.mini .dato{font-size:29px;font-weight:900;color:var(--yellow);line-height:1;display:block;margin-bottom:9px;letter-spacing:-.02em}
+.mini .dato{font-size:29px;font-weight:900;color:var(--accent-fg);line-height:1;display:block;margin-bottom:9px;letter-spacing:-.02em}
 .mini h4{font-size:13.5px;font-weight:800;margin-bottom:7px}
-.mini p{font-size:12.5px;color:var(--gray-600);font-weight:300}
+.mini p{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
 .mini p b{color:var(--black);font-weight:700}
-.sub-h{font-size:16px;font-weight:800;margin:26px 0 14px}
+.sub-h{font-size:16px;font-weight:800;margin:26px 0 14px;max-width:var(--measure)}
 tr.destacada td{background:var(--yellow-light)}
 tr.destacada td b{color:var(--black);font-weight:700}
 .acc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .ico{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--black);
   display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ico svg{width:21px;height:21px}
-.badge{display:inline-block;padding:4px 11px;border-radius:100px;font-size:10px;font-weight:800;
-  text-transform:uppercase;letter-spacing:.05em}
+.badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.05em}
 .b-ok{background:#E8F5EC;color:var(--green)}
 .accion h4{font-size:16px;font-weight:800;margin-bottom:8px}
-.pedido{font-size:11.5px;color:var(--gray-400);font-style:italic;border-left:2px solid var(--gray-100);
+.pedido{font-size:13px;color:var(--gray-400);font-style:italic;border-left:2px solid var(--gray-100);
   padding-left:11px;margin-bottom:14px;line-height:1.5}
-.detalle{font-size:12.5px;color:var(--gray-600);font-weight:300;margin-bottom:14px}
+.detalle{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300;margin-bottom:14px}
 .detalle b{color:var(--black);font-weight:700}
 .next{background:var(--gray-50);border-radius:var(--radius-sm);padding:13px 15px;
-  font-size:12px;color:var(--gray-600);font-weight:300}
-.next span{display:block;font-size:9.5px;font-weight:800;letter-spacing:.09em;
-  text-transform:uppercase;color:#A07400;margin-bottom:5px}
+  font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
+.next span{display:block;font-size:12px;font-weight:800;color:var(--accent-fg);margin-bottom:5px}
 
 /* ---- pestanas ---- */
 .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-.tab{background:var(--white);border:1px solid var(--gray-200);border-radius:100px;
-  padding:8px 18px;font-family:inherit;font-size:11.5px;font-weight:600;color:var(--gray-600);
+.tab{background:var(--white);border:1px solid var(--gray-200);border-radius:999px;
+  padding:8px 18px;font-family:inherit;font-size:13px;font-weight:600;color:var(--gray-600);
   cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-.tab:hover{border-color:var(--yellow)}
-.tab[aria-selected="true"]{background:var(--black);color:var(--white);border-color:var(--black)}
+.tab:hover{border-color:var(--accent-fg)}
+/* La pestana activa se invierte con los roles del sistema, no con dos
+   colores absolutos: asi tambien imprime bien. */
+.tab[aria-selected="true"]{background:var(--fg);color:var(--ground);border-color:var(--fg)}
 .panel[hidden]{display:none}
 
 /* ---- graficas ---- */
 .chart-box{background:var(--white);border:1px solid var(--gray-200);
-  border-radius:var(--radius-lg);border-bottom:3px solid var(--yellow);padding:24px 20px 14px;
+  border-radius:var(--radius-lg);padding:24px 20px 14px;
   position:relative}
 .chart{width:100%;height:auto;display:block;overflow:visible}
 .rej{stroke:var(--gray-100);stroke-width:1}
@@ -112,26 +112,26 @@ tr.destacada td b{color:var(--black);font-weight:700}
 .linea-meta{fill:none;stroke:var(--gray-400);stroke-width:2;stroke-dasharray:6 5}
 .linea-g{fill:none;stroke:var(--gray-400);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:7 4}
 .pto-g{stroke:var(--gray-400)}
-.area{fill:rgba(255,192,0,.14)}
+.area{fill:rgba(255,212,0,.14)}
 .pto{fill:var(--white);stroke:var(--black);stroke-width:2.5}
-.val{font-size:10px;font-weight:700;fill:var(--black);text-anchor:middle}
-.lbl-x{font-size:9.5px;fill:var(--gray-400);text-anchor:middle;font-weight:500}
-.lbl-y{font-size:9.5px;fill:var(--gray-400);text-anchor:end}
-.lbl-y2{font-size:9.5px;fill:var(--gray-400);text-anchor:start}
+.val{font-size:12px;font-weight:700;fill:var(--black);text-anchor:middle}
+.lbl-x{font-size:12px;fill:var(--gray-400);text-anchor:middle;font-weight:500}
+.lbl-y{font-size:12px;fill:var(--gray-400);text-anchor:end}
+.lbl-y2{font-size:12px;fill:var(--gray-400);text-anchor:start}
 .leyenda{display:flex;gap:20px;justify-content:center;margin-top:6px;flex-wrap:wrap}
-.leyenda span{font-size:10.5px;color:var(--gray-600);font-weight:500;display:flex;
+.leyenda span{font-size:13px;color:var(--gray-600);font-weight:500;display:flex;
   align-items:center;gap:7px}
-.sw{width:13px;height:9px;border-radius:2px;display:inline-block}
+.sw{width:13px;height:9px;border-radius:0;display:inline-block}
 .sw.y{background:var(--yellow)}
 .sw.k{background:var(--black);height:3px}
 .sw.g{background:var(--gray-400);height:3px}
-.sw.a{background:rgba(255,192,0,.35)}
+.sw.a{background:rgba(255,212,0,.35)}
 .sw.gg{background:var(--gray-400);height:3px}
-#tip,#tip2{position:absolute;background:var(--black);color:var(--white);border-radius:var(--radius-sm);
-  padding:9px 12px;font-size:11px;pointer-events:none;opacity:0;transition:opacity .12s;
+#tip,#tip2{position:absolute;border-radius:var(--radius-sm);
+  padding:9px 12px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .12s;
   white-space:nowrap;z-index:5;font-weight:300;line-height:1.5}
-#tip b,#tip2 b{color:var(--yellow);font-weight:700}
-#tip .t,#tip2 .t{font-weight:700;color:var(--white);display:block;margin-bottom:3px}
+#tip b,#tip2 b{color:var(--accent-fg);font-weight:700}
+#tip .t,#tip2 .t{font-weight:700;color:var(--fg);display:block;margin-bottom:3px}
 
 /* ---- previews ---- */
 .prev-grid{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start}
@@ -139,77 +139,88 @@ tr.destacada td b{color:var(--black);font-weight:700}
 .shot{border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;
   background:var(--white)}
 .shot img{display:block;width:100%;height:auto}
-.shot figcaption{font-size:9.5px;color:var(--gray-400);text-align:center;padding:7px 4px;
-  font-weight:600;text-transform:uppercase;letter-spacing:.06em;border-top:1px solid var(--gray-100)}
+.shot figcaption{font-size:var(--fs-body-min);color:var(--gray-400);text-align:center;padding:7px 4px;
+  font-weight:600;border-top:1px solid var(--gray-100)}
 .feed{width:230px} .story{width:150px}
 .ad-copy{background:var(--gray-50);border-radius:var(--radius-md);padding:18px 20px}
 .ad-copy .ttl{font-size:15px;font-weight:800;margin-bottom:9px}
-.ad-copy p{font-size:12.5px;color:var(--gray-600);font-weight:300}
+.ad-copy p{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
 .cta{display:inline-block;margin-top:14px;background:var(--yellow);color:var(--black);
-  font-size:11px;font-weight:800;padding:8px 18px;border-radius:var(--radius-sm);
-  text-transform:uppercase;letter-spacing:.05em}
+  font-size:12px;font-weight:800;padding:8px 18px;border-radius:var(--radius-sm);letter-spacing:.05em}
 .serp{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);
   padding:18px 20px}
-.serp .patro{font-size:11px;font-weight:700;color:var(--black);margin-bottom:5px}
-.serp .url{font-size:11.5px;color:var(--gray-600);font-weight:300;margin-bottom:3px}
+.serp .patro{font-size:12px;font-weight:700;color:var(--black);margin-bottom:5px}
+.serp .url{font-size:13px;color:var(--gray-600);font-weight:300;margin-bottom:3px}
 .serp .tit{font-size:16px;color:#1a0dab;font-weight:500;margin-bottom:4px;line-height:1.3}
 .serp .desc{font-size:12.5px;color:var(--gray-600);font-weight:300}
-.tag{display:inline-block;background:var(--yellow-light);color:#7A5C00;font-size:11px;
-  font-weight:600;padding:5px 12px;border-radius:100px;margin:0 6px 7px 0}
+.tag{display:inline-block;background:var(--yellow-light);color:#7A5C00;font-size:12px;
+  font-weight:600;padding:5px 12px;border-radius:999px;margin:0 6px 7px 0}
 
-.nota{background:var(--yellow-light);border-left:4px solid var(--yellow);
-  border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;font-size:12.5px;
-  color:#5E4A16;font-weight:300;margin-top:16px}
+/* Enmarcada con el borde en acento completo, como .marco del sistema: la
+   barra lateral gruesa se lee como pestana suelta. */
+.nota{background:var(--yellow-light);border:1px solid var(--accent);
+  border-radius:var(--radius-sm);padding:16px 20px;font-size:13px;
+  color:#5E4A16;font-weight:400;margin-top:16px}
 .nota b{color:var(--black);font-weight:700}
 
-.cierre{background:var(--black);border-radius:var(--radius-xl);padding:38px 40px}
-.cierre h2{color:var(--white);margin-bottom:16px}
-.cierre p{font-size:13.5px;color:rgba(255,255,255,.62);font-weight:300;margin-bottom:14px;max-width:88ch}
+/* El fondo lo pinta el suelo declarado, no una regla a mano. */
+.cierre{border-radius:var(--radius-xl);padding:38px 40px}
+.cierre h2{color:var(--fg);margin-bottom:16px}
+.cierre p{font-size:13.5px;color:var(--fg-secondary);font-weight:400;margin-bottom:14px;max-width:88ch}
 .cierre p:last-child{margin-bottom:0}
-.cierre b{color:var(--yellow);font-weight:700}
+.cierre b{color:var(--accent-fg);font-weight:700}
 
 footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
-  font-size:11px;color:var(--gray-400);font-weight:300}
+  font-size:var(--fs-body-min);color:var(--gray-400);font-weight:300}
 :focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
-@media (max-width:980px){.kpi-row{grid-template-columns:repeat(2,1fr)}
+@media (max-width:980px){
   .grid-2,.grid-3,.prev-grid{grid-template-columns:1fr}h1{font-size:32px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* @movil:inicio */
+/* Colapso para telefono. Se escribe solo para los contenedores
+   que MIDIERON desbordamiento a 390px, no para todas las
+   rejillas del documento. El escritorio no se toca. */
+@media (max-width:560px){
+  .shots{flex-wrap:wrap}
+}
+/* @movil:fin */
 </style>
 </head>
 <body>
+
+<section class="portada" data-suelo="tinta">
+  <div class="portada-wrap">
+  <div class="portada-copy">
+    <span class="portada-kicker">U. Católica · Cierre</span>
+    <h1>Maestría en Gestión Económica y <em>Evaluación de Impacto</em></h1>
+    <p class="portada-lede">Universidad Católica de Colombia. Periodo del 6 de julio al 3 de septiembre de 2026 · Meta Ads y
+    Google Ads · Lanzamiento del programa. <b>Campaña finalizada el 3 de septiembre.</b></p>
+    <dl class="portada-cifras">
+      <div>
+        <dt>Inversión ejecutada</dt>
+        <dd>10.644.545<small><b>67,8%</b> de 15.700.000</small></dd>
+      </div>
+      <div>
+        <dt>Leads generados</dt>
+        <dd>195,2<small><b>62,2%</b> de la meta de 314</small></dd>
+      </div>
+      <div>
+        <dt>CPL del programa</dt>
+        <dd>54.531<small>objetivo 50.000 · <b>1,1×</b></small></dd>
+      </div>
+      <div>
+        <dt>Matrículas estimadas</dt>
+        <dd>6,8<small>al 3,5% de conversión</small></dd>
+      </div>
+    </dl>
+  </div>
+  </div>
+</section>
+
 <div class="wrap">
 
-<div class="hero">
-  <div class="hero-in">
-    <div class="eyebrow">Universidad Católica de Colombia · Informe de cierre</div>
-    <h1>Maestría en Gestión Económica y Evaluación de Impacto</h1>
-    <p class="hero-sub">Periodo del 6 de julio al 3 de septiembre de 2026 · Meta Ads y Google Ads ·
-    Lanzamiento del programa</p>
-    <span class="chip">Campaña finalizada el 3 de septiembre</span>
-  </div>
-  <div class="kpi-row">
-    <div class="kpi">
-      <div class="kpi-label">Inversión ejecutada</div>
-      <div class="kpi-value">10.644.545</div>
-      <div class="kpi-sub"><b>67,8%</b> de 15.700.000</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Leads generados</div>
-      <div class="kpi-value acc">195,2</div>
-      <div class="kpi-sub"><b>62,2%</b> de la meta de 314</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">CPL del programa</div>
-      <div class="kpi-value">54.531</div>
-      <div class="kpi-sub">objetivo 50.000 · <b>1,1×</b></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-label">Matrículas estimadas</div>
-      <div class="kpi-value">6,8</div>
-      <div class="kpi-sub">al 3,5% de conversión</div>
-    </div>
-  </div>
-</div>
+
 
 <section>
   <h2>Ejecutado contra lo propuesto</h2>
@@ -281,7 +292,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
     <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2">Acumulado vs meta</button>
   </div>
   <div class="chart-box">
-    <div id="tip"></div>
+    <div id="tip" data-suelo="tinta"></div>
     <div class="panel" id="p1" role="tabpanel" aria-labelledby="t1">
       <svg viewBox="0 0 860 300" class="chart" role="img"
   aria-label="Leads por semana y costo por lead">
@@ -370,8 +381,8 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   interés declarado en formación de posgrado y economía.</p>
   <div class="grid-2">
     <article class="card">
-      <h4 style="font-size:15px;font-weight:800;margin-bottom:14px">Segmentación en Meta</h4>
-      <table style="font-size:12px">
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:14px">Segmentación en Meta</h3>
+      <table style="font-size:var(--fs-body-min)">
         <tbody>
           <tr><td class="prog" style="width:44%">Objetivo de optimización</td>
           <td>Generación de leads</td></tr>
@@ -381,12 +392,11 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
           <td>Activa</td></tr>
         </tbody>
       </table>
-      <p style="font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase;
-        letter-spacing:.08em;margin:18px 0 10px">Capas de interés</p>
+      <p style="font-size:var(--fs-body-min);color:var(--gray-400);font-weight:600;margin:18px 0 10px">Capas de interés</p>
       <div><span class="tag">Economía (economía)</span><span class="tag">Educación de posgrado (educación superior)</span><span class="tag">Educación superior (educación)</span><span class="tag">Maestría (educación superior)</span><span class="tag">Universidad (educación superior)</span><span class="tag">Universidad privada (educación superior)</span></div>
     </article>
     <article class="card">
-      <h4 style="font-size:15px;font-weight:800;margin-bottom:8px">Estrategia de palabras clave</h4>
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:8px">Estrategia de palabras clave</h3>
       <p class="detalle">Las 15 palabras clave cubren tres frentes: la
       <b>consulta de marca</b> de la Universidad, el <b>nombre exacto</b> del programa y la
       <b>temática</b> de evaluación de impacto y proyectos. Todas en concordancia amplia, para
@@ -421,26 +431,26 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   <div class="grid-3" style="margin-bottom:22px">
     <div class="card mini">
       <span class="dato">46.299</span>
-      <h4>CPL de Meta en el periodo</h4>
+      <h3>CPL de Meta en el periodo</h3>
       <p>Frente a 76.504 en Google. Cada lead costó <b>1,65 veces
       menos</b> en Meta.</p>
     </div>
     <div class="card mini">
       <span class="dato">73%</span>
-      <h4>De los leads salieron de Meta</h4>
+      <h3>De los leads salieron de Meta</h3>
       <p>142 de 195,2 leads, con el
       61,8% de la inversión. Aportó más resultado del que consumió.</p>
     </div>
     <div class="card mini">
       <span class="dato">16 días</span>
-      <h4>Meta sostuvo el arranque</h4>
+      <h3>Meta sostuvo el arranque</h3>
       <p>Salió al aire el 6 de julio y llevó el programa sola hasta que búsqueda entró el 22,
       validando el canal antes de escalar.</p>
     </div>
   </div>
 
   <div class="chart-box" style="margin-bottom:22px">
-    <div id="tip2"></div>
+    <div id="tip2" data-suelo="tinta"></div>
     <svg viewBox="0 0 860 300" class="chart" role="img"
   aria-label="Costo por lead semanal de Meta y de Google">
   <line x1="60" y1="22.0" x2="836" y2="22.0" class="rej"/><line x1="60" y1="80.5" x2="836" y2="80.5" class="rej"/><line x1="60" y1="139.0" x2="836" y2="139.0" class="rej"/><line x1="60" y1="197.5" x2="836" y2="197.5" class="rej"/><line x1="60" y1="256.0" x2="836" y2="256.0" class="rej"/><text x="50" y="26.0" class="lbl-y">118k</text><text x="50" y="84.5" class="lbl-y">88k</text><text x="50" y="143.0" class="lbl-y">59k</text><text x="50" y="201.5" class="lbl-y">29k</text><text x="50" y="260.0" class="lbl-y">0k</text>
@@ -514,44 +524,44 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   <div class="grid-2">
 <article class="card accion">
   <div class="acc-head">
-    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFC000" stroke-width="2"
+    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#ffd400" stroke-width="2"
       stroke-linecap="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
     <span class="badge b-ok">Ejecutado</span>
   </div>
-  <h4>Generación de demanda</h4>
+  <h3>Generación de demanda</h3>
   <p class="pedido">Implementación de audiencias y estrategias para atraer aspirantes calificados.</p>
   <p class="detalle">En Meta se construyó una audiencia alineada al perfil del programa: <b>25 a 65 años</b> en <b>Bogotá + 40 km</b>, la zona de cobertura de la modalidad híbrida, con 6 capas de interés en educación superior, posgrado y economía. La optimización se fijó en generación de leads y se dejó activa la automatización de segmentación para que la plataforma ampliara el alcance donde encontrara señal de conversión.<br><br>En Google se cubrió el embudo con <b>15 palabras clave</b> en tres frentes: la consulta de marca de la Universidad, el nombre exacto del programa y la temática de evaluación de impacto y proyectos. La concordancia amplia se eligió a propósito para captar variantes de un programa nuevo, del que todavía no se conoce cómo lo busca la gente.</p>
   <div class="next"><span>Optimización siguiente</span>Activar las audiencias similares del píxel de registro completado —ya construidas en la cuenta— y concentrar la inversión de búsqueda en la consulta de marca, que fue la que trajo 39 de los 53 leads de Google.</div>
 </article>
 <article class="card accion">
   <div class="acc-head">
-    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFC000" stroke-width="2"
+    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#ffd400" stroke-width="2"
       stroke-linecap="round"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
     <span class="badge b-ok">Ejecutado</span>
   </div>
-  <h4>Optimización de creatividades</h4>
+  <h3>Optimización de creatividades</h3>
   <p class="pedido">Piezas y mensajes alineados al perfil profesional del programa.</p>
   <p class="detalle">El mensaje se construyó sobre el diferencial del programa: la capacidad de <b>demostrar impacto con evidencia</b>, no solo de tomar decisiones. La pieza salió en <b>dos formatos</b> —feed cuadrado 2048×2048 y story vertical 1080×1920— para cubrir todas las ubicaciones de Meta sin recortes, con llamado a la acción de registro y los diferenciales de modalidad híbrida y tres semestres explícitos en el copy.<br><br>En Google el anuncio adaptable se armó con <b>15 títulos y 4 descripciones</b>, el máximo que permite el formato, para que el sistema pruebe combinaciones y encuentre la que mejor responde a cada búsqueda.</p>
   <div class="next"><span>Optimización siguiente</span>Sumar variantes de pieza para rotar en marcha. El CPM de Meta subió 47% entre julio y agosto con el CTR estable, señal de que la audiencia ya vio el mensaje suficientes veces y conviene refrescarlo.</div>
 </article>
 <article class="card accion">
   <div class="acc-head">
-    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFC000" stroke-width="2"
+    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#ffd400" stroke-width="2"
       stroke-linecap="round"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
     <span class="badge b-ok">Ejecutado</span>
   </div>
-  <h4>Optimización de inversión</h4>
+  <h3>Optimización de inversión</h3>
   <p class="pedido">Concentración del presupuesto en las campañas con mejor desempeño.</p>
   <p class="detalle">Hubo dos intervenciones documentadas. El <b>18 de agosto</b> se detectó saturación en Meta y se recortó de 239.264 a cerca de 100.000 diarios: el CPL del canal cayó de 83.742 a <b>34.013</b> en el tramo siguiente, el mejor del periodo. Ese mismo día se ajustó la puja de Google para destrabar el 90% de impresiones que se perdía por ranking; se destrabó, pero el inventario adicional convirtió peor, así que la puja se devuelve a su objetivo original.<br><br>El <b>3 de septiembre</b> se cerró el periodo pausando las campañas de ambos canales.</p>
   <div class="next"><span>Optimización siguiente</span>Reasignar el reparto hacia el canal que cumplió: Meta entregó el 128% de sus leads estimados con el CPL en línea con lo proyectado.</div>
 </article>
 <article class="card accion">
   <div class="acc-head">
-    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FFC000" stroke-width="2"
+    <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#ffd400" stroke-width="2"
       stroke-linecap="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
     <span class="badge b-ok">Ejecutado</span>
   </div>
-  <h4>Seguimiento de resultados</h4>
+  <h3>Seguimiento de resultados</h3>
   <p class="pedido">Reporte de leads y CPL frente al objetivo establecido.</p>
   <p class="detalle">La medición está conectada de punta a punta: los leads de Meta entran por formulario instantáneo y los de Google por la acción de conversión «registro completado» medida en GA4, de modo que ambos canales se leen con el mismo criterio. Este informe consolida la serie semanal completa del periodo con inversión, leads, CPL y avance acumulado contra la meta.</p>
   <div class="next"><span>Optimización siguiente</span>Pasar a cadencia semanal fija con alerta automática cuando el CPL supere el objetivo, para poder corregir en marcha y no al cierre.</div>
@@ -559,7 +569,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   </div>
 </section>
 
-<section class="cierre">
+<section class="cierre" data-suelo="tinta">
   <h2>Conclusión y siguiente etapa</h2>
   <p>El lanzamiento cerró con <b>195,2 leads</b> y una inversión de <b>10.644.545</b>,
   el 67,8% de lo presupuestado. El aprendizaje más valioso del periodo es
@@ -594,9 +604,9 @@ document.querySelectorAll('[role="tablist"]').forEach(lista => {
     tabs.forEach(t => {
       const activo = t === tab;
       t.setAttribute('aria-selected', activo);
-      document.getElementById(t.getAttribute('aria-controls')).hidden = !activo;
-    });
-  }));
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !activo
+    })
+  }))
 });
 
 // Tooltip sobre las barras y los puntos de las graficas.
@@ -610,15 +620,15 @@ function mostrar(ev, i, modo) {
   const r = caja.getBoundingClientRect();
   tip.style.left = Math.min(Math.max(ev.clientX - r.left - 70, 8), r.width - 190) + 'px';
   tip.style.top = (ev.clientY - r.top - 78) + 'px';
-  tip.style.opacity = 1;
+  tip.style.opacity = 1
 }
 document.querySelectorAll('#p1 .barra').forEach((b, i) => {
   b.addEventListener('mousemove', ev => mostrar(ev, i, 'cpl'));
-  b.addEventListener('mouseleave', () => tip.style.opacity = 0);
+  b.addEventListener('mouseleave', () => tip.style.opacity = 0)
 });
 document.querySelectorAll('#p2 .pto').forEach((p, i) => {
   p.addEventListener('mousemove', ev => mostrar(ev, i, 'ac'));
-  p.addEventListener('mouseleave', () => tip.style.opacity = 0);
+  p.addEventListener('mouseleave', () => tip.style.opacity = 0)
 });
 
 // Grafica de canales: su propio tooltip, anclado a su caja.
@@ -636,9 +646,9 @@ caja2.querySelectorAll('.pto').forEach(pto => {
     const r = caja2.getBoundingClientRect();
     tip2.style.left = Math.min(Math.max(ev.clientX - r.left - 70, 8), r.width - 180) + 'px';
     tip2.style.top = (ev.clientY - r.top - 74) + 'px';
-    tip2.style.opacity = 1;
+    tip2.style.opacity = 1
   });
-  pto.addEventListener('mouseleave', () => tip2.style.opacity = 0);
+  pto.addEventListener('mouseleave', () => tip2.style.opacity = 0)
 });
 </script>
 </body>
