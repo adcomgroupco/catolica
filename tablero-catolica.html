@@ -329,6 +329,10 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
         <div class="table-header"><div class="table-title">Inversión mensual por canal y modalidad</div></div>
         <div class="table-scroll" id="mes-table"></div>
       </div>
+      <div class="table-wrap">
+        <div class="table-header"><div class="table-title">Inversión, Leads y CPL mensual — Ene 2026 a hoy</div></div>
+        <div class="table-scroll" id="mes-leads-cpl-table"></div>
+      </div>
     </div>
     <div class="section" id="s3">
       <div class="section-title">Detalle por Programa</div>
@@ -374,6 +378,15 @@ function parseFechaCompleta(val){
   const m2 = String(val).match(/(\d{4})-(\d{2})-(\d{2})/);
   if(m2) return {date:new Date(val), mes:m2[1]+'-'+m2[2], full:val};
   return {date:null, mes:'', full:''}
+}
+
+// La hoja de leads del CRM mezcla "Facebook_Ads"/"Google_Ads" con "facebook"/"google".
+function leadMedio(r){ return String(r[3]||'').toLowerCase().trim().replace(/_ads$/,'') }
+// Tipo de programa del CRM → modalidad del dashboard (Branding no genera leads CRM).
+function leadModal(r){
+  const t=String(r[5]||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  if(!t) return '';
+  return t.startsWith('profesional')?'Pregrados':'Posgrados'
 }
 
 function fmtMes(mesStr){
@@ -501,7 +514,7 @@ function processAndRender(){
     if(!fd) return false;
     if(fDesde&&fd<fDesde) return false;
     if(fHasta&&fd>fHasta) return false;
-    if(fMedio&&String(r[3]||'').toLowerCase()!==fMedio) return false;
+    if(fMedio&&leadMedio(r)!==fMedio) return false;
     return true
   });
 
@@ -510,7 +523,7 @@ function processAndRender(){
     if(!fd) return false;
     if(fDesde&&fd<fDesde) return false;
     if(fHasta&&fd>fHasta) return false;
-    if(fMedio&&String(r[3]||'').toLowerCase()!==fMedio) return false;
+    if(fMedio&&leadMedio(r)!==fMedio) return false;
     return true
   });
 
@@ -558,8 +571,8 @@ function processAndRender(){
     const inv=rm.reduce((a,r)=>a+r.inv,0);
     const lp=rm.reduce((a,r)=>a+r.leadsP,0);
     // ✅ FIX: sumar r[8] por medio
-    const lc=filtLeads.filter(r=>String(r[3]||'').toLowerCase()===m).reduce((a,r)=>a+(parseInt(r[8])||0),0);
-    const mt=filtMat.filter(r=>String(r[3]||'').toLowerCase()===m).reduce((a,r)=>a+(parseInt(r[12])||0),0);
+    const lc=filtLeads.filter(r=>leadMedio(r)===m).reduce((a,r)=>a+(parseInt(r[8])||0),0);
+    const mt=filtMat.filter(r=>leadMedio(r)===m).reduce((a,r)=>a+(parseInt(r[12])||0),0);
     return {medio:m,inv,leads_pauta:lp,leads_crm:lc,matriculas:mt,
       cpl_pauta:lp?inv/lp:0, cpl_crm:lc?inv/lc:0}
   });
@@ -597,8 +610,8 @@ function processAndRender(){
     const lc=la.reduce((a,r)=>a+(parseInt(r[8])||0),0);
     const mt=ma.reduce((a,r)=>a+(parseInt(r[12])||0),0);
     const ad=ma.reduce((a,r)=>a+(parseInt(r[11])||0),0);
-    const lc_fb=la.filter(r=>String(r[3]||'').toLowerCase()==='facebook').reduce((a,r)=>a+(parseInt(r[8])||0),0);
-    const lc_go=la.filter(r=>String(r[3]||'').toLowerCase()==='google').reduce((a,r)=>a+(parseInt(r[8])||0),0);
+    const lc_fb=la.filter(r=>leadMedio(r)==='facebook').reduce((a,r)=>a+(parseInt(r[8])||0),0);
+    const lc_go=la.filter(r=>leadMedio(r)==='google').reduce((a,r)=>a+(parseInt(r[8])||0),0);
     return {...p,leads_crm:lc,admitidos:ad,matriculas:mt,
       crm_facebook:lc_fb,crm_google:lc_go,
       cpl_pauta:p.leads_pauta?p.inv_total/p.leads_pauta:0,
@@ -613,6 +626,7 @@ function processAndRender(){
   $('last-update').textContent='Act: '+new Date().toLocaleTimeString('es-CO');
 
   renderMesTable();
+  renderMesLeadsCplTable();
   renderAllProgTables();
   revealSections()
 }
@@ -735,6 +749,73 @@ function renderMesTable(){
   $('mes-table').innerHTML=`<table>
     <thead><tr><th>Mes / Modalidad</th><th class="num">Facebook</th><th class="num">Google</th><th class="num">TikTok</th><th class="num">Programática</th><th class="num">Total</th></tr></thead>
     <tbody>${bodyRows}${totRow}</tbody></table>`
+}
+
+// ── RENDER INVERSIÓN, LEADS Y CPL MENSUAL ─────────────────────────────────────
+// Ventana fija Ene 2026 → hoy (igual que Compensar); respeta Canal y Modalidad.
+function renderMesLeadsCplTable(){
+  const fMedio=$('f-medio')?.value||'';
+  const fModal=$('f-modalidad')?.value||'';
+  const hoy=new Date();
+  const desdeStr='2026-01-01';
+  const hastaStr=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+  const enRango=fd=>fd&&fd>=desdeStr&&fd<=hastaStr;
+
+  const byMes={};
+  const bucket=mes=>byMes[mes]||(byMes[mes]={inv:0,leadsP:0,leadsCRM:0});
+  RAW_RG.forEach(r=>{
+    const f=parseFechaCompleta(r[0]);
+    if(!enRango(f.full)) return;
+    if(fMedio&&String(r[4]||'').toLowerCase().trim()!==fMedio) return;
+    if(fModal&&String(r[5]||'').trim()!==fModal) return;
+    const b=bucket(f.mes);
+    b.inv+=parseInv(r[2]);
+    b.leadsP+=Math.round(parseFloat(String(r[3]||'0').replace(/[$\s]/g,'').replace(',','.'))||0)
+  });
+  RAW_LEADS.forEach(r=>{
+    const f=parseFechaCompleta(r[0]);
+    if(!enRango(f.full)) return;
+    if(fMedio&&leadMedio(r)!==fMedio) return;
+    if(fModal&&leadModal(r)!==fModal) return;
+    bucket(f.mes).leadsCRM+=parseInt(r[8])||0
+  });
+
+  const meses=Object.keys(byMes).filter(Boolean).sort();
+  if(!meses.length){
+    $('mes-leads-cpl-table').innerHTML='<div style="padding:24px;text-align:center;color:#aaa">Sin datos</div>';
+    return
+  }
+  let tInv=0,tLP=0,tLC=0;
+  const body=meses.map(mes=>{
+    const d=byMes[mes];
+    tInv+=d.inv; tLP+=d.leadsP; tLC+=d.leadsCRM;
+    return `<tr>
+      <td>${fmtMes(mes)}</td>
+      <td class="num bold">${fmtCOP(d.inv)}</td>
+      <td class="num">${fmtNz(d.leadsP)}</td>
+      <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(d.leadsP?d.inv/d.leadsP:0)}</td>
+      <td class="num bold">${fmtNz(d.leadsCRM)}</td>
+      <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(d.leadsCRM?d.inv/d.leadsCRM:0)}</td>
+    </tr>`
+  }).join('');
+  const totRow=`<tr class="total-row">
+    <td>TOTAL</td>
+    <td class="num yellow">${fmtCOP(tInv)}</td>
+    <td class="num yellow">${fmtNz(tLP)}</td>
+    <td class="num yellow">${fmtCOP(tLP?tInv/tLP:0)}</td>
+    <td class="num yellow">${fmtNz(tLC)}</td>
+    <td class="num yellow">${fmtCOP(tLC?tInv/tLC:0)}</td>
+  </tr>`;
+  $('mes-leads-cpl-table').innerHTML=`<table>
+    <thead><tr>
+      <th>Mes</th>
+      <th class="num">Inversión</th>
+      <th class="num">Leads Plataforma</th>
+      <th class="num">CPL Plataforma</th>
+      <th class="num">Leads CRM</th>
+      <th class="num">CPL CRM</th>
+    </tr></thead>
+    <tbody>${body}${totRow}</tbody></table>`
 }
 
 function toggleMes(mes){
