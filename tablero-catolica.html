@@ -88,24 +88,49 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 .table-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-100)}
 .table-title{font-size:13px;font-weight:700}
 .table-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
-th{padding:9px 12px;text-align:left;font-size:12px;font-weight:700;color:var(--fg-muted);white-space:nowrap}
-th.num{text-align:right}
-td{padding:8px 12px;border-bottom:1px solid var(--gray-100);font-size:12px}
-td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
-td.bold{font-weight:700}
-tr:hover td{background:#FAFAFA}
-tr.total-row td{background:var(--black);color:var(--white);font-weight:700;border-bottom:none;font-size:12px}
-tr.total-row td.yellow{color:var(--accent)}
-tr.mes-row{background:var(--gray-50);cursor:pointer}
-tr.mes-row td{font-weight:700;font-size:12px;border-bottom:2px solid var(--gray-200)}
-tr.mes-row:hover td{background:#ECECEC}
+/* Todo lo de tabla va prefijado con .table-scroll: assets/css/adcom.css trae un
+   componente "tabla" propio con selectores sin clase (table, thead th+th,
+   tbody td{text-align:right;...}) que, sin el prefijo, gana la especificidad y
+   deja la primera columna alineada a la derecha con un min-width de fábrica.
+   Mismo criterio que tablero-compensar.html. */
+.table-scroll table{width:100%;border-collapse:collapse}
+.table-scroll thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
+.table-scroll th{padding:9px 12px;text-align:left;font-size:12px;font-weight:700;color:var(--fg-muted);white-space:nowrap}
+.table-scroll th.num{text-align:right}
+.table-scroll th.sortable{cursor:pointer;user-select:none}
+.table-scroll th.sortable:hover{color:var(--black)}
+.table-scroll th.sort-active{color:var(--black)!important}
+.table-scroll td{padding:8px 12px;border-bottom:1px solid var(--gray-100);font-size:12px;text-align:left}
+.table-scroll td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
+.table-scroll td.bold{font-weight:700}
+.prog-name{min-width:160px;max-width:220px;font-weight:600;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.table-scroll tr:hover td{background:#FAFAFA}
+.table-scroll tr.total-row td{background:var(--black);color:var(--white);font-weight:700;border-bottom:none;font-size:12px}
+.table-scroll tr.total-row td.yellow{color:var(--accent-fg)}
+.table-scroll tr.mes-row{background:var(--gray-50);cursor:pointer}
+.table-scroll tr.mes-row td{font-weight:700;font-size:12px;border-bottom:2px solid var(--gray-200)}
+.table-scroll tr.mes-row:hover td{background:#ECECEC}
 .toggle-icon{display:inline-block;transition:transform .2s;margin-right:6px;color:#aaa}
 .toggle-icon.open{transform:rotate(90deg)}
-tr.modal-row td{background:#FAFAFA;font-size:12px}
-tr.modal-row.hidden{display:none}
-tr.modal-row td:first-child{padding-left:28px;color:#666}
+.table-scroll tr.modal-row td{background:#FAFAFA;font-size:12px}
+.table-scroll tr.modal-row.hidden{display:none}
+.table-scroll tr.modal-row td:first-child{padding-left:28px;color:#666}
+/* RESPONSIVE TABLAS: la tabla de programas llega a 14 columnas. Se reduce
+   tipografía/relleno en cascada para que quepa sin scroll horizontal en
+   laptops (1366-1440), dejando el scroll de .table-scroll como último recurso. */
+@media(max-width:1700px){
+  .table-scroll th,.table-scroll td{font-size:11px;padding:7px 9px}
+  .prog-name{min-width:130px;max-width:180px}
+}
+@media(max-width:1450px){
+  .table-scroll th,.table-scroll td{font-size:10px;padding:6px 7px}
+  .prog-name{min-width:110px;max-width:150px}
+}
+@media(max-width:1300px){
+  .table-scroll th,.table-scroll td{font-size:9px;padding:4px 6px}
+  .table-scroll th{white-space:normal}
+  .prog-name{min-width:100px;max-width:130px}
+}
 .prog-section{margin-bottom:28px}
 .prog-section-title{font-size:12px;font-weight:800;padding:10px 16px;border-radius:var(--r-sm) var(--r-sm) 0 0;color:var(--fg);display:flex;align-items:center;gap:8px}
 .prog-section-title.pre{background:var(--pregrados)}
@@ -114,9 +139,6 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
 .prog-controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .prog-search{flex:1;min-width:180px;background:var(--white);border:1px solid var(--gray-200);font-family:'Poppins',sans-serif;font-size:12px;padding:8px 12px;border-radius:var(--r-sm);outline:none}
 .prog-search:focus{border-color:var(--accent-fg)}
-th.sortable{cursor:pointer;user-select:none}
-th.sortable:hover{color:var(--black)}
-th.sort-active{color:var(--black)!important}
 .badge{display:inline-block;padding:2px 7px;border-radius:0;font-size:12px;font-weight:700;white-space:nowrap}
 .b-Posgrados{background:#EDE9FE;color:#5B21B6}
 .b-Pregrados{background:#DBEAFE;color:#1E40AF}
@@ -198,20 +220,19 @@ th.sort-active{color:var(--black)!important}
   .table-wrap{border-radius:2mm;margin-bottom:4mm;break-inside:auto;page-break-inside:auto}
   .table-header{padding:3mm 4mm}
   .table-title{font-size:8.5pt}
-  table{width:100%;table-layout:auto}
+  .table-scroll table{width:100%;min-width:0;table-layout:auto}
   thead{display:table-header-group}
   tr{break-inside:avoid;page-break-inside:avoid}
-  th{padding:1.8mm 1.2mm;font-size:5.8pt;letter-spacing:.025em;white-space:normal}
-  td{padding:1.6mm 1.2mm;font-size:6.5pt}
-  td.num{white-space:nowrap}
-  tr.total-row td,tr.mes-row td{font-size:6.5pt}
-  tr.modal-row.hidden{display:table-row!important}
-  tr.modal-row td:first-child{padding-left:4mm}
+  .table-scroll th{padding:1.8mm 1.2mm!important;font-size:5.8pt!important;letter-spacing:.025em;white-space:normal!important}
+  .table-scroll td{padding:1.6mm 1.2mm!important;font-size:6.5pt!important}
+  .table-scroll td.num{white-space:nowrap}
+  .table-scroll tr.modal-row.hidden{display:table-row!important}
+  .table-scroll tr.modal-row td:first-child{padding-left:4mm!important}
   #s1,#s2{break-after:page;page-break-after:always}
   .prog-section{margin-bottom:5mm;break-before:page;page-break-before:always}
   .prog-section:first-child{break-before:auto;page-break-before:auto}
   .prog-section-title{padding:2.5mm 4mm;font-size:8pt;break-after:avoid;page-break-after:avoid}
-  .prog-section td:first-child{min-width:0!important;max-width:38mm!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+  .prog-name{min-width:0!important;max-width:38mm!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
 }
 </style>
 </head>
@@ -765,7 +786,7 @@ function renderAllProgTables(){
         onclick="sortProgGroup('${g.key}','${col}')">${lbl}${act?(s.dir>0?' ↑':' ↓'):''}</th>`
     };
     const tbody=rows.map(p=>{
-      const base=`<td style="min-width:160px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px" title="${p.Programa}">${p.Programa}</td>
+      const base=`<td class="prog-name" title="${p.Programa}">${p.Programa}</td>
         <td>${badge(p.Tipo)}</td>
         <td class="num bold">${fmtCOP(p.inv_total)}</td>
         <td class="num" style="color:var(--fg)">${fmtCOP(p.inv_facebook)}</td>
