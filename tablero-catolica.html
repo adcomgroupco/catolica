@@ -346,8 +346,15 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 
 <script>
 const URL_RG    = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=1551290449";
-const URL_LEADS = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=17439818";
-const URL_MAT   = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=955481695";
+// CRM_ASPIRANTES pesa ~17 MB completa: se piden solo las columnas y filas de pauta.
+// B Fecha · C Fuente · D Campaña · E Código · F Programa · H Nivel · I Periodo
+const URL_ASP   = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=40171782&tq="+encodeURIComponent("select B,C,D,E,F,H,I where C='Trafico_Pago'");
+const URL_ADM   = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=2049412307";
+const FUENTE_PAUTA = 'Trafico_Pago';
+// Nombres del CRM que no coinciden con RESUMEN GENERAL ni normalizando tildes.
+const PROGRAMA_ALIAS = {
+  'especializacion en compliace y derecho de los negocios':'Especializacion en Compliance y Derecho de los Negocios',
+};
 const URL_METAS = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=2109044138";
 
 let RAW_RG=[], RAW_LEADS=[], RAW_MAT=[], RAW_METAS=[];
@@ -380,8 +387,7 @@ function parseFechaCompleta(val){
   return {date:null, mes:'', full:''}
 }
 
-// La hoja de leads del CRM mezcla "Facebook_Ads"/"Google_Ads" con "facebook"/"google".
-function leadMedio(r){ return String(r[3]||'').toLowerCase().trim().replace(/_ads$/,'') }
+function leadMedio(r){ return String(r[3]||'') }
 // Tipo de programa del CRM → modalidad del dashboard (Branding no genera leads CRM).
 function leadModal(r){
   const t=String(r[5]||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
@@ -401,16 +407,75 @@ function fmtMes(mesStr){
 function gvizRows(response){
   if(response?.status!=='ok'||!response.table)throw new Error('Google Sheets devolvió una respuesta inválida');
   const cols=response.table.cols||[];
-  return (response.table.rows||[]).map(row=>cols.map((col,index)=>{
+  const rows=(response.table.rows||[]).map(row=>cols.map((col,index)=>{
     const cell=row.c?.[index];
     if(!cell||cell.v===null||cell.v===undefined)return '';
-    if(col.type==='date'){
+    if(col.type==='date'||col.type==='datetime'){
       if(cell.f)return cell.f;
-      const match=String(cell.v).match(/^Date\((\d+),(\d+),(\d+)\)$/);
+      const match=String(cell.v).match(/^Date\((\d+),(\d+),(\d+)/);
       if(match)return `${match[3]}/${Number(match[2])+1}/${match[1]}`
     }
     return cell.v
-  }))
+  }));
+  rows.headers=cols.map(col=>String(col.label||'').trim());
+  return rows
+}
+
+// ── CRM → formato posicional ─────────────────────────────────────────────────
+// CRM_ASPIRANTES y CRM_ADMISIONES llegan crudas desde la sincronización con el CRM
+// (se recargan completas en cada corrida), así que la normalización vive aquí.
+function normTexto(s){
+  return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim().replace(/\s+/g,' ')
+}
+function normPrograma(s){
+  const nombre=String(s||'').trim();
+  return PROGRAMA_ALIAS[normTexto(nombre)]||nombre
+}
+// Campaña del CRM: Facebook_Ads, Google_Ads, Google_Pmax, programatica…
+function normMedio(s){
+  const t=normTexto(s);
+  if(t.startsWith('facebook'))return 'facebook';
+  if(t.startsWith('google'))return 'google';
+  if(t.startsWith('tiktok'))return 'tiktok';
+  if(t.startsWith('programatica'))return 'programatica';
+  return t
+}
+function crmCol(rows,...labels){
+  const heads=(rows.headers||[]).map(normTexto);
+  for(const label of labels){
+    const index=heads.indexOf(normTexto(label));
+    if(index!==-1)return index
+  }
+  throw new Error(`Falta la columna "${labels[0]}" en la hoja del CRM`)
+}
+// Salida: [0]Fecha [1]Cod [2]Fuente [3]Medio [4]Programa [5]Tipo [6]Periodo [7]Etapa
+//         [8]ASPIRANTES [9]PRE-INSCRITOS [10]INSCRITOS [11]ADMITIDOS [12]MATRICULAS
+function crmAspirantes(rows){
+  const c={fecha:crmCol(rows,'Fecha de creación'),fuente:crmCol(rows,'Fuente de Aspirante'),
+    medio:crmCol(rows,'Campaña','Medio'),cod:crmCol(rows,'Código de programa'),
+    prog:crmCol(rows,'Nombre del programa','Programa'),nivel:crmCol(rows,'Nivel de formación'),
+    periodo:crmCol(rows,'Periodo')};
+  return rows.filter(r=>String(r[c.fuente]).trim()===FUENTE_PAUTA).map(r=>[
+    r[c.fecha],r[c.cod],r[c.fuente],normMedio(r[c.medio]),normPrograma(r[c.prog]),
+    String(r[c.nivel]||'').trim(),r[c.periodo],'ASPIRANTE',1,0,0,0,0
+  ])
+}
+function crmAdmisiones(rows){
+  const c={fecha:crmCol(rows,'Fecha de creación'),fase:crmCol(rows,'Fase'),
+    fuente:crmCol(rows,'Fuente de Aspirante'),medio:crmCol(rows,'Campaña','Medio'),
+    cod:crmCol(rows,'Código de programa'),prog:crmCol(rows,'Nombre programa','Nombre del programa'),
+    nivel:crmCol(rows,'Nivel de formación'),periodo:crmCol(rows,'Periodo'),
+    pre:crmCol(rows,'Fecha Pre-inscrito'),ins:crmCol(rows,'Fecha Inscrito'),
+    adm:crmCol(rows,'Fecha Admitido'),mat:crmCol(rows,'Fecha Matriculado')};
+  const tiene=v=>String(v||'').trim()?1:0;
+  return rows.filter(r=>String(r[c.fuente]).trim()===FUENTE_PAUTA).map(r=>{
+    const cancelado=normTexto(r[c.fase])==='cancelado';
+    return [
+      r[c.fecha],r[c.cod],r[c.fuente],normMedio(r[c.medio]),normPrograma(r[c.prog]),
+      String(r[c.nivel]||'').trim(),r[c.periodo],String(r[c.fase]||'').trim(),
+      0,tiene(r[c.pre]),tiene(r[c.ins]),tiene(r[c.adm]),cancelado?0:tiene(r[c.mat])
+    ]
+  })
 }
 
 function loadGoogleSheet(url){
@@ -451,8 +516,8 @@ async function refreshData(){
   $('last-update').textContent='Cargando...';
   const results=await Promise.allSettled([
     loadGoogleSheet(URL_RG),
-    loadGoogleSheet(URL_LEADS),
-    loadGoogleSheet(URL_MAT),
+    loadGoogleSheet(URL_ASP).then(crmAspirantes),
+    loadGoogleSheet(URL_ADM).then(crmAdmisiones),
     loadGoogleSheet(URL_METAS)
   ]);
   if(token!==REFRESH_TOKEN)return;
@@ -475,8 +540,7 @@ async function refreshData(){
 }
 
 // ── PROCESAR ──────────────────────────────────────────────────────────────────
-// LEADS cols: [0]Fecha [1]Cod [2]Fuente [3]Medio [4]Programa [5]Tipo [6]Periodo [7]Etapa
-//             [8]ASPIRANTES [9]PRE-INSCRITOS [10]INSCRITOS [11]ADMITIDOS [12]MATRICULAS
+// RAW_LEADS y RAW_MAT ya vienen en formato posicional (ver crmAspirantes / crmAdmisiones).
 function processAndRender(){
   const fDesde=$('f-desde')?.value||'';
   const fHasta=$('f-hasta')?.value||'';
@@ -604,8 +668,9 @@ function processAndRender(){
 
   window._progData=Object.values(progMap).map(p=>{
     // ✅ FIX: filtrar también por fecha y programa, sumar r[8]
-    const la=filtLeads.filter(r=>String(r[4]||'').trim()===p.Programa);
-    const ma=filtMat.filter(r=>String(r[4]||'').trim()===p.Programa);
+    const progKey=normTexto(p.Programa);
+    const la=filtLeads.filter(r=>normTexto(r[4])===progKey);
+    const ma=filtMat.filter(r=>normTexto(r[4])===progKey);
     // ✅ FIX: sumar columna r[8] en lugar de .length
     const lc=la.reduce((a,r)=>a+(parseInt(r[8])||0),0);
     const mt=ma.reduce((a,r)=>a+(parseInt(r[12])||0),0);
