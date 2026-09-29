@@ -1542,6 +1542,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 .mchips{display:flex;flex-wrap:wrap;gap:6px}
 .mchips span{border:1px solid #333;border-radius:999px;padding:7px 12px;font-size:.76rem;color:#ddd;background:#171717}
 .guard p{margin-top:12px;font-size:.84rem;color:#aaa;line-height:1.5}
+.prop dl{grid-template-columns:repeat(3,minmax(0,1fr))}
 </style>
 <style>
 /* =====================================================================
@@ -1918,6 +1919,54 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 
 .tcrm dd{margin-bottom:6px!important}
 
+/* =====================================================================
+   BORRADOR 3 · versión condensada
+   ===================================================================== */
+.terr{border-left:4px solid var(--yellow);padding:14px 0 14px 22px}
+.terr .tag{display:block;font-size:.64rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px}
+.terr p{font-size:clamp(1.1rem,2vw,1.45rem);font-weight:800;line-height:1.35;max-width:52ch}
+.terr em{font-style:normal;color:var(--yellow)}
+/* drivers desplegables */
+.dacc2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.dacc{display:grid;gap:8px}
+.dacc details{border:1px solid var(--line-dark);border-radius:18px;background:#0f0f0f;overflow:hidden;transition:border-color .2s ease,background .2s ease}
+.dacc details[open]{border-color:rgba(255,212,0,.55);background:#141414}
+.dacc summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:34px minmax(0,1fr) 22px;gap:12px;align-items:center;padding:14px 16px}
+.dacc summary::-webkit-details-marker{display:none}
+.dacc .dc-code{width:34px;height:34px;border-radius:10px;background:#1c1c1c;color:var(--yellow);display:grid;place-items:center;font-size:.72rem;font-weight:900}
+.dacc details[open] .dc-code{background:var(--yellow);color:var(--ink)}
+.dacc summary b{display:block;font-size:1rem;line-height:1.2}
+.dacc summary small{display:block;font-size:.8rem;color:#9a9a9a;margin-top:2px}
+.dacc summary small em{font-style:normal;color:var(--yellow)}
+.dacc .chev{color:#777;font-size:1rem;transition:transform .25s ease;text-align:center}
+.dacc details[open] .chev{transform:rotate(180deg);color:var(--yellow)}
+.dacc .dc-body{padding:0 16px 16px 62px;display:grid;gap:10px;animation:dcin .3s ease}
+@keyframes dcin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.dacc .dc-body dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:.84rem;line-height:1.45}
+.dacc .dc-body dt{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;padding-top:3px}
+.dacc .dc-body dd{margin:0;color:#ccc}
+.dacc .dc-body code{font-family:ui-monospace,Menlo,monospace;font-size:.72rem;color:#9a9a9a}
+.dacc .dc-body code b{color:var(--yellow)}
+@media(max-width:900px){.dacc2{grid-template-columns:1fr}.dacc .dc-body{padding-left:16px}.dacc .dc-body dl{grid-template-columns:1fr}}
+/* recorrido 2027-1 sobre papel */
+.section-light .drv-bar{color:var(--muted-light)}
+.section-light .drv-bar b{color:var(--ink)}
+.imannote.dark-on-light{color:var(--muted-light);margin-top:14px}
+/* landings: reparto y decisión en una fila */
+.abrow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:stretch}
+.decision-mini{background:var(--ink);color:#fff;border-radius:20px;padding:22px 24px}
+.decision-mini .tag{font-size:.64rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow)}
+.decision-mini h4{margin-top:8px;font-size:1.25rem;font-weight:900;line-height:1.15}
+.decision-mini p{margin-top:8px;color:#bbb;font-size:.88rem;line-height:1.5}
+@media(max-width:900px){.abrow{grid-template-columns:1fr}}
+/* presupuesto sobre tinta */
+.section-dark .bud-total{background:#111;border:1px solid var(--line-dark)}
+.section-dark .bud-cta{background:#111;border-color:var(--line-dark)}
+.section-dark .bud-cta p{color:#bbb}
+.section-dark .closing p{color:#aaa}
+.section-dark .bud-media{color:var(--ink)}
+.bud-exp,.bud-exp b{color:var(--ink)}
+
 </style>
 </head>
 <body>
@@ -1927,7 +1976,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
   <nav>
     <a href="#ch-01" class="nav-link">01 Punto de partida</a>
     <a href="#ch-02" class="nav-link">02 Cómo lo vamos a hacer</a>
-    <a href="#c2-6" class="nav-link nav-sub">Presupuesto</a>
+    <a href="#presupuesto" class="nav-link nav-sub">Presupuesto</a>
   </nav>
   <span class="header-context">CATÓLICA · 2027-1</span>
 </header>
@@ -1949,7 +1998,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
     </dl>
   </div>
   <aside class="syllabus" aria-label="Contenido de la ruta">
-    <div class="sy-top"><span>CONTENIDO</span><span>2 PARTES · 9 CAPÍTULOS</span></div>
+    <div class="sy-top"><span>CONTENIDO</span><span>2 PARTES · 8 CAPÍTULOS</span></div>
     <div class="sy-mod">
       <h3><span>PARTE 01</span>Punto de partida</h3>
       <ul class="sy-list">
@@ -1961,12 +2010,11 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
     <div class="sy-mod">
       <h3><span>PARTE 02</span>Cómo lo vamos a hacer</h3>
       <ul class="sy-list">
-        <li><a href="#c2-1"><i>1</i>Drivers y hilo conductor</a></li>
+        <li><a href="#c2-1"><i>1</i>Drivers</a></li>
         <li><a href="#c2-2"><i>2</i>Recorrido del aspirante</a></li>
         <li><a href="#c2-3"><i>3</i>Efecto Imán y agentes</a></li>
         <li><a href="#c2-4"><i>4</i>Test de landings</a></li>
-        <li><a href="#c2-5"><i>5</i>Cómo se arma la pauta</a></li>
-        <li><a href="#c2-6"><i>6</i>Presupuesto</a></li>
+        <li><a href="#c2-5"><i>5</i>Pauta y presupuesto</a></li>
       </ul>
     </div>
   </aside>
@@ -2073,15 +2121,6 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
   </div>
 
   <div class="block reveal">
-    <div class="sub-head"><span class="tag">Lo que dice el análisis de comunicación</span><h3>La categoría comunica instituciones. El aspirante compra pruebas.</h3></div>
-    <div class="grid-3">
-      <div class="eje-card"><div class="eje-num">01</div><h5>La pieza intenta decirlo todo</h5><p>Programa, modalidad, beneficios, financiación y llamado en un solo bloque. Ningún argumento se prueba, porque todos se dicen a la vez. La pieza de texto funciona; ahora necesita un solo argumento.</p></div>
-      <div class="eje-card"><div class="eje-num">02</div><h5>Casi todo es estático</h5><p>El 83% de la inversión en Meta va a piezas estáticas. El siguiente paso no es abandonar el texto: es probar texto en pantalla sobre un video con una persona real.</p></div>
-      <div class="eje-card"><div class="eje-num">03</div><h5>No hay un aspirante: hay ocho razones</h5><p>Segmentar por programa produce versiones. Segmentar por la razón de decisión, el driver, produce hipótesis que se pueden medir.</p></div>
-    </div>
-  </div>
-
-  <div class="block reveal">
     <div class="sub-head"><span class="tag">Respaldo que hoy no se cuenta</span><h3>La prueba ya existe. Está en las landings, no en los anuncios.</h3><p>Lo revisamos en las 35 landings de programa. Hay respaldo que aplica a todos y respaldo propio de algunos programas.</p></div>
     <div class="acr2">
       <div class="acr-all">
@@ -2102,19 +2141,10 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
         </div>
       </div>
     </div>
-    <p class="acr-note">Por validar con la Católica: en la mayoría de especializaciones, maestrías y doctorados la resolución que publica la landing es el registro calificado, no una acreditación del programa. Mientras se confirma, en posgrado usamos el respaldo institucional.</p>
   </div>
 
   <div class="block reveal">
-    <div class="tension">
-      <p class="eyebrow eyebrow-dark"><span>LA TENSIÓN QUE HAY QUE RESOLVER</span></p>
-      <h3>Bajar la voz institucional sin soltar el respaldo institucional.</h3>
-      <div class="tension-duo">
-        <div><b>Si baja la voz sin el respaldo</b>Se confunde con una plataforma más, sin su velocidad ni su precio. Pierde su ventaja.</div>
-        <div><b>Si mantiene el respaldo sin bajar la voz</b>Queda igual a todas las universidades: mismo lenguaje, misma pieza, mismo argumento.</div>
-      </div>
-      <p class="tension-out">El territorio: <em>el rigor de una universidad acreditada, dicho en el lenguaje de una plataforma.</em></p>
-    </div>
+    <div class="terr"><span class="tag">El territorio</span><p>Bajar la voz institucional sin soltar el respaldo: <em>el rigor de una universidad acreditada, dicho en el lenguaje de una plataforma.</em></p></div>
   </div>
 </section>
 
@@ -2144,8 +2174,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
     <a href="#c2-2"><i>2</i>Recorrido</a>
     <a href="#c2-3"><i>3</i>Imán y agentes</a>
     <a href="#c2-4"><i>4</i>Landings</a>
-    <a href="#c2-5"><i>5</i>Pauta</a>
-    <a href="#c2-6"><i>6</i>Presupuesto</a>
+    <a href="#c2-5"><i>5</i>Pauta y presupuesto</a>
   </div>
   <div class="cb-prog"><i></i></div>
 </nav>
@@ -2153,19 +2182,19 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 <section class="section-dark mod-open">
   <div class="mod-head reveal">
     <div class="num">02</div>
-    <div><span class="kick">Parte 02</span><h2>Cómo lo vamos a hacer</h2><p>Seis capítulos, en el orden en que el aspirante vive la ruta: la razón que lo mueve, el recorrido, la conversación, la landing, la pauta que lo sostiene y lo que cuesta.</p></div>
+    <div><span class="kick">Parte 02</span><h2>Cómo lo vamos a hacer</h2><p>Cinco capítulos, en el orden en que el aspirante vive la ruta: la razón que lo mueve, el recorrido, la conversación, la landing y la pauta que lo sostiene.</p></div>
   </div>
 </section>
 
 <!-- 2.1 -->
 <section class="section-dark" id="c2-1" data-lesson="2-1" style="padding-top:0">
-  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 1 · Drivers y hilo conductor</span><h2>Ocho razones para decidir, un mensaje para cada una</h2><p>Un driver es la razón principal por la que alguien decide estudiar. Salen del análisis de audiencias: cuatro en pregrado y cuatro en posgrado. Cada anuncio le habla a uno solo.</p></div>
+  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 1 · Drivers</span><h2>Ocho razones para decidir, un mensaje para cada una</h2><p>Un driver es la razón principal por la que alguien decide estudiar. Salen del análisis de audiencias: cuatro en pregrado y cuatro en posgrado. Cada anuncio le habla a uno solo. Abre cada uno para ver el detalle.</p></div>
 
   <div class="block reveal">
-    <div class="drv-group"><span class="tag">Pregrado</span><q>¿En quién quieres convertirte?</q></div>
-    <div class="dcards" id="dcardsPre"></div>
-    <div class="drv-group"><span class="tag">Posgrado</span><q>¿Cómo das el siguiente salto?</q></div>
-    <div class="dcards" id="dcardsPos"></div>
+    <div class="dacc2">
+      <div><div class="drv-group"><span class="tag">Pregrado</span><q>¿En quién quieres convertirte?</q></div><div class="dacc" id="daccPre"></div></div>
+      <div><div class="drv-group"><span class="tag">Posgrado</span><q>¿Cómo das el siguiente salto?</q></div><div class="dacc" id="daccPos"></div></div>
+    </div>
   </div>
 
   <div class="block reveal">
@@ -2245,16 +2274,15 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
       <div class="flow">
         <div class="today">
           <div class="today-in">
-            <div class="fbox pain"><span class="fb-k">Anuncio</span><span class="fb-t">Pieza estática con seis mensajes</span><span class="fb-d">Programa, beneficios y financiación al tiempo</span><span class="pain-tag">No sabemos qué argumento funcionó</span></div>
-            <div class="fbox"><span class="fb-k">Landing</span><span class="fb-t">Una sola versión por programa</span><span class="fb-d">Con formulario y promesa de contacto en 48 horas</span></div>
-            <div class="fbox pain"><span class="fb-k">Página de gracias</span><span class="fb-t">"Te contactaremos pronto"</span><span class="fb-d">El aspirante espera</span><span class="pain-tag">El interés se enfría</span></div>
+            <div class="fbox pain"><span class="fb-k">Anuncio</span><span class="fb-t">Una pieza con seis mensajes</span><span class="fb-d">Programa, beneficios y financiación al tiempo</span><span class="pain-tag">No sabemos qué argumento funcionó</span></div>
+            <div class="fbox"><span class="fb-k">Landing</span><span class="fb-t">Una sola versión por programa</span><span class="fb-d">Formulario y promesa de contacto en 48 horas</span></div>
+            <div class="fbox pain"><span class="fb-k">Página de gracias</span><span class="fb-t">"Te contactaremos pronto"</span><span class="pain-tag">El interés se enfría</span></div>
           </div>
           <div class="farrow">→</div>
-          <div class="fbox bottleneck"><span class="fb-k">Cuello de botella</span><span class="fb-t">El primer contacto</span><span class="fb-d">Equipo comercial y agente de voz en seguimiento, sin el contexto del anuncio ni de la landing.</span><span class="pain-tag">4 de cada 10 nunca hablan con nadie</span><span class="pain-tag">Todos los leads pesan igual</span></div>
+          <div class="fbox bottleneck"><span class="fb-k">Cuello de botella</span><span class="fb-t">El primer contacto</span><span class="fb-d">Equipo comercial y agente de voz en seguimiento, sin el contexto del anuncio ni de la landing.</span><span class="pain-tag">Todos los leads pesan igual</span></div>
           <div class="farrow">→</div>
           <div class="today-rest">
-            <div class="fbox"><span class="fb-k">Preinscripción</span><span class="fb-t">6 de cada 10 llegan a matrícula</span><span class="fb-d">Quien llega aquí, se queda</span></div>
-            <div class="fbox"><span class="fb-k">Inscripción y admisión</span><span class="fb-t">Proceso de admisiones</span></div>
+            <div class="fbox"><span class="fb-k">Preinscripción y admisión</span><span class="fb-t">Proceso de admisiones</span></div>
             <div class="fbox goal"><span class="fb-k">Meta</span><span class="fb-t">Matrícula</span><span class="fb-d">Sin saber qué razón la trajo</span></div>
           </div>
         </div>
@@ -2328,71 +2356,42 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
   </div>
 </section>
 
-
 <!-- 2.3 -->
 <section class="section-dark" id="c2-3" data-lesson="2-3">
   <div class="lesson-head reveal"><span class="lesson-n">Capítulo 3 · Efecto Imán y agentes</span><h2>El aspirante levanta la mano y alguien responde en minutos</h2><p>Justo después de enviar el formulario, el aspirante elige cómo quiere hablar. Cada botón activa un agente que atiende el primer contacto y le entrega al asesor una oportunidad lista para avanzar.</p></div>
 
   <div class="block reveal">
-    <div class="sub-head"><span class="tag">El Efecto Imán</span><h3>De prospecto perseguido a prospecto que levanta la mano</h3></div>
     <div class="imanvs">
-      <div class="pas"><b>Página de gracias de hoy</b><q>"Te contactaremos en menos de 48 horas."</q><p>El aspirante espera, se enfría y termina entre los 4 de cada 10 que nunca tienen una conversación.</p></div>
+      <div class="pas"><b>Página de gracias de hoy</b><q>"Te contactaremos en menos de 48 horas."</q><p>El aspirante espera y se enfría.</p></div>
       <div class="act"><b>Con Efecto Imán</b><q>"Laura, ¿resolvemos tus dudas ahora mismo?"</q><p>El aspirante actúa en el momento de mayor interés, y el botón que elige dice qué tan listo está.</p></div>
     </div>
-    <div class="grid-2">
-      <div class="option-card"><span class="o-num">01</span><h4>📞 Llámame ahora</h4><p>El agente de voz que ya opera marca en menos de un minuto, con el programa, el driver y lo que el aspirante dijo que más le importa.</p><span class="o-prio">Activa: agente de voz · ya opera</span></div>
-      <div class="option-card accent"><span class="o-num">02</span><h4>💬 Escribir por WhatsApp</h4><p>Abre el chat con un mensaje ya escrito: el programa y lo que más le importa. El agente responde en segundos sobre ese tema.</p><span class="o-prio">Activa: agente de WhatsApp · nuevo</span></div>
-    </div>
-    <p class="imannote">Si no elige ninguno, entra a la secuencia de seguimiento: el agente de voz lo busca en la mejor franja de su perfil.</p>
-  </div>
-
-  <div class="block reveal">
-    <div class="sub-head"><span class="tag">Dos agentes, dos papeles</span><h3>La voz ya existe. WhatsApp es lo que proponemos sumar.</h3></div>
     <div class="solution-grid">
       <div class="solution-card">
         <div class="sol-icon" style="font-size:1.4rem">📞</div>
-        <div class="sol-tag">Voz · Contactar y recuperar · ya opera</div>
-        <h4>Lo conectamos al botón y le damos contexto</h4>
-        <p class="sol-desc">Hoy hace seguimiento por llamada. En 2027-1 se activa desde "Llámame ahora" y llama sabiendo qué programa vio el aspirante, qué driver lo trajo y qué respondió en el formulario. Sigue buscando a quien dejó sus datos sin avanzar.</p>
+        <div class="sol-tag">Botón "Llámame ahora" · agente de voz · ya opera</div>
+        <h4>Llama en menos de un minuto, con contexto</h4>
+        <p class="sol-desc">Es el agente que hoy hace seguimiento. Lo conectamos al botón y llama sabiendo el programa, el driver del anuncio y lo que el aspirante dijo que más le importa. Sigue buscando a quien dejó sus datos sin avanzar.</p>
       </div>
       <div class="solution-card">
         <div class="sol-icon" style="background:#25d366;font-size:1.4rem">💬</div>
-        <div class="sol-tag" style="color:#25d366">WhatsApp · Orientar y acompañar · nuevo</div>
-        <h4>Responde, identifica barreras y guía al siguiente paso</h4>
-        <p class="sol-desc">Parte del mensaje que escribió el aspirante, resuelve dudas del programa y detecta barreras como financiación, horarios u homologación. Busca un avance concreto: una cita con el asesor o el inicio de la inscripción.</p>
+        <div class="sol-tag" style="color:#25d366">Botón "Escribir por WhatsApp" · agente de WhatsApp · nuevo</div>
+        <h4>Responde en segundos sobre el tema del aspirante</h4>
+        <p class="sol-desc">Parte del mensaje que el aspirante envía, resuelve dudas del programa y detecta barreras como financiación, horarios u homologación. Busca un avance concreto: una cita con el asesor o el inicio de la inscripción.</p>
       </div>
     </div>
   </div>
 
   <div class="block reveal">
-    <div class="sub-head"><span class="tag">Cómo viaja la información al WhatsApp</span><h3>El mensaje sale escrito desde la página de gracias</h3><p>Si el aspirante solo abriera un chat en blanco, el agente no sabría quién es. Por eso la landing le pasa los datos a la página de gracias, y el botón de WhatsApp los convierte en el primer mensaje.</p></div>
+    <div class="sub-head"><span class="tag">Cómo viaja la información al WhatsApp</span><h3>El mensaje sale escrito desde la página de gracias</h3><p>Si el aspirante abriera un chat en blanco, el agente no sabría quién es. Por eso la landing le pasa los datos a la página de gracias, y el botón los convierte en el primer mensaje.</p></div>
     <div class="wapath">
-      <div class="wp-step"><span class="wp-n">1</span><b>El formulario guarda</b><span>Nombre, programa, el driver que trajo el anuncio y lo que el aspirante dijo que más le importa.</span></div>
+      <div class="wp-step"><span class="wp-n">1</span><b>El formulario guarda</b><span>Nombre, programa, el driver del anuncio y lo que más le importa.</span></div>
       <div class="wp-step"><span class="wp-n">2</span><b>Pasa a la página de gracias</b><span>En la URL o en la memoria del navegador.</span><code>/derecho/gracias?n=Laura&amp;m=homologar&amp;ref=UC21-4821</code></div>
-      <div class="wp-step"><span class="wp-n">3</span><b>El botón arma el mensaje</b><span>El enlace de WhatsApp acepta un texto ya escrito. El aspirante solo toca enviar.</span><code>wa.me/57…?text=Hola, soy <b>Laura</b>. Me interesa <b>Derecho</b> y quiero saber <b>qué puedo homologar</b>. (Ref. UC21-4821)</code></div>
+      <div class="wp-step"><span class="wp-n">3</span><b>El botón arma el mensaje</b><span>El aspirante solo toca enviar.</span><code>wa.me/57…?text=Hola, soy <b>Laura</b>. Me interesa <b>Derecho</b> y quiero saber <b>qué puedo homologar</b>. (Ref. UC21-4821)</code></div>
       <div class="wp-step"><span class="wp-n">4</span><b>El agente lee el primer mensaje</b><span>Sabe el programa y el tema desde el primer segundo y abre la conversación justo ahí.</span></div>
     </div>
     <div class="grid-2" style="margin-top:14px">
-      <div class="level"><span class="tag">Nivel 1 · la base</span><h4>Mensaje escrito, sin integración</h4><p>Funciona con cualquier proveedor de WhatsApp. El mensaje se arma con una plantilla por driver para que suene como algo que el aspirante escribiría, porque puede editarlo antes de enviarlo.</p></div>
+      <div class="level"><span class="tag">Nivel 1 · la base</span><h4>Mensaje escrito, sin integración</h4><p>Funciona con cualquier proveedor de WhatsApp. El mensaje se arma con una plantilla por driver para que suene natural, porque el aspirante puede editarlo antes de enviarlo.</p></div>
       <div class="level next"><span class="tag">Nivel 2 · el siguiente paso</span><h4>Conectado a Zoho</h4><p>Con la referencia o con el mismo celular del formulario, el agente encuentra la ficha del aspirante en Zoho, trae su historia y deja escrita la conversación. Requiere que el proveedor del agente se integre con el CRM.</p></div>
-    </div>
-  </div>
-
-  <div class="block reveal">
-    <div class="sub-head"><span class="tag">Nivel 2 · con Zoho</span><h3>El asesor recibe una oportunidad, no un teléfono</h3><p>Cuando el agente está conectado al CRM, registra lo que el aspirante busca, sus dudas, sus barreras y el paso que aceptó dar. Mira cómo se llena la ficha mientras avanza la conversación.</p></div>
-    <div class="zdemo">
-      <div class="zchat">
-        <div class="wa-head"><div class="av">UC</div><div><strong>Admisiones U. Católica</strong><span>Agente de WhatsApp · en línea</span></div></div>
-        <div class="wa-body" id="zBody"></div>
-        <div class="zbtns"><button type="button" class="flow-play" id="zPlay">▶ Ver cómo se llena la ficha</button></div>
-      </div>
-      <div class="zcard">
-        <div class="zcard-h"><span>Zoho CRM · Ficha del aspirante</span><b>Laura Gómez · Derecho</b></div>
-        <div class="zgrp" data-g="origen"><h5>Origen</h5><dl id="zOrigen"></dl></div>
-        <div class="zgrp" data-g="perfil"><h5>Perfil</h5><dl id="zPerfil"></dl></div>
-        <div class="zgrp" data-g="conv"><h5>Conversación</h5><dl id="zConv"></dl></div>
-        <div class="zgrp" data-g="gest"><h5>Gestión</h5><dl id="zGest"></dl></div>
-      </div>
     </div>
   </div>
 
@@ -2417,31 +2416,13 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
         <div class="sp-rule"><b>Pasa a un asesor cuando</b><span>pide hablar con una persona, acepta una cita, tiene una duda de homologación o financiación que requiere revisar su caso, o pregunta algo que el agente no puede responder con información aprobada.</span></div>
       </div>
     </div>
-    <p class="imannote">Los mensajes que la universidad inicia por WhatsApp usan plantillas aprobadas por WhatsApp y solo se envían con autorización previa (Ley 1581).</p>
-  </div>
-
-  <div class="block reveal">
-    <div class="grid-2">
-      <div class="guard"><b>Reglas de los agentes</b>
-        <ul class="obs">
-          <li>Solo responden con información aprobada por la Católica.</li>
-          <li>No comunican valores 2027 hasta que admisiones los confirme.</li>
-          <li>Solo contactan con autorización previa por llamada y WhatsApp (Ley 1581).</li>
-          <li>Se identifican como asistentes de admisiones.</li>
-        </ul>
-      </div>
-      <div class="guard"><b>Cómo se mide</b>
-        <div class="mchips"><span>Tiempo al primer contacto</span><span>Contactabilidad por franja</span><span>% que elige un botón</span><span>% de conversaciones calificadas</span><span>Citas agendadas</span><span>Preinscritos</span></div>
-        <p>Cada métrica se lee por programa, driver y versión de landing.</p>
-      </div>
-    </div>
-    <p class="bridge-line" style="margin-top:22px">Los agentes no reemplazan a los asesores: les quitan el primer contacto y el seguimiento para que dediquen su tiempo a orientar y cerrar. <b>La demo del capítulo 4 termina en esta misma página de gracias.</b></p>
+    <p class="imannote">Los agentes solo responden con información aprobada por la Católica. Los mensajes que la universidad inicia por WhatsApp usan plantillas aprobadas y solo se envían con autorización previa (Ley 1581).</p>
   </div>
 </section>
 
 <!-- 2.4 -->
 <section class="section-light" id="c2-4" data-lesson="2-4">
-  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 4 · Test de landings</span><h2>Dos versiones, una sola URL por programa</h2><p>Así se ven en computador, sobre la landing real de Derecho. La A es la de control: formulario directo, como lo que hoy funciona. La B prueba si una persona real contando la prueba en video convierte mejor.</p></div>
+  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 4 · Test de landings</span><h2>Dos versiones, una sola URL por programa</h2><p>Así se ven en computador, sobre la landing real de Derecho. La A es la de control: formulario directo, como lo que hoy funciona. La B prueba si una persona real contando la prueba en video convierte mejor. Al enviar, las dos llevan a la página de gracias del capítulo 3.</p></div>
 
   <div class="block reveal" id="demo">
     <div class="dlab">
@@ -2464,32 +2445,19 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
   </div>
 
   <div class="block reveal">
-    <div class="sub-head"><span class="tag">Cómo se reparte el tráfico</span><h3>El 50/50 se hace en la landing, no en el anuncio</h3><p>Partir cada campaña en dos conjuntos con presupuesto separado divide el volumen, y ninguna campaña por programa tiene suficientes conversiones para aprender dos veces.</p></div>
-    <div class="eje-grid grid-4">
-      <div class="eje-card"><div class="eje-num">01</div><h5>Un conjunto, una URL</h5><p>Meta y Google optimizan con todo el presupuesto y todas las conversiones del programa.</p></div>
-      <div class="eje-card"><div class="eje-num">02</div><h5>La landing lanza una moneda</h5><p>Un script asigna A o B al azar y la recuerda si el visitante vuelve. Las landings ya cargan Zoho PageSense, que también puede hacer este reparto.</p></div>
-      <div class="eje-card"><div class="eje-num">03</div><h5>La versión viaja al CRM</h5><p>Campos ocultos con la versión, el driver del anuncio y la respuesta de lo más importante llegan a Zoho con cada lead.</p></div>
-      <div class="eje-card"><div class="eje-num">04</div><h5>Lectura sumada</h5><p>La variable es la misma en todos los programas, así que los resultados se suman.</p></div>
-    </div>
-    <div class="absim" style="margin-top:14px;border-radius:20px;border:1px solid var(--line-light)">
-      <p>Simula mil visitas para ver cómo se reparte el tráfico entre las dos versiones:</p>
-      <div class="abbars">
-        <div class="abbar"><span>A · formulario</span><div class="tr"><div class="fl f" id="d-ff"></div></div><span class="n" id="d-nf">0</span></div>
-        <div class="abbar"><span>B · video</span><div class="tr"><div class="fl v" id="d-fv"></div></div><span class="n" id="d-nv">0</span></div>
+    <div class="abrow">
+      <div class="absim" style="border-radius:20px;border:1px solid var(--line-light)">
+        <p><b>El 50/50 se hace en la landing, no en el anuncio.</b> Un solo conjunto por programa y una sola URL: un script asigna A o B al azar y la versión llega al CRM con cada lead. Las landings ya cargan Zoho PageSense, que también puede hacer el reparto.</p>
+        <div class="abbars">
+          <div class="abbar"><span>A · formulario</span><div class="tr"><div class="fl f" id="d-ff"></div></div><span class="n" id="d-nf">0</span></div>
+          <div class="abbar"><span>B · video</span><div class="tr"><div class="fl v" id="d-fv"></div></div><span class="n" id="d-nv">0</span></div>
+        </div>
+        <button type="button" class="button button-primary" id="d-sim">Simular 1.000 visitas</button>
       </div>
-      <button type="button" class="button button-primary" id="d-sim">Simular 1.000 visitas</button>
-    </div>
-  </div>
-
-  <div class="block reveal">
-    <div class="decision-box">
-      <p class="eyebrow"><span>REGLA DE DECISIÓN</span></p>
-      <h3>Gana la versión que trae aspirantes, no la que trae más formularios</h3>
-      <p>Se lee sumando todos los programas, con la versión, el driver y la respuesta del formulario fijos en cada lead dentro del CRM.</p>
-      <div class="decision-grid">
-        <div class="decision-card"><h4>Métrica que decide</h4><p>Costo por lead con conversación. Después, costo por preinscrito y por matrícula.</p><div class="decision-cta">Una versión puede traer menos leads y más matrículas.</div></div>
-        <div class="decision-card"><h4>El punto de partida</h4><p>La A es el control porque se parece a lo que hoy funciona: mensaje claro y formulario a la vista.</p><div class="decision-cta">La B tiene que ganarle a la A para escalar.</div></div>
-        <div class="decision-card"><h4>Control de calidad</h4><p>El reparto en GA4 debe quedar cerca de 50/50.</p><div class="decision-cta">Si queda, por ejemplo, 60/40, se pausa y se revisa la instalación.</div></div>
+      <div class="decision-mini">
+        <span class="tag">Regla de decisión</span>
+        <h4>Gana la versión que trae aspirantes, no la que trae más formularios</h4>
+        <p>Decide el costo por lead con conversación, después el costo por preinscrito y por matrícula, leído por versión y por driver. La B tiene que ganarle a la A para escalar. Si el reparto se aleja del 50/50, se pausa y se revisa la instalación.</p>
       </div>
     </div>
   </div>
@@ -2497,11 +2465,11 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 
 <!-- 2.5 -->
 <section class="section-dark" id="c2-5" data-lesson="2-5">
-  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 5 · Cómo se arma la pauta</span><h2>Una campaña por programa. Dentro, un anuncio por driver.</h2><p>Mantenemos la campaña por programa porque así se mide en el CRM y en el forecast. Lo que cambia es lo que va adentro: cada pieza prueba una razón de decisión, sobre el formato que ya sabemos que funciona.</p></div>
+  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 5 · Pauta y presupuesto</span><h2>Una campaña por programa. Dentro, un anuncio por driver.</h2><p>Mantenemos la campaña por programa porque así se mide en el CRM y en el forecast. Lo que cambia es lo que va adentro: cada pieza prueba una razón de decisión, sobre el formato de texto que ya sabemos que funciona.</p></div>
 
   <div class="block reveal">
     <div class="tree">
-      <div class="tree-c"><span class="tag">Campaña</span><h4>Una por programa</h4><p>Presupuesto y meta propios, como en el forecast. Es la unidad que se lee en el CRM.</p></div>
+      <div class="tree-c"><span class="tag">Campaña</span><h4>Una por programa</h4><p>Presupuesto y meta propios, como en el forecast.</p></div>
       <div class="tree-arrow">→</div>
       <div class="tree-c mid"><span class="tag">Conjunto</span><h4>Uno por programa</h4><p>Todo el volumen junto para que la plataforma aprenda rápido. Una sola URL con el test A/B.</p></div>
       <div class="tree-arrow">→</div>
@@ -2513,32 +2481,18 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 
   <div class="block reveal">
     <div class="grid-3">
-      <div class="eje-card"><div class="eje-num">01</div><h5>El texto es la base</h5><p>Las piezas de solo texto traen leads a la mitad del costo. Se mantienen como formato principal, ahora ordenadas por driver.</p></div>
-      <div class="eje-card"><div class="eje-num">02</div><h5>Una pieza, un argumento</h5><p>Si la pieza dice seis cosas, no sabemos cuál movió la aguja. El programa es la letra pequeña, no el titular.</p></div>
-      <div class="eje-card"><div class="eje-num">03</div><h5>Personas reales, como prueba</h5><p>No modelos de banco: estudiantes y egresados reales, en video vertical con texto en pantalla. Se prueban contra la pieza de texto.</p></div>
-      <div class="eje-card"><div class="eje-num">04</div><h5>Respaldo narrado, no sellado</h5><p>En los programas acreditados, la acreditación la cuenta un egresado que ejerce, no un logo en la esquina.</p></div>
-      <div class="eje-card"><div class="eje-num">05</div><h5>Google habla el mismo idioma</h5><p>Los titulares de búsqueda se agrupan por driver, para que quien busca "especialización virtual" lea la promesa de compatibilidad.</p></div>
-      <div class="eje-card"><div class="eje-num">06</div><h5>15% a 20% para experimentar</h5><p>Cada prueba nace con su hipótesis escrita. Se escala lo que matricula; el driver que no convierte sale, sin apego.</p></div>
+      <div class="eje-card"><div class="eje-num">01</div><h5>Google habla el mismo idioma</h5><p>Los titulares de búsqueda se agrupan por driver, para que quien busca "especialización virtual" lea la promesa de compatibilidad.</p></div>
+      <div class="eje-card"><div class="eje-num">02</div><h5>Personas reales, como prueba</h5><p>No modelos de banco: estudiantes y egresados reales, en video vertical con texto en pantalla, contra la pieza de texto.</p></div>
+      <div class="eje-card"><div class="eje-num">03</div><h5>15% a 20% para experimentar</h5><p>Cada prueba nace con su hipótesis escrita. Se escala lo que matricula; el driver que no convierte sale, sin apego.</p></div>
     </div>
   </div>
 
-  <div class="block reveal">
-    <div class="sub-head"><span class="tag">Dos negocios, dos preguntas</span><h3>Pregrado y posgrado no compiten contra lo mismo</h3></div>
-    <div class="biz2">
-      <div><span class="tag">Pregrado</span><q>¿En quién quieres convertirte?</q><p>Futuro, identidad y profesión. Compite contra la gratuidad de la universidad pública y las nuevas alternativas que trae la IA.</p><div class="biz-drv"><span>Primera generación universitaria</span><span>El que quiere ver resultados</span><span>El que busca acompañamiento</span><span>El que retoma sus estudios</span></div></div>
-      <div class="pos"><span class="tag">Posgrado</span><q>¿Cómo das el siguiente salto?</q><p>Crecimiento y especialización. Compite contra la sobreoferta: más de mil maestrías solo en Bogotá.</p><div class="biz-drv"><span>El profesional que necesita respaldo</span><span>El que estudia mientras trabaja</span><span>El que busca ascender</span><span>El que quiere investigar</span></div></div>
-    </div>
-  </div>
-</section>
-<!-- 2.6 -->
-<section class="section-light" id="c2-6" data-lesson="2-6">
-  <div class="lesson-head reveal"><span class="lesson-n">Capítulo 6 · Presupuesto</span><h2>Resumen de la inversión 2027-1</h2><p>Lo esencial en una pantalla. El detalle por programa, medio y mes, la conversión planteada y las matrículas esperadas están en el forecast.</p></div>
-
-  <div class="block reveal">
+  <div class="block reveal" id="presupuesto">
+    <div class="sub-head"><span class="tag">Presupuesto 2027-1</span><h3>La inversión en una pantalla</h3><p>El detalle por programa, medio y mes, la conversión planteada y las matrículas esperadas están en el forecast.</p></div>
     <div class="bud">
       <div class="bud-total">
         <span class="tag">Inversión total · septiembre 2026 a febrero 2027</span>
-        <strong data-count="672">$672M</strong>
+        <strong>$672M</strong>
         <div class="bud-split"><div><b>$636M</b><span>Performance: una campaña por programa, con el test de landings y los anuncios por driver.</span></div><div><b>$36M</b><span>Branding y Quiz Vocacional.</span></div></div>
       </div>
       <div class="bud-media">
@@ -2546,7 +2500,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
         <div class="bud-row"><span>Google</span><div class="bud-tr"><i style="--w:68%"></i></div><b>68%</b></div>
         <div class="bud-row"><span>Meta</span><div class="bud-tr"><i style="--w:31%"></i></div><b>31%</b></div>
         <div class="bud-row"><span>TikTok</span><div class="bud-tr"><i style="--w:1%"></i></div><b>1%</b></div>
-        <div class="bud-exp"><b>$95M a $127M</b><span>del presupuesto de performance reservado para experimentar con drivers y versiones (15% a 20%).</span></div>
+        <div class="bud-exp"><b>$95M a $127M para probar</b><span>No es presupuesto adicional: es la parte de los $636M (entre 15% y 20%) que se usa para probar drivers nuevos y la versión B de la landing. El resto va a lo que ya funciona.</span></div>
       </div>
     </div>
     <div class="bud-cta"><p>Cuánto recibe cada programa, qué conversión planteamos y cuántas matrículas esperamos de la pauta.</p><a class="button button-primary" href="forecast-catolica" target="_blank" rel="noopener">Ver el forecast completo ↗</a></div>
@@ -2559,7 +2513,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 </div>
 
 <footer>
-  <span>Ruta estratégica 2027-1 · Estrategia y comunicación · Universidad Católica de Colombia · Borrador 2</span>
+  <span>Ruta estratégica 2027-1 · Estrategia y comunicación · Universidad Católica de Colombia · Borrador 3</span>
   <span>ADCOM · 2026</span>
 </footer>
 
@@ -2606,10 +2560,9 @@ var DRV=[
  {g:'pos',c:'G4',n:'El que quiere investigar',m:'Estudiar con un investigador reconocido',w:'Elige director antes que programa. Decide con formato largo y conversación uno a uno.',p:'Líneas de investigación y directores con nombre propio.',e:'Maestrías · Doctorados',u:'investigacion'}
 ];
 ['pre','pos'].forEach(function(g){
-  $(g==='pre'?'dcardsPre':'dcardsPos').innerHTML=DRV.filter(function(d){return d.g===g}).map(function(d){
-    return '<article class="dcard"><span class="dc-code">'+d.c+'</span><h4>'+d.n+'</h4><div class="dc-move"><small>Lo que lo mueve</small>'+d.m+'</div>'+
-      '<dl><dt>Quién es</dt><dd>'+d.w+'</dd><dt>La prueba que necesita</dt><dd>'+d.p+'</dd><dt>Dónde aplica</dt><dd>'+d.e+'</dd></dl>'+
-      '<span class="dc-url">drv=<b>'+d.u+'</b></span></article>';
+  $(g==='pre'?'daccPre':'daccPos').innerHTML=DRV.filter(function(d){return d.g===g}).map(function(d){
+    return '<details><summary><span class="dc-code">'+d.c+'</span><span><b>'+d.n+'</b><small>Lo que lo mueve: <em>'+d.m+'</em></small></span><span class="chev" aria-hidden="true">⌄</span></summary>'+
+      '<div class="dc-body"><dl><dt>Quién es</dt><dd>'+d.w+'</dd><dt>La prueba</dt><dd>'+d.p+'</dd><dt>Dónde aplica</dt><dd>'+d.e+'</dd></dl><code>drv=<b>'+d.u+'</b></code></div></details>';
   }).join('');
 });
 (function(){
@@ -2624,6 +2577,8 @@ var DRV=[
 
 /* ---------------- 2.2 Recorrido ---------------- */
 each('.jr-switch button',function(b){b.onclick=function(){each('.jr-switch button',function(x){x.classList.toggle('on',x===b)});each('.jr-view',function(v){v.hidden=v.dataset.view!==b.dataset.jr})}});
+
+
 (function(){
   var flow=$('flow'),laneBtns=flow.querySelectorAll('#flowLaneBtns button'),lane='all',timers=[];
   function clearLit(){timers.forEach(clearTimeout);timers=[];each('.fbox.lit',function(b){b.classList.remove('lit')},flow)}
@@ -2681,29 +2636,7 @@ each('.jr-switch button',function(b){b.onclick=function(){each('.jr-switch butto
   }
   $('simPlay').onclick=simRun;
 
-  var ZM=[
-   ['out','Hola, soy Laura. Me interesa Derecho y quiero saber qué puedo homologar. (Ref. UC21-4821)',{zOrigen:[['Campaña','derecho_2027-1 · Meta'],['Anuncio','"Lo que estudiaste cuenta" · drv=retoma'],['Landing','Versión A · formulario'],['Lo más importante','Homologar lo que ya estudié']]}],
-   ['in','¡Hola, Laura! Soy el asistente de admisiones de la Católica. Cuéntame qué estudiaste y hasta qué semestre, y te digo qué podría homologarse en Derecho.',null],
-   ['out','Hice 3 semestres de Ciencia Política en otra universidad.',{zPerfil:[['Motivación','Terminar una carrera que ya empezó'],['Trayectoria','3 semestres de Ciencia Política']]}],
-   ['in','Es una buena base. Con tu certificado de notas, admisiones hace el estudio de homologación. ¿Hoy estudias o trabajas?',null],
-   ['out','Trabajo de día. ¿Qué opciones tengo?',{zPerfil:[['Disponibilidad','Trabaja de día']],zConv:[['Preguntas','Homologación y franjas de estudio'],['Barreras','Tiempo disponible']]}],
-   ['in','Te conecto con una asesora para revisar tu caso y las franjas de estudio. ¿Te sirve el martes a las 5 p. m.?',{zConv:[['Síntesis','Quiere homologar Ciencia Política, trabaja de día y necesita una franja compatible']]}],
-   ['out','Sí, el martes me sirve.',{zGest:[['Estado','Interés alto'],['Próximo paso','Estudio de homologación el martes a las 5 p. m.'],['Tarea','Asesora: pedir el certificado de notas antes de la cita'],['Prioridad','Alta']]}]
-  ];
-  var zT=[];
-  function zReset(){zT.forEach(clearTimeout);zT=[];$('zBody').innerHTML='';['zOrigen','zPerfil','zConv','zGest'].forEach(function(k){$(k).innerHTML=''})}
-  function zMsg(m){var d=document.createElement('div');d.className='wa-msg '+m[0];d.textContent=m[1];$('zBody').appendChild(d);
-    if(m[2])Object.keys(m[2]).forEach(function(k){m[2][k].forEach(function(r){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];dt.className=dd.className='new';$(k).appendChild(dt);$(k).appendChild(dd)})})}
-  $('zPlay').onclick=function(){
-    zReset();var t=0;
-    ZM.forEach(function(m){
-      if(m[0]==='in'){zT.push(setTimeout(function(){var ty=document.createElement('div');ty.className='wa-typing';ty.id='zTy';ty.innerHTML='<i></i><i></i><i></i>';$('zBody').appendChild(ty)},t));t+=900;
-        zT.push(setTimeout(function(){var ty=$('zTy');if(ty)ty.remove();zMsg(m)},t));}
-      else{t+=700;zT.push(setTimeout(function(){zMsg(m)},t))}
-      t+=1100;
-    });
-  };
-  zMsg(ZM[0]);
+
 })();
 
 /* ---------------- 2.4 Landing de Derecho en computador ---------------- */
