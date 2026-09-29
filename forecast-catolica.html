@@ -136,9 +136,9 @@ body{font-family:var(--fuente);background:#F0F0F0;color:var(--dark);min-height:1
   <div class="hero-kpis">
     <div class="hkpi orange"><div class="lbl">Inversión Total</div><div class="val" id="hInv">—</div><div class="sub" id="hInvSub">Todos los periodos</div></div>
     <div class="hkpi"><div class="lbl">Leads Estimados</div><div class="val" id="hLeads">—</div><div class="sub">Generación digital</div></div>
-    <div class="hkpi yellow"><div class="lbl">Matrículas Est.</div><div class="val" id="hMats">—</div><div class="sub">Aporte de pauta</div></div>
+    <div class="hkpi yellow"><div class="lbl">Matrículas Est.</div><div class="val" id="hMats">—</div><div class="sub" id="hMatsSub">Aporte de pauta</div></div>
     <div class="hkpi"><div class="lbl">CPL Promedio</div><div class="val" id="hCPL">—</div><div class="sub">Costo por lead</div></div>
-    <div class="hkpi"><div class="lbl">Periodos</div><div class="val" id="hPeriodos">5</div><div class="sub">2025-3 → 2027-3</div></div>
+    <div class="hkpi"><div class="lbl">% Conversión planteada</div><div class="val" id="hConv">—</div><div class="sub">Lead → matrícula</div></div>
   </div>
 </div>
 
@@ -200,13 +200,28 @@ const fmtHero = n => {
 const fmtN   = n => n&&Number(n)?Math.round(Number(n)).toLocaleString('es-CO'):'—';
 const fmtPct = n => n?((Number(n)*100).toFixed(1)+'%'):'0%';
 const sum    = (arr,k) => arr.reduce((a,r)=>a+(Number(r[k])||0),0);
+// Sheets exporta "3,71%": el decimal es coma. Devuelve fracción (0.0371).
+const pctVal = v => {
+  if(typeof v==='number') return v>1?v/100:v;
+  const n=parseFloat(String(v||'').replace(/[%\s]/g,'').replace(/\./g,'').replace(',','.'));
+  return isNaN(n)?0:n/100
+};
+// Conversión y aporte a la meta calculados sobre filas de programas (sin branding).
+function kpisPauta(rows){
+  const prog=rows.filter(r=>r.Modalidad!=='Branding');
+  const leads=sum(prog,'Leads'), mats=sum(prog,'Matriculas'), meta=sum(prog,'MatriculasMeta');
+  return {leads,mats,meta,conv:leads?mats/leads:0,aporte:meta?mats/meta:0}
+}
+const fmtAporte = (mats,meta) => meta?Math.round(mats/meta*100)+'%':'Sin meta';
 
 // ═══ INIT ═══
 window.addEventListener('load',()=>{
   updateHeroKPIs(null);
   renderGeneral();
   rendered['general']=true;
-  document.getElementById('lastUpd').textContent='Datos del Excel'
+  document.getElementById('lastUpd').textContent='Datos del Excel';
+  // Los datos embebidos son solo respaldo: se lee el Sheet al abrir.
+  tryFetchSheets(true)
 });
 
 // ═══ CSV PARSER ═══
@@ -242,14 +257,14 @@ function mapPrograma(r){
     _periodo:        String(r['Periodo']||r['periodo']||'').trim(),
     Programa:        String(r['Programa']||'').trim(),
     Modalidad:       String(r['Modalidad']||'').trim(),
-    PctPrograma:     typeof pct==='number' ? pct/100 : parseFloat(String(pct).replace('%',''))/100||0,
+    PctPrograma:     pctVal(pct),
     Presupuesto:     Number(r['Presupuesto'])||0,
     CPL:             Number(r['CPL'])||0,
     Leads:           Number(r['Leads'])||0,
-    PctConv:         typeof pctConv==='number' ? pctConv/100 : parseFloat(String(pctConv).replace('%',''))/100||0,
+    PctConv:         pctVal(pctConv),
     Matriculas:      Number(r['Matriculas'])||0,
     MatriculasMeta:  Number(r['Matriculas meta']||r['MatriculasMeta'])||0,
-    PctCumplimiento: Number(r['% Cumplimiento']||r['PctCumplimiento'])||0,
+    PctCumplimiento: pctVal(r['% Cumplimiento']||r['PctCumplimiento']),
   }
 }
 
@@ -261,7 +276,7 @@ function mapMedio(r){
     Programa:   String(r['Programa']||'').trim(),
     Modalidad:  String(r['Modalidad']||'').trim(),
     Medio:      String(r['Medio']||'').trim(),
-    PctCanal:   typeof pct==='number' ? pct/100 : parseFloat(String(pct).replace('%',''))/100||0,
+    PctCanal:   pctVal(pct),
     Presupuesto:Number(r['Presupuesto'])||0,
   }
 }
@@ -273,18 +288,18 @@ function mapMensual(r){
   return {
     _periodo:       String(r['Periodo']||r['periodo']||'').trim(),
     Mes:            String(r['Mes']||'').trim(),
-    Pct:            typeof pct==='number' ? pct/100 : parseFloat(String(pct).replace('%',''))/100||0,
+    Pct:            pctVal(pct),
     Pregrado:       Number(r['Pregrado'])||0,
     Posgrados:      Number(r['Posgrados'])||0,
     InversionFormal:Number(r['InversionFormal']||r['Inversion Formal'])||0,
-    PctBranding:    typeof pctBrd==='number' ? pctBrd/100 : parseFloat(String(pctBrd).replace('%',''))/100||0,
+    PctBranding:    pctVal(pctBrd),
     Branding:       Number(r['Branding'])||0,
     Total:          Number(r['Total'])||0,
   }
 }
 
 // ═══ FETCH SHEETS ═══
-function tryFetchSheets(){
+function tryFetchSheets(silencioso){
   const dot=document.getElementById('syncDot');
   const btn=document.getElementById('syncBtn');
   dot.classList.add('spin'); btn.disabled=true;
@@ -326,7 +341,8 @@ function tryFetchSheets(){
     document.getElementById('lastUpd').textContent='Act. '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})
   })
   .catch(e=>{
-    alert('⚠️ Error al leer Sheets: '+e.message)
+    if(silencioso) document.getElementById('lastUpd').textContent='Datos del Excel (sin conexión)';
+    else alert('⚠️ Error al leer Sheets: '+e.message)
   })
   .finally(()=>{ dot.classList.remove('spin'); btn.disabled=false })
 }
@@ -372,7 +388,11 @@ function updateHeroKPIs(periodo){
   document.getElementById('hMats').textContent = fmtN(mats);
   document.getElementById('hCPL').textContent = fmtHero(cpl);
   document.getElementById('hInvSub').textContent = periodo?periodo:'Todos los periodos';
-  document.getElementById('hPeriodos').textContent = periodo?'1':'5';
+  const k = kpisPauta(allProg);
+  document.getElementById('hConv').textContent = k.conv?(k.conv*100).toFixed(2)+'%':'—';
+  document.getElementById('hMatsSub').textContent = k.meta
+    ? `${fmtAporte(k.mats,k.meta)} de la meta (${fmtN(k.meta)})`
+    : 'Aporte de pauta';
   
   const periodoCount = periodo
     ? DATA.mensual.filter(r=>r._periodo===periodo).length
@@ -417,7 +437,7 @@ function buildNivelTable(periodo){
   
   let h=`<div class="sec-title"><div class="sec-tl">Resumen por Nivel</div></div>
     <div class="tbl-wrap"><table class="tbl">
-    <thead><tr><th>Nivel</th><th class="r">Inversión</th><th class="r">Leads</th><th class="r">Matrículas</th><th class="r">CPL</th></tr></thead><tbody>`;
+    <thead><tr><th>Nivel</th><th class="r">Inversión</th><th class="r">Leads</th><th class="r">Matrículas</th><th class="r">CPL</th><th class="r">% Conv</th></tr></thead><tbody>`;
   
   [['Pregrado','bdg-pre'],['Posgrado','bdg-pos'],['Branding','bdg-brd']].forEach(([niv,bdg])=>{
     const rows=prog.filter(r=>r.Modalidad===niv);
@@ -427,14 +447,16 @@ function buildNivelTable(periodo){
       <td class="r">${fmtM(i)}</td>
       <td class="r">${niv==='Branding'?'—':fmtN(l)}</td>
       <td class="r">${niv==='Branding'?'—':fmtN(m)}</td>
-      <td class="r">${(niv!=='Branding'&&l>0)?fmtM(i/l):'—'}</td></tr>`
+      <td class="r">${(niv!=='Branding'&&l>0)?fmtM(i/l):'—'}</td>
+      <td class="r">${(niv!=='Branding'&&l>0)?fmtPct(m/l):'—'}</td></tr>`
   });
-  
+
   h+=`<tr class="tbl-grand"><td>TOTAL</td>
     <td class="r">${fmtM(totInv)}</td>
     <td class="r">${fmtN(totLeads)}</td>
     <td class="r">${fmtN(totMats)}</td>
-    <td class="r">—</td></tr>
+    <td class="r">—</td>
+    <td class="r">${totLeads?fmtPct(totMats/totLeads):'—'}</td></tr>
   </tbody></table></div>`;
   return h
 }
@@ -484,7 +506,7 @@ function buildProgramasTable(periodo, color){
     <thead><tr>
       <th>Programa</th><th>Nivel</th><th class="r">% Canal</th><th class="r">Presupuesto</th>
       <th class="r">CPL</th><th class="r">Leads</th><th class="r">% Conv</th>
-      <th class="r">Matrículas</th><th class="r">Meta</th><th class="r">% Cumpl.</th>
+      <th class="r">Matrículas</th><th class="r">Meta</th><th class="r">Pauta / meta</th>
     </tr></thead><tbody>`;
   
   // Separador Pregrado
@@ -505,8 +527,8 @@ function buildProgramasTable(periodo, color){
   h+=`<tr class="tbl-grand">
     <td colspan="3">SUBTOTAL PROGRAMAS</td>
     <td class="r">${fmtM(tProg.inv)}</td>
-    <td class="r">—</td><td class="r">${fmtN(tProg.leads)}</td><td class="r">—</td>
-    <td class="r">${fmtN(tProg.mats)}</td><td class="r">${fmtN(tProg.meta)}</td><td class="r">—</td>
+    <td class="r">—</td><td class="r">${fmtN(tProg.leads)}</td><td class="r">${fmtPct(tProg.leads?tProg.mats/tProg.leads:0)}</td>
+    <td class="r">${fmtN(tProg.mats)}</td><td class="r">${fmtN(tProg.meta)}</td><td class="r">${fmtAporte(tProg.mats,tProg.meta)}</td>
   </tr>`;
   
   // Separador Branding & Campaña General
@@ -535,9 +557,9 @@ function buildProgramasTable(periodo, color){
   h+=`<tr class="tbl-grand">
     <td colspan="3">TOTAL PERIODO</td>
     <td class="r">${fmtM(totAll)}</td>
-    <td class="r">—</td><td class="r">${fmtN(sum(progReales,'Leads'))}</td><td class="r">—</td>
-    <td class="r">${fmtN(sum(progReales,'Matriculas'))}</td>
-    <td class="r">${fmtN(sum(progReales,'MatriculasMeta'))}</td><td class="r">—</td>
+    <td class="r">—</td><td class="r">${fmtN(tProg.leads)}</td><td class="r">${fmtPct(tProg.leads?tProg.mats/tProg.leads:0)}</td>
+    <td class="r">${fmtN(tProg.mats)}</td>
+    <td class="r">${fmtN(tProg.meta)}</td><td class="r">${fmtAporte(tProg.mats,tProg.meta)}</td>
   </tr>`;
   
   h+='</tbody></table></div>';
@@ -547,8 +569,10 @@ function buildProgramasTable(periodo, color){
 function buildProgRow(r,maxP,pc){
   const pct=((Number(r.Presupuesto)||0)/maxP*100).toFixed(0);
   const bdg=r.Modalidad==='Pregrado'?'bdg-pre':'bdg-pos';
-  const cumplNum=Number(r.PctCumplimiento)||0;
-  const cumplColor=cumplNum>=2?'color:#1A6B1A':cumplNum>=1?'color:var(--or-dark)':'color:#C0392B';
+  // Se calcula aquí para no depender de la columna % Cumplimiento del Sheet.
+  const meta=Number(r.MatriculasMeta)||0, mats=Number(r.Matriculas)||0;
+  const cumplNum=meta?mats/meta:0;
+  const cumplColor=!meta?'color:#888':cumplNum>=1?'color:#1A6B1A':cumplNum>=.5?'color:var(--or-dark)':'color:#C0392B';
   return `<tr>
     <td title="${r.Programa}" style="max-width:220px;overflow:hidden;text-overflow:ellipsis">${r.Programa.length>35?r.Programa.substring(0,33)+'…':r.Programa}</td>
     <td><span class="bdg ${bdg}">${r.Modalidad}</span></td>
@@ -559,7 +583,7 @@ function buildProgRow(r,maxP,pc){
     <td class="r">${fmtPct(r.PctConv)}</td>
     <td class="r">${fmtN(r.Matriculas)}</td>
     <td class="r">${fmtN(r.MatriculasMeta)}</td>
-    <td class="r"><span style="${cumplColor};font-weight:600">${cumplNum?(cumplNum*100).toFixed(0)+'%':'—'}</span></td>
+    <td class="r"><span style="${cumplColor};font-weight:600">${fmtAporte(mats,meta)}</span></td>
   </tr>`
 }
 
@@ -604,6 +628,22 @@ function renderGeneral(){
   PERIODOS.forEach(p=>{html+=`<td class="r">${fmtM(sum(DATA.programa.filter(r=>r._periodo===p),'Presupuesto'))}</td>`});
   html+=`<td class="r">${fmtM(gt)}</td><td class="r">100%</td></tr></tbody></table></div>`;
   
+  // Conversión planteada y aporte a la meta por periodo
+  html+=`<div class="sec-title"><div class="sec-tl">Conversión planteada y meta por periodo</div></div><div class="tbl-wrap"><table class="tbl"><thead><tr>
+    <th>Periodo</th><th class="r">Inversión</th><th class="r">Leads</th><th class="r">% Conv. planteada</th>
+    <th class="r">Matrículas pauta</th><th class="r">Meta</th><th class="r">Pauta / meta</th></tr></thead><tbody>`;
+  PERIODOS.forEach(p=>{
+    const rows=DATA.programa.filter(r=>r._periodo===p);
+    if(!rows.length) return;
+    const k=kpisPauta(rows);
+    html+=`<tr><td><strong style="color:${PERIODO_COLOR[p]}">${p}</strong></td>
+      <td class="r">${fmtM(sum(rows,'Presupuesto'))}</td><td class="r">${fmtN(k.leads)}</td>
+      <td class="r"><strong>${k.conv?(k.conv*100).toFixed(2)+'%':'—'}</strong></td>
+      <td class="r">${fmtN(k.mats)}</td><td class="r">${fmtN(k.meta)}</td>
+      <td class="r">${fmtAporte(k.mats,k.meta)}</td></tr>`
+  });
+  html+='</tbody></table></div>';
+
   // Nivel + Top10
   html+=`<div class="g2" style="margin-top:1rem"><div>${buildNivelTable(null)}</div><div>${buildTop10(null)}</div></div>`;
   
@@ -652,7 +692,8 @@ function renderPeriodo(periodo,key){
   const leads=sum(progNoBrd,'Leads');
   const mats=sum(progNoBrd,'Matriculas');
   const cpl=leads>0?inv/leads:0;
-  
+  const kp=kpisPauta(prog);
+
   let html=`<div class="per-hdr">
     <div class="per-lbl">${periodo}</div>
     <div><div class="per-meta-title">${mes.length} meses · ${progNoBrd.length} programas + branding</div>
@@ -662,6 +703,9 @@ function renderPeriodo(periodo,key){
       <div class="pkpi"><div class="pkpi-val">${fmtN(leads)}</div><div class="pkpi-lbl">Leads</div></div>
       <div class="pkpi"><div class="pkpi-val">${fmtN(mats)}</div><div class="pkpi-lbl">Matrículas</div></div>
       <div class="pkpi"><div class="pkpi-val">${fmtHero(cpl)}</div><div class="pkpi-lbl">CPL</div></div>
+      <div class="pkpi"><div class="pkpi-val">${kp.conv?(kp.conv*100).toFixed(2)+'%':'—'}</div><div class="pkpi-lbl">% Conv. planteada</div></div>
+      <div class="pkpi"><div class="pkpi-val">${fmtN(kp.meta)}</div><div class="pkpi-lbl">Meta</div></div>
+      <div class="pkpi"><div class="pkpi-val">${fmtAporte(kp.mats,kp.meta)}</div><div class="pkpi-lbl">Pauta / meta</div></div>
     </div></div>`;
   
   // Distribución mensual
