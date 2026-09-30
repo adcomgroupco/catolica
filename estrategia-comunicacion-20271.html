@@ -1967,6 +1967,33 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 .section-dark .bud-media{color:var(--ink)}
 .bud-exp,.bud-exp b{color:var(--ink)}
 
+/* ---------- Borrador 4 ---------- */
+.mpath{display:grid;grid-template-columns:repeat(4,minmax(0,1fr) 22px) minmax(0,1.3fr);gap:8px;align-items:stretch}
+.mp-step{background:var(--white);border:1px solid var(--line-light);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:6px;color:var(--ink)}
+.mp-n{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--yellow);display:grid;place-items:center;font-size:.74rem;font-weight:900}
+.mp-step b{font-size:.95rem;line-height:1.2}
+.mp-step>span{font-size:.8rem;color:var(--muted-light);line-height:1.4}
+.mp-f{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-top:8px}
+.mp-f i{font-style:normal;font-size:.68rem;font-weight:700;background:#fff4c2;color:#5a4a00;border-radius:999px;padding:3px 9px}
+.mp-arrow{display:grid;place-items:center;color:#8a7300;font-weight:900}
+.mp-crm{background:var(--ink);color:#fff;border-radius:18px;padding:16px 18px}
+.mp-crm .tag{display:block;font-size:.62rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);margin-bottom:10px}
+.mp-crm dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 12px;font-size:.8rem;line-height:1.4}
+.mp-crm dt{font-size:.6rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);padding-top:2px}
+.mp-crm dd{margin:0;color:#ddd}
+.mp-note{margin-top:12px;font-size:.86rem;color:var(--muted-light)}
+@media(max-width:1100px){.mpath{grid-template-columns:1fr 1fr}.mp-arrow{display:none}.mp-crm{grid-column:1/-1}}
+@media(max-width:560px){.mpath{grid-template-columns:1fr}}
+.kpi4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.kpi4>div{border:1px solid var(--line-dark);border-radius:20px;padding:20px 22px;background:#111;position:relative;overflow:hidden}
+.kpi4>div::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--yellow)}
+.kpi4 span{display:block;font-size:.64rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#9a9a9a}
+.kpi4 b{display:block;margin-top:8px;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:900;letter-spacing:-.03em;line-height:1;color:#fff}
+.kpi4 .hl{background:var(--yellow);border-color:var(--yellow)}
+.kpi4 .hl span{color:#3a3000}
+.kpi4 .hl b{color:var(--ink)}
+@media(max-width:900px){.kpi4{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -2206,59 +2233,6 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
     </div>
   </div>
 
-  <div class="block reveal">
-    <div class="sub-head"><span class="tag">Demo · así se enlaza un driver</span><h3>Derecho · El que retoma sus estudios</h3><p>El mismo argumento en los cinco momentos. Dale play para recorrerlo.</p></div>
-    <div class="drv-bar"><p>Cinco momentos, un solo argumento: <b>lo que ya estudiaste cuenta.</b></p><button type="button" class="flow-play" id="drvPlay">▶ Recorrer el hilo</button></div>
-    <div class="thread" id="thread">
-      <div class="tstep" data-t="1">
-        <span class="tk"><b>1</b>Anuncio</span>
-        <div class="tad">
-          <div class="tad-top"><i></i><span>ucatolica</span><em>Publicidad</em></div>
-          <div class="tad-txt"><small>Profesional en</small><strong>Derecho</strong><p>¿Ya empezaste otra carrera? <em>Lo que estudiaste cuenta.</em></p><span>Te decimos qué podrías homologar</span></div>
-          <div class="tad-copy">Pieza de texto, el formato que hoy funciona, con un solo argumento.</div>
-          <div class="tad-cta">Más información</div>
-        </div>
-        <code class="turl">…/derecho/?utm_content=21&amp;<b>drv=retoma</b></code>
-        <small>El driver viaja en la URL del anuncio.</small>
-      </div>
-      <div class="tstep" data-t="2">
-        <span class="tk"><b>2</b>Landing</span>
-        <div class="tlp">
-          <div class="tlp-bar"><span>U. Católica</span><span>Derecho</span></div>
-          <div class="tlp-hero"><b>Lo que ya estudiaste cuenta</b><span>Te decimos qué podría homologarse antes de que decidas.</span></div>
-          <div class="tlp-vid">▶</div>
-          <div class="tlp-f"><i></i><i></i><em>Enviar solicitud</em></div>
-        </div>
-        <small>El titular repite el anuncio. En la versión B, una persona real lo cuenta en video.</small>
-      </div>
-      <div class="tstep" data-t="3">
-        <span class="tk"><b>3</b>Formulario</span>
-        <div class="tq">¿Qué es lo más importante para ti al elegir?</div>
-        <div class="tq-opts"><span>Poder pagarla</span><span>Que me sirva para trabajar</span><span>Que me acompañen</span><span class="on">Homologar lo que ya estudié</span></div>
-        <small>Confirma el driver con las palabras del aspirante.</small>
-      </div>
-      <div class="tstep" data-t="4">
-        <span class="tk"><b>4</b>WhatsApp</span>
-        <div class="twa">
-          <div class="twa-top"><i></i>Admisiones U. Católica</div>
-          <div class="twa-b me">Hola, soy Laura. Me interesa Derecho y quiero saber qué puedo homologar. (Ref. UC21-4821)</div>
-          <div class="twa-b">¡Hola, Laura! Cuéntame qué estudiaste y hasta qué semestre, y te digo qué podría homologarse en Derecho.</div>
-        </div>
-        <small>El mensaje sale escrito desde la página de gracias. El agente abre con ese tema.</small>
-      </div>
-      <div class="tstep" data-t="5">
-        <span class="tk"><b>5</b>Asesor · CRM</span>
-        <dl class="tcrm">
-          <dt>Programa</dt><dd>Derecho (21)</dd>
-          <dt>Driver del anuncio</dt><dd class="hl">El que retoma sus estudios</dd>
-          <dt>Lo más importante</dt><dd>Homologar lo que ya estudié</dd>
-          <dt>Landing</dt><dd>Versión A · formulario</dd>
-          <dt>Siguiente paso</dt><dd>Estudio de homologación</dd>
-        </dl>
-        <small>El asesor llega sabiendo qué vio, qué le importa y qué aceptó hacer.</small>
-      </div>
-    </div>
-  </div>
 </section>
 <!-- 2.2 -->
 <section class="section-light" id="c2-2" data-lesson="2-2">
@@ -2395,29 +2369,6 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
     </div>
   </div>
 
-  <div class="block reveal">
-    <div class="sub-head"><span class="tag">Un lead en el tiempo</span><h3>Nadie se queda sin respuesta</h3><p>Elige cómo reacciona el aspirante y mira qué pasa del otro lado: quién lo contacta, cuándo y cómo cambia su estado en el CRM.</p></div>
-    <div class="simx">
-      <div class="simx-pick" id="simPick">
-        <button type="button" class="on" data-s="call"><b>Contesta la llamada</b><small>Elige "Llámame ahora"</small></button>
-        <button type="button" data-s="wa"><b>No contesta, pero responde WhatsApp</b><small>Ocupado cuando lo llaman</small></button>
-        <button type="button" data-s="d2"><b>Responde al día 2</b><small>Se tarda en retomar</small></button>
-        <button type="button" data-s="none"><b>No responde nada</b><small>El caso más difícil</small></button>
-        <button type="button" class="flow-play" id="simPlay">▶ Ver la secuencia</button>
-      </div>
-      <div class="simx-phone">
-        <div class="sp-top"><span id="simClock">Minuto 0</span><span class="sp-dot"></span></div>
-        <div class="sp-feed" id="simFeed"><p class="sp-empty">Elige cómo reacciona el aspirante y dale play.</p></div>
-      </div>
-      <div class="simx-crm">
-        <span class="tag">Estado en el CRM</span>
-        <div class="sp-status" id="simStatus">Nuevo</div>
-        <ol class="sp-log" id="simLog"></ol>
-        <div class="sp-rule"><b>Pasa a un asesor cuando</b><span>pide hablar con una persona, acepta una cita, tiene una duda de homologación o financiación que requiere revisar su caso, o pregunta algo que el agente no puede responder con información aprobada.</span></div>
-      </div>
-    </div>
-    <p class="imannote">Los agentes solo responden con información aprobada por la Católica. Los mensajes que la universidad inicia por WhatsApp usan plantillas aprobadas y solo se envían con autorización previa (Ley 1581).</p>
-  </div>
 </section>
 
 <!-- 2.4 -->
@@ -2442,6 +2393,30 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
       </div>
       <div class="dfoot"><span>Piel de la landing real de Derecho. El video, el testimonio y los textos nuevos son de ejemplo. No se envía ningún dato.</span><button type="button" id="d-reset">↺ Reiniciar la demo</button></div>
     </div>
+  </div>
+
+  <div class="block reveal">
+    <div class="sub-head"><span class="tag">Qué medimos en cada paso</span><h3>Del anuncio al CRM, cada paso deja un dato</h3><p>Así viaja un lead y esto es lo que queda registrado en el CRM cuando termina el recorrido.</p></div>
+    <div class="mpath">
+      <div class="mp-step"><span class="mp-n">1</span><b>Llega desde el anuncio</b><span>Meta o Google, con la URL etiquetada.</span><div class="mp-f"><i>fuente</i><i>medio</i><i>campaña</i><i>programa</i><i>driver</i></div></div>
+      <div class="mp-arrow">→</div>
+      <div class="mp-step"><span class="mp-n">2</span><b>Entra a una de las landings</b><span>La moneda asigna la versión A o B.</span><div class="mp-f"><i>versión A o B</i><i>% de video visto</i></div></div>
+      <div class="mp-arrow">→</div>
+      <div class="mp-step"><span class="mp-n">3</span><b>Deja sus datos</b><span>El formulario suma lo que dice el aspirante.</span><div class="mp-f"><i>lo más importante</i><i>franja de interés</i></div></div>
+      <div class="mp-arrow">→</div>
+      <div class="mp-step"><span class="mp-n">4</span><b>Llega a la página de gracias</b><span>Elige cómo quiere hablar.</span><div class="mp-f"><i>botón elegido</i><i>llamada o WhatsApp</i></div></div>
+      <div class="mp-arrow">→</div>
+      <div class="mp-crm"><span class="tag">5 · Lo que cae al CRM</span>
+        <dl>
+          <dt>Origen</dt><dd>Fuente · medio · campaña · código de programa</dd>
+          <dt>Driver</dt><dd>El del anuncio y lo más importante para el aspirante</dd>
+          <dt>Landing</dt><dd>Versión A o B</dd>
+          <dt>Contacto</dt><dd>Botón elegido y agente que lo atendió</dd>
+          <dt>Avance</dt><dd>Contactado · preinscrito · matriculado</dd>
+        </dl>
+      </div>
+    </div>
+    <p class="mp-note">Con esos campos, el reporte semanal puede leer el costo por matrícula por programa, por driver y por versión de landing.</p>
   </div>
 
   <div class="block reveal">
@@ -2489,6 +2464,12 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:24px clamp(20
 
   <div class="block reveal" id="presupuesto">
     <div class="sub-head"><span class="tag">Presupuesto 2027-1</span><h3>La inversión en una pantalla</h3><p>El detalle por programa, medio y mes, la conversión planteada y las matrículas esperadas están en el forecast.</p></div>
+    <div class="kpi4">
+      <div><span>Leads estimados</span><b>25.580</b></div>
+      <div><span>Matrículas de pauta</span><b>590</b></div>
+      <div><span>CPL promedio</span><b>$24.863</b></div>
+      <div class="hl"><span>Conversión planteada</span><b>2,3%</b></div>
+    </div>
     <div class="bud">
       <div class="bud-total">
         <span class="tag">Inversión total · septiembre 2026 a febrero 2027</span>
@@ -2564,15 +2545,7 @@ var DRV=[
       '<div class="dc-body"><dl><dt>Quién es</dt><dd>'+d.w+'</dd><dt>La prueba</dt><dd>'+d.p+'</dd><dt>Dónde aplica</dt><dd>'+d.e+'</dd></dl><code>drv=<b>'+d.u+'</b></code></div></details>';
   }).join('');
 });
-(function(){
-  var tT=[];
-  $('drvPlay').onclick=function(){
-    tT.forEach(clearTimeout);tT=[];var st=$('thread').children;
-    Array.prototype.forEach.call(st,function(x){x.classList.remove('lit')});
-    Array.prototype.forEach.call(st,function(x,i){tT.push(setTimeout(function(){Array.prototype.forEach.call(st,function(y,j){y.classList.toggle('lit',j===i)})},i*900))});
-    tT.push(setTimeout(function(){Array.prototype.forEach.call(st,function(y){y.classList.remove('lit')})},st.length*900+700));
-  };
-})();
+
 
 /* ---------------- 2.2 Recorrido ---------------- */
 each('.jr-switch button',function(b){b.onclick=function(){each('.jr-switch button',function(x){x.classList.toggle('on',x===b)});each('.jr-view',function(v){v.hidden=v.dataset.view!==b.dataset.jr})}});
@@ -2587,55 +2560,6 @@ each('.jr-switch button',function(b){b.onclick=function(){each('.jr-switch butto
   function boxesFor(s){return Array.prototype.filter.call(flow.querySelectorAll('.fbox[data-step="'+s+'"]'),inLane)}
   Array.prototype.forEach.call(laneBtns,function(btn){btn.onclick=function(){Array.prototype.forEach.call(laneBtns,function(b){b.classList.remove('is-active')});btn.classList.add('is-active');lane=btn.dataset.lane;clearLit();applyLane()}});
   $('flowPlay').onclick=function(){clearLit();for(var s=1;s<=8;s++){(function(s){timers.push(setTimeout(function(){boxesFor(s).forEach(function(b){b.classList.add('lit')})},(s-1)*650))})(s)}};
-})();
-
-/* ---------------- 2.3 Secuencia y ficha ---------------- */
-(function(){
-  var SIM={
-   call:[['Minuto 0','sys','Laura envía el formulario y toca "Llámame ahora".','Nuevo','','Formulario enviado · programa, driver y lo más importante'],
-         ['Minuto 1','call','📞 El agente de voz llama con el contexto de Derecho y la homologación.','Llamando','',''],
-         ['Minuto 1','me','Sí, hola.','Contactado','ok','Contesta en el primer intento'],
-         ['Minuto 3','in','Te cuento qué podrías homologar. ¿Te agendo con una asesora para revisar tu caso?','Contactado','ok',''],
-         ['Minuto 4','me','Sí, el martes me sirve.','Cita agendada','hot','Cita martes 5 p. m. · prioridad alta'],
-         ['Minuto 4','sys','La asesora recibe la ficha con el resumen y la tarea.','Oportunidad para asesor','hot','Pasa a la asesora con contexto']],
-   wa:[['Minuto 0','sys','Laura envía el formulario y no elige botón.','Nuevo','','Formulario enviado'],
-       ['Minuto 1','call','📞 El agente de voz llama.','Intento 1','',''],
-       ['Minuto 1','miss','Llamada sin respuesta','Intento 1','mid','No contesta'],
-       ['Minuto 5','in','Hola, Laura. Te llamamos por tu interés en Derecho. ¿Te cuento qué podrías homologar?','Seguimiento','mid','WhatsApp con el paso pendiente'],
-       ['Minuto 12','me','Sí, estaba en una reunión. Me interesa.','Contactado','ok','Responde por WhatsApp'],
-       ['Minuto 14','in','¿Te agendo con una asesora para revisar tu caso?','Contactado','ok',''],
-       ['Minuto 15','me','Sí, mañana en la tarde.','Cita agendada','hot','Cita mañana en la tarde · prioridad alta']],
-   d2:[['Minuto 0','sys','Laura envía el formulario.','Nuevo','','Formulario enviado'],
-       ['Minuto 1','miss','📞 Llamada sin respuesta','Intento 1','mid','No contesta'],
-       ['Minuto 5','in','Hola, Laura. Te llamamos por tu interés en Derecho. ¿Te cuento qué podrías homologar?','Seguimiento','mid','WhatsApp sin respuesta'],
-       ['Mismo día','miss','📞 Segundo intento de voz, en la mejor franja de su perfil','Intento 2','mid','No contesta'],
-       ['Día 2','in','Laura, ¿pudiste reunir tu certificado de notas? Con eso revisamos tu homologación.','Seguimiento','mid','WhatsApp retoma la duda abierta'],
-       ['Día 2','me','Hola, sí. ¿Qué tengo que hacer?','Contactado','ok','Responde al día 2'],
-       ['Día 2','in','Te agendo con una asesora. ¿Jueves a las 6 p. m.?','Cita agendada','hot','Cita jueves 6 p. m.']],
-   none:[['Minuto 0','sys','Laura envía el formulario.','Nuevo','','Formulario enviado'],
-       ['Minuto 1','miss','📞 Llamada sin respuesta','Intento 1','mid','No contesta'],
-       ['Minuto 5','in','Hola, Laura. Te llamamos por tu interés en Derecho.','Seguimiento','mid','WhatsApp sin respuesta'],
-       ['Mismo día','miss','📞 Segundo intento de voz','Intento 2','mid','No contesta'],
-       ['Día 2','in','Laura, seguimos atentos para contarte qué podrías homologar.','Seguimiento','mid','WhatsApp sin respuesta'],
-       ['Día 4','miss','📞 Último intento de voz','Intento 3','mid','No contesta'],
-       ['Día 4','sys','Pasa a la lista de la asesora con prioridad media.','Lista del asesor','mid','Nadie se queda sin gestión']]
-  };
-  var scen='call',sT=[];
-  each('#simPick button[data-s]',function(b){b.onclick=function(){each('#simPick button[data-s]',function(x){x.classList.toggle('on',x===b)});scen=b.dataset.s;simRun()}});
-  function simReset(){sT.forEach(clearTimeout);sT=[];$('simFeed').innerHTML='';$('simLog').innerHTML='';$('simStatus').textContent='Nuevo';$('simStatus').className='sp-status';$('simClock').textContent='Minuto 0'}
-  function simRun(){
-    simReset();var box=document.querySelector('.simx');box.classList.add('run');
-    SIM[scen].forEach(function(e,i){sT.push(setTimeout(function(){
-      $('simClock').textContent=e[0];
-      var d=document.createElement('div');d.className='sp-ev '+e[1];d.innerHTML='<span class="t">'+e[0]+'</span>'+e[2];$('simFeed').appendChild(d);$('simFeed').scrollTop=9999;
-      var s=$('simStatus');s.textContent=e[3];s.className='sp-status'+(e[4]?' '+e[4]:'');
-      if(e[5]){var li=document.createElement('li');li.innerHTML='<b>'+e[0]+'</b> · '+e[5];$('simLog').appendChild(li)}
-      if(i===SIM[scen].length-1)box.classList.remove('run');
-    },i*1200))});
-  }
-  $('simPlay').onclick=simRun;
-
-
 })();
 
 /* ---------------- 2.4 Landing de Derecho en computador ---------------- */
