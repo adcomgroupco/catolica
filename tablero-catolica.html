@@ -3,244 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Dashboard Católica — ADCOM</title>
+<title>Tablero Pauta Católica</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="assets/css/adcom.css">
 <script defer src="assets/js/adcom.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 :root{
   --black:#050505;--white:#fcfcfa;--yellow:#ffd400;
-  --gray-50:var(--ground);--gray-100:var(--sunken);--gray-200:var(--rule);
-  --gray-400:#9E9E9E;--gray-600:var(--fg-secondary);
-  --r-sm:8px;--r-md:var(--radius);--sidebar:220px;
-  --pregrados:#1877F2;--posgrados:#7C3AED;--branding:#059669
+  --gray-50:var(--ground);--gray-100:var(--sunken);--gray-200:var(--rule);--gray-400:var(--fg-muted);--gray-600:var(--fg-secondary);
+  --sidebar:230px;--r-sm:8px;--r-md:12px;
+  --c-pos:#15803d;--c-mid:#b45309;--c-neg:#b91c1c
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;font-size:13px;overflow-x:hidden}
-/* El riel de navegación (antes .sidebar/.nav-item a mano) ahora es
-   .app-shell del sistema: adcom/sistema/DESIGN.md, "El menú lateral". */
-.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow-x:hidden}
-.topbar{background:var(--white);border-bottom:2px solid var(--gray-200);padding:0 28px;position:sticky;top:0;z-index:50}
-.topbar-top{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px}
-.topbar-top>div:first-child{min-width:0}
-.topbar-title{font-size:15px;font-weight:800;overflow-wrap:break-word}
-.topbar-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.topbar-badge{font-size:12px;font-weight:700;color:#666;background:var(--gray-50);padding:5px 12px;border-radius:var(--radius);border:1px solid var(--gray-200)}
-.btn-pdf{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--black);color:var(--white);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:8px 13px;border:1px solid var(--black);border-radius:var(--r-sm);cursor:pointer;white-space:nowrap;transition:transform .15s ease,background .15s ease}
-.btn-pdf:hover{background:#262626;transform:translateY(-1px)}
-.btn-pdf:focus-visible{outline:3px solid rgba(255,212,0,.45);outline-offset:2px}
-.btn-pdf svg{width:14px;height:14px;flex-shrink:0}
-.print-meta{display:none}
-.topbar-filters{display:flex;align-items:center;gap:8px;padding:0 0 12px;flex-wrap:wrap;overflow-x:auto}
-.topbar-filters label{font-size:12px;font-weight:700;color:var(--fg-muted);margin-right:2px}
-.tf-group{display:flex;align-items:center;gap:6px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--r-sm);padding:4px 10px}
-.tf-select{background:transparent;border:none;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--black);outline:none;cursor:pointer;padding:2px 0}
-.tf-input{background:transparent;border:none;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--black);outline:none;width:90px}
-.tf-sep{color:#ccc;font-weight:300;font-size:16px}
-.period-tag{font-size:12px;font-weight:600;color:#92400E;background:#FEF3C7;border:1px solid #FDE68A;padding:4px 12px;border-radius:var(--radius);white-space:nowrap}
-.btn-apply{background:var(--yellow);color:var(--black);font-family:'Poppins',sans-serif;font-size:12px;font-weight:800;padding:7px 18px;border:none;border-radius:var(--r-sm);cursor:pointer}
-.btn-apply:hover{opacity:.85}
-.btn-reset{background:transparent;color:var(--fg-muted);font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;border:1px solid var(--gray-200);border-radius:var(--r-sm);cursor:pointer}
-.btn-reset:hover{color:var(--black);border-color:#999}
-.loading-bar{height:3px;background:var(--gray-200);overflow:hidden}
-.loading-bar.active::after{content:'';display:block;height:100%;width:40%;background:var(--yellow);animation:ldbar 1s ease-in-out infinite}
-@keyframes ldbar{0%{margin-left:-40%}100%{margin-left:100%}}
-.content{padding:24px 28px;min-width:0;overflow-x:hidden}
-.section{margin-bottom:36px;opacity:0;transform:translateY(16px);transition:all .45s ease}
-.section.visible{opacity:1;transform:none}
-.section-title{font-size:12px;font-weight:700;color:var(--fg-muted);margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.section-title::after{content:'';flex:1;height:1px;background:var(--gray-200)}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
-.kpi-card{background:var(--white);border-radius:var(--r-md);padding:18px 20px;border:1px solid var(--gray-200)}
-.kpi-card.accent{border-top:3px solid var(--yellow)}
-.kpi-card.accent-pre{border-top:3px solid var(--pregrados)}
-.kpi-card.accent-pos{border-top:3px solid var(--posgrados)}
-.kpi-card.accent-brd{border-top:3px solid var(--branding)}
-.kpi-label{font-size:12px;font-weight:700;color:var(--fg-muted);margin-bottom:8px}
-.kpi-value{font-size:20px;font-weight:800;line-height:1.2;word-break:break-all}
-.kpi-sub{font-size:12px;color:var(--fg-muted);margin-top:4px}
-.kpi-meta{margin-top:8px}
-.kpi-meta-row{display:flex;justify-content:space-between;font-size:12px;color:var(--fg-muted);margin-bottom:3px}
-.kpi-meta-row span:last-child{font-weight:700;color:#666}
-.kpi-bar{height:4px;background:var(--gray-100);border-radius:0;overflow:hidden}
-.kpi-bar-fill{height:100%;border-radius:0;transition:width .6s ease}
-.fill-pre{background:var(--pregrados)}
-.fill-pos{background:var(--posgrados)}
-.fill-brd{background:var(--branding)}
-.fill-yellow{background:var(--accent-fg)}
-.medio-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-@media(max-width:1200px){.medio-grid{grid-template-columns:repeat(2,1fr)}}
-.medio-card{background:var(--white);border-radius:var(--r-md);border:1px solid var(--gray-200);overflow:hidden}
-.medio-card-header{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--gray-100)}
-.medio-icon{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:var(--fg);flex-shrink:0}
-.medio-name{font-size:12px;font-weight:700}
-.medio-body{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.m-label{font-size:12px;font-weight:700;color:var(--fg-muted);letter-spacing:.06em}
-.m-value{font-size:13px;font-weight:700;margin-top:1px;word-break:break-all}
-.m-value.yellow{color:var(--accent-fg)}
-.medio-footer{padding:9px 14px;background:var(--gray-50);border-top:1px solid var(--gray-100);display:flex;justify-content:space-between}
-.mf-label{font-size:12px;color:var(--fg-muted);font-weight:700;letter-spacing:.06em}
-.mf-value{font-size:12px;font-weight:700;margin-top:2px;word-break:break-all}
-.table-wrap{background:var(--white);border-radius:var(--r-md);border:1px solid var(--gray-200);overflow:hidden;margin-bottom:16px}
-.table-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-100)}
-.table-title{font-size:13px;font-weight:700}
-.table-scroll{overflow-x:auto}
-/* Todo lo de tabla va prefijado con .table-scroll: assets/css/adcom.css trae un
-   componente "tabla" propio con selectores sin clase (table, thead th+th,
-   tbody td{text-align:right;...}) que, sin el prefijo, gana la especificidad y
-   deja la primera columna alineada a la derecha con un min-width de fábrica.
-   Mismo criterio que tablero-compensar.html. */
-.table-scroll table{width:100%;border-collapse:collapse}
-.table-scroll thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
-.table-scroll th{padding:9px 12px;text-align:left;font-size:12px;font-weight:700;color:var(--fg-muted);white-space:nowrap}
-.table-scroll th.num{text-align:right}
-.table-scroll th.sortable{cursor:pointer;user-select:none}
-.table-scroll th.sortable:hover{color:var(--black)}
-.table-scroll th.sort-active{color:var(--black)!important}
-.table-scroll td{padding:8px 12px;border-bottom:1px solid var(--gray-100);font-size:12px;text-align:left}
-.table-scroll td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
-.table-scroll td.bold{font-weight:700}
-.prog-name{min-width:160px;max-width:220px;font-weight:600;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.table-scroll tr:hover td{background:#FAFAFA}
-.table-scroll tr.total-row td{background:var(--black);color:var(--white);font-weight:700;border-bottom:none;font-size:12px}
-.table-scroll tr.total-row td.yellow{color:var(--accent-fg)}
-.table-scroll tr.mes-row{background:var(--gray-50);cursor:pointer}
-.table-scroll tr.mes-row td{font-weight:700;font-size:12px;border-bottom:2px solid var(--gray-200)}
-.table-scroll tr.mes-row:hover td{background:#ECECEC}
-.toggle-icon{display:inline-block;transition:transform .2s;margin-right:6px;color:#aaa}
-.toggle-icon.open{transform:rotate(90deg)}
-.table-scroll tr.modal-row td{background:#FAFAFA;font-size:12px}
-.table-scroll tr.modal-row.hidden{display:none}
-.table-scroll tr.modal-row td:first-child{padding-left:28px;color:#666}
-/* RESPONSIVE TABLAS: la tabla de programas llega a 14 columnas. Se reduce
-   tipografía/relleno en cascada para que quepa sin scroll horizontal en
-   laptops (1366-1440), dejando el scroll de .table-scroll como último recurso. */
-@media(max-width:1700px){
-  .table-scroll th,.table-scroll td{font-size:11px;padding:7px 9px}
-  .prog-name{min-width:130px;max-width:180px}
-}
-@media(max-width:1450px){
-  .table-scroll th,.table-scroll td{font-size:10px;padding:6px 7px}
-  .prog-name{min-width:110px;max-width:150px}
-}
-@media(max-width:1300px){
-  .table-scroll th,.table-scroll td{font-size:9px;padding:4px 6px}
-  .table-scroll th{white-space:normal}
-  .prog-name{min-width:100px;max-width:130px}
-}
-.prog-section{margin-bottom:28px}
-.prog-section-title{font-size:12px;font-weight:800;padding:10px 16px;border-radius:var(--r-sm) var(--r-sm) 0 0;color:var(--fg);display:flex;align-items:center;gap:8px}
-.prog-section-title.pre{background:var(--pregrados)}
-.prog-section-title.pos{background:var(--posgrados)}
-.prog-section-title.brd{background:var(--branding)}
-.prog-controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.prog-search{flex:1;min-width:180px;background:var(--white);border:1px solid var(--gray-200);font-family:'Poppins',sans-serif;font-size:12px;padding:8px 12px;border-radius:var(--r-sm);outline:none}
-.prog-search:focus{border-color:var(--accent-fg)}
-.badge{display:inline-block;padding:2px 7px;border-radius:0;font-size:12px;font-weight:700;white-space:nowrap}
-.b-Posgrados{background:#EDE9FE;color:#5B21B6}
-.b-Pregrados{background:#DBEAFE;color:#1E40AF}
-.b-Branding{background:#D1FAE5;color:#065F46}
-.b-General{background:#F1F5F9;color:#475569}
-.b-Especialización{background:#EDE9FE;color:#5B21B6}
-.b-Maestría{background:#FEF3C7;color:#92400E}
-.b-Doctorado{background:#FEE2E2;color:#991B1B}
-.b-Pregrado{background:#DBEAFE;color:#1E40AF}
-#loader{position:fixed;inset:0;background:rgba(10,10,10,.95);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
-.loader-logo img{height:48px}
-.loader-sub{font-size:12px;color:var(--fg-muted)}
-.spinner{width:32px;height:32px;border:3px solid #222;border-top-color:var(--accent-fg);border-radius:50%;animation:spin .7s linear infinite}
+body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;overflow-x:hidden}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:10px 20px;position:sticky;top:0;z-index:50;display:flex;flex-direction:column;gap:8px}
+.tb-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar-title{font-size:12px;font-weight:700;margin-right:4px;white-space:nowrap}
+.f-sep{width:1px;height:18px;background:var(--gray-200)}
+.fg{display:flex;align-items:center;gap:5px}
+.fl{font-size:12px;color:var(--gray-600);font-weight:500;white-space:nowrap}
+select,input[type=date],input[type=search]{font-family:'Poppins',sans-serif;font-size:12px;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--black);outline:none}
+select{cursor:pointer;max-width:220px}
+select:focus,input:focus{border-color:var(--accent-fg)}
+.qbtn{font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;padding:4px 10px;border:1px solid var(--gray-200);background:var(--white);border-radius:999px;cursor:pointer;color:var(--gray-600)}
+.qbtn:hover{border-color:var(--black);color:var(--black)}
+.qbtn.on{background:var(--black);color:var(--white);border-color:var(--black)}
+.btn-reset{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:5px 10px;background:var(--black);color:var(--white);border:none;border-radius:var(--radius-sm);cursor:pointer}
+.chk{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray-600);cursor:pointer;white-space:nowrap}
+.last-upd{margin-left:auto;font-size:12px;color:var(--gray-400)}
+
+/* CONTENT */
+.content{padding:18px 20px;min-width:0}
+.sec-title{font-size:13px;font-weight:700;margin:4px 0 10px;display:flex;align-items:center;gap:7px;scroll-margin-top:110px}
+.sec-title>span:first-child{display:inline-block;width:3px;height:13px;background:var(--yellow);flex-shrink:0}
+.sec-note{font-size:12px;color:var(--gray-400);font-weight:400;margin-left:6px}
+.card{background:var(--white);border-radius:var(--r-md);border:1px solid var(--gray-200)}
+
+/* KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.kpi-card{padding:14px}
+.kpi-label{font-size:12px;color:var(--gray-600);font-weight:600;margin-bottom:3px}
+.kpi-value{font-size:20px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi-sub{font-size:12px;color:var(--gray-400);margin-top:3px}
+.kpi-bwrap{margin-top:8px}
+.kpi-brow{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-600);margin-bottom:3px}
+.kpi-bar{height:4px;background:var(--gray-200);border-radius:999px;overflow:hidden}
+.kpi-bfill{height:100%;border-radius:999px}
+.bg-pos{background:var(--c-pos)} .bg-mid{background:var(--c-mid)} .bg-neg{background:var(--c-neg)}
+.t-pos{color:var(--c-pos);font-weight:600} .t-mid{color:var(--c-mid);font-weight:600} .t-neg{color:var(--c-neg);font-weight:600} .t-mute{color:var(--gray-400)}
+
+/* EMBUDO */
+.funnel{padding:16px 18px;margin-bottom:20px;display:grid;grid-template-columns:1fr;gap:9px}
+.f-row{display:grid;grid-template-columns:150px 1fr 190px 190px;align-items:center;gap:12px}
+.f-head{font-size:11px;color:var(--gray-400);font-weight:600}
+.f-cost{font-size:12px;font-variant-numeric:tabular-nums;display:flex;justify-content:flex-end;align-items:baseline;gap:8px;border-left:1px solid var(--gray-200);padding-left:12px}
+.f-cost b{font-size:14px}
+.f-lbl{font-size:12px;font-weight:600;color:var(--gray-600)}
+.f-track{height:22px;background:var(--gray-100);border-radius:6px;overflow:hidden}
+.f-fill{height:100%;background:var(--yellow);border-radius:6px;min-width:2px}
+.f-fill.dark{background:var(--black)}
+.f-val{font-size:12px;font-variant-numeric:tabular-nums;display:flex;justify-content:space-between;gap:8px}
+.f-val b{font-size:14px}
+
+/* NIVEL / MEDIO */
+.two-col{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.nivel-card{padding:16px}
+.nivel-tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;margin-bottom:12px}
+.tag-pre{background:#FFF8E1;color:#92400E} .tag-pos{background:#EDE9FE;color:#4C1D95}
+.nm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 10px}
+.nm-label{font-size:11px;color:var(--gray-400);font-weight:500}
+.nm-value{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.chart-card{padding:14px;margin-bottom:20px}
+.chart-wrap{height:260px;position:relative}
+
+/* TABLAS */
+.tcard{margin-bottom:20px;overflow:hidden}
+.tbar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--gray-100);flex-wrap:wrap}
+.tbar .sp{flex:1}
+.tbtn{font-family:'Poppins',sans-serif;font-size:12px;padding:4px 10px;border:1px solid var(--gray-200);background:var(--white);border-radius:var(--radius-sm);cursor:pointer}
+.tscroll{overflow-x:auto}
+.tscroll table{width:100%;min-width:0;border-collapse:collapse;font-size:12px}
+.tscroll thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
+.tscroll thead th{font-weight:700;padding:9px 10px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:0;position:sticky;top:0;background:var(--gray-50)}
+.tscroll thead th.r{text-align:right}
+.tscroll thead th.sortable{cursor:pointer;user-select:none}
+.tscroll thead th.sortable:hover,.tscroll thead th.sort-act{color:var(--black)}
+.tscroll thead th.grp{border-left:1px solid var(--gray-200)}
+.tscroll tbody tr{border-bottom:1px solid var(--gray-100)}
+.tscroll tbody td{padding:7px 10px;color:var(--gray-600);white-space:nowrap;text-align:left;vertical-align:middle;border-top:0}
+.tscroll tbody td.r{text-align:right;font-variant-numeric:tabular-nums}
+.tscroll tbody td.grp{border-left:1px solid var(--gray-100)}
+.tscroll tbody tr:hover td{background:var(--gray-50)}
+.tscroll .tr-total td{font-weight:700;color:var(--black);background:var(--gray-50) !important;border-top:2px solid var(--gray-200) !important}
+.lv1 td{font-weight:600;color:var(--black)}
+.lv1{cursor:pointer}
+.lv2{cursor:pointer;background:#fafafa}
+.lv2 td:first-child{padding-left:30px}
+.lv3 td:first-child{padding-left:56px;color:var(--gray-600)}
+.lv2 td:first-child,.lv2 td{font-weight:500}
+.hidden{display:none}
+.tog{display:inline-block;transition:transform .18s;margin-right:6px;color:var(--accent-fg);font-size:11px;width:9px}
+.tog.open{transform:rotate(90deg)}
+.nv{display:inline-block;font-size:10px;font-weight:700;padding:0 5px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.nv-pre{background:#FFF8E1;color:#92400E} .nv-pos{background:#EDE9FE;color:#4C1D95} .nv-gen{background:var(--gray-100);color:var(--gray-600)}
+.foot-note{font-size:11px;color:var(--gray-400);padding:8px 12px;border-top:1px solid var(--gray-100);line-height:1.5}
+@media(max-width:1700px){.tscroll thead th,.tscroll tbody td{font-size:11px;padding:6px 8px}}
+@media(max-width:1450px){.tscroll thead th,.tscroll tbody td{font-size:10px;padding:5px 6px}.lv2 td:first-child{padding-left:22px}.lv3 td:first-child{padding-left:40px}}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:rgba(10,10,10,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:12px}
+.ld-logo img{height:36px}
+.spinner{width:28px;height:28px;border:3px solid #222;border-top-color:var(--accent-fg);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+#ld-msg{color:var(--fg-muted);font-size:12px}
 
-/* Responsive dashboard standard: navigation, filters and data cards */
-@media(max-width:900px){
-  body{display:block;overflow-x:hidden}
-  .sidebar{position:relative;width:100%;min-height:auto;overflow:visible}
-  .sidebar-logo{padding:12px 18px}
-  .sidebar-nav{display:flex;padding:0;overflow-x:auto;scrollbar-width:thin}
-  .nav-label{display:none}
-  .nav-item{flex:0 0 auto;border-left:0;border-bottom:3px solid transparent;padding:11px 16px;white-space:nowrap}
-  .nav-item.active{border-left-color:transparent;border-bottom-color:var(--accent-fg)}
-  .sidebar-bottom{display:none}
-  .main{margin-left:0;width:100%}
-  .topbar{padding:0 18px}
-  .topbar-top{gap:16px}
-  .content{padding:20px 18px}
-}
-@media(max-width:640px){
-  .topbar-top{align-items:flex-start;flex-direction:column;padding-bottom:12px}
-  .topbar-top>div:first-child{width:100%}
-  .topbar-title{font-size:14px;line-height:1.35}
-  .topbar-actions{width:100%;justify-content:space-between}
-  .topbar-filters{align-items:stretch;gap:7px}
-  .tf-group{width:100%;min-height:40px}
-  .tf-group:first-child{display:grid;grid-template-columns:auto 1fr auto 1fr}
-  .tf-input{min-width:0;width:100%!important}
-  .btn-apply,.btn-reset{flex:1;min-height:40px}
-  .content{padding:18px 12px}
-  .kpi-grid,.medio-grid{grid-template-columns:1fr}
-  .kpi-card{padding:16px}
-  .table-header{padding:12px 14px}
-}
-
-/* PDF / print standard: browser-native output keeps text selectable and tables sharp */
-@page{size:A4 landscape;margin:10mm}
-@media print{
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  html,body{width:100%;min-height:auto;background:#fff!important;overflow:visible!important}
-  body{display:block;font-family:'Poppins',Arial,sans-serif;font-size:8pt}
-  .sidebar,#loader,.loading-bar,.topbar-filters,.btn-pdf,.prog-controls{display:none!important}
-  .main{display:block;width:100%;margin:0!important;overflow:visible!important}
-  .topbar{position:static;padding:0 0 5mm;border-bottom:1.5pt solid var(--yellow);box-shadow:none}
-  .topbar-top{align-items:flex-start;padding:0 0 3mm;gap:8mm}
-  .topbar-title{font-size:15pt;line-height:1.25}
-  .topbar-actions{padding-top:1mm}
-  .topbar-badge{font-size:7pt;background:var(--gray-50)!important}
-  .period-tag{font-size:7.5pt;padding:1.2mm 3mm}
-  .print-meta{display:flex;align-items:center;flex-wrap:wrap;gap:2mm 5mm;color:var(--gray-600);font-size:7.5pt}
-  .print-meta-item{display:flex;gap:1.5mm}
-  .print-meta-label{font-weight:700;color:var(--fg-muted)}
-  .content{padding:6mm 0 0;overflow:visible!important}
-  .section,.section.visible{margin-bottom:7mm;opacity:1!important;transform:none!important;transition:none!important}
-  .section-title{margin-bottom:3mm;font-size:8pt;break-after:avoid;page-break-after:avoid}
-  .kpi-grid,.medio-grid{grid-template-columns:repeat(4,1fr)!important;gap:3mm;margin-bottom:5mm}
-  .kpi-card,.medio-card{border-radius:3mm;break-inside:avoid;page-break-inside:avoid}
-  .kpi-card{padding:4mm}
-  .kpi-label{font-size:6.5pt;margin-bottom:1.5mm}
-  .kpi-value{font-size:14pt;word-break:normal}
-  .kpi-sub,.kpi-meta-row{font-size:6.5pt}
-  .medio-card-header{padding:2.5mm 3mm}
-  .medio-body{padding:2.5mm 3mm;gap:2mm}
-  .medio-footer{padding:2mm 3mm}
-  .m-label,.mf-label{font-size:6pt}
-  .m-value,.mf-value{font-size:8pt;word-break:normal}
-  .table-wrap,.table-scroll{overflow:visible!important}
-  .table-wrap{border-radius:2mm;margin-bottom:4mm;break-inside:auto;page-break-inside:auto}
-  .table-header{padding:3mm 4mm}
-  .table-title{font-size:8.5pt}
-  .table-scroll table{width:100%;min-width:0;table-layout:auto}
-  thead{display:table-header-group}
-  tr{break-inside:avoid;page-break-inside:avoid}
-  .table-scroll th{padding:1.8mm 1.2mm!important;font-size:5.8pt!important;letter-spacing:.025em;white-space:normal!important}
-  .table-scroll td{padding:1.6mm 1.2mm!important;font-size:6.5pt!important}
-  .table-scroll td.num{white-space:nowrap}
-  .table-scroll tr.modal-row.hidden{display:table-row!important}
-  .table-scroll tr.modal-row td:first-child{padding-left:4mm!important}
-  #s1,#s2{break-after:page;page-break-after:always}
-  .prog-section{margin-bottom:5mm;break-before:page;page-break-before:always}
-  .prog-section:first-child{break-before:auto;page-break-before:auto}
-  .prog-section-title{padding:2.5mm 4mm;font-size:8pt;break-after:avoid;page-break-after:avoid}
-  .prog-name{min-width:0!important;max-width:38mm!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
-}
+@media(max-width:1300px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.nm-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.f-row{grid-template-columns:90px 1fr 120px 130px}.f-cost span{display:none}.content{padding:14px 16px}}
 </style>
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
 </head>
 <body class="con-shell">
-<div id="loader">
+<div id="loading">
+  <div class="ld-logo"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCABkAGQDASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAAUEBgcDAgH/xAA4EAACAQMDAgQEBAUEAwAAAAABAgMABBEFEiExBhNBUWEicYGRBxQjMqEVQlKxwdHwJGJy4fH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A2miiigCiiigCiiigCiiigCiiigCiiigCiiigCiiigCiiigCiiigCiio+oahb6Xp8t7dOUhiALEKWPJAHABJ5IoJFFeW41O3t7KO7kEgjkxsATLMT0AA5JrMT/aBpKXnkLFeNG0bOt0Ihs4zgMCeQRgjt3oA9FY5vjlpYlnBtLwQQP5T3JiHlhsZXBBOQfXFaltcRXdrFcQNuilQSIcEZBGR19KAqiiqnxBqsuj2SXEdub2SR9gt4s5c8kkdOMc0Au8TeLNK8Krbf2k8im4LiIRxlySBk9B24815n/bHRlRXa3u0VwSpaIYY4OAw7E4OP3r578e/Etl4u1K31OGzmtLi3DxOjuHVlO04IwMHJPbpXkmtanHJp9rbWNq1rbRbnz57SSSSWZieSSSf3oA9P1j9pOl2Msq2tvPdmN2Utj92xHr15r0v4b8U6T4s092029WQKQJIY2VpIs/3AAkA+xr5Lk0u9e1nuBZzNDA5SSQRna3bAPr1FX3wftY7bVJNSmvmskFuwjxGSJJpMBFXBHopz6mgD7bRRRQBRRRQBRRRQBXif4oQadqmqadb67ZXGs6Tpk6SX9lYSokpJBKHk+jDjGPWvbVSdU0m01izNneozwllfaDg5U5U/mBQB868OeIfDP8A9Rfw4fDkNzqyT/ZLq/nj3K6uSMyE/MQCoyvPFeoeDfjJpOptZaIkV1LqxXyo1mTapZfmHJbKgDn6V48fhX4aMt/HFG6G0meFGKgFlUnv0PFQPC1xNoXxT0y7s5pFjg1KJFDkHZl9pGR1HNAHutFFFAFcOorXriigCiiigCiiigCiiigP/9k=" alt="Universidad Católica"></div>
   <div class="spinner"></div>
-  <div class="loader-logo"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAARCABkAGQDASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAAUEBgcDAgH/xAA4EAACAQMDAgQEBAUEAwAAAAABAgMABBEFEiExBhNBUWEicYGRBxQjMqEVQlKxwdHwJGJy4fH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A2miiigCiiigCiiigCiiigCiiigCiiigCiiigCiiigCiiigCiiigCiio+oahb6Xp8t7dOUhiALEKWPJAHABJ5IoJFFeW41O3t7KO7kEgjkxsATLMT0AA5JrMT/aBpKXnkLFeNG0bOt0Ihs4zgMCeQRgjt3oA9FY5vjlpYlnBtLwQQP5T3JiHlhsZXBBOQfXFaltcRXdrFcQNuilQSIcEZBGR19KAqiiqnxBqsuj2SXEdub2SR9gt4s5c8kkdOMc0Au8TeLNK8Krbf2k8im4LiIRxlySBk9B24815n/bHRlRXa3u0VwSpaIYY4OAw7E4OP3r578e/Etl4u1K31OGzmtLi3DxOjuHVlO04IwMHJPbpXkmtanHJp9rbWNq1rbRbnz57SSSSWZieSSSf3oA9P1j9pOl2Msq2tvPdmN2Utj92xHr15r0v4b8U6T4s092029WQKQJIY2VpIs/3AAkA+xr5Lk0u9e1nuBZzNDA5SSQRna3bAPr1FX3wftY7bVJNSmvmskFuwjxGSJJpMBFXBHopz6mgD7bRRRQBRRRQBRRRQBXif4oQadqmqadb67ZXGs6Tpk6SX9lYSokpJBKHk+jDjGPWvbVSdU0m01izNneozwllfaDg5U5U/mBQB868OeIfDP8A9Rfw4fDkNzqyT/ZLq/nj3K6uSMyE/MQCoyvPFeoeDfjJpOptZaIkV1LqxXyo1mTapZfmHJbKgDn6V48fhX4aMt/HFG6G0meFGKgFlUnv0PFQPC1xNoXxT0y7s5pFjg1KJFDkHZl9pGR1HNAHutFFFAFcOorXriigCiiigCiiigCiiigP/9k=" alt="ADCOM"></div>
-  <div class="loader-sub">Cargando datos de Universidad Católica...</div>
+  <div id="ld-msg">Cargando datos...</div>
 </div>
 
 <nav class="app-sidebar">
@@ -248,793 +140,489 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
     <a class="app-sidebar-brand" href="index.html"><i></i>Adcom</a>
     <div class="app-sidebar-client">
       <span class="app-sidebar-client-label">Cliente</span>
-      <strong class="app-sidebar-client-name">Universidad Católica de Colombia</strong>
+      <strong class="app-sidebar-client-name">Universidad Católica, pauta digital</strong>
     </div>
   </div>
   <div class="app-sidebar-nav">
     <span class="app-sidebar-nav-title">Secciones</span>
-    <a href="#s1" class="active"><b></b>Resumen general</a>
-    <a href="#s2"><b></b>Inversión mes a mes</a>
-    <a href="#s3"><b></b>Por programa</a>
+    <a href="#sec-kpi" class="active"><b></b>Resumen</a>
+    <a href="#sec-embudo"><b></b>Embudo</a>
+    <a href="#sec-nivel"><b></b>Por nivel</a>
+    <a href="#sec-medio"><b></b>Por medio</a>
+    <a href="#sec-semana"><b></b>Mes a mes · semanal</a>
+    <a href="#sec-detalle"><b></b>Nivel · grupo · programa</a>
+    <a href="#sec-brand"><b></b>Branding y eventos</a>
   </div>
-  <div class="app-sidebar-foot">
-    <button class="btn-refresh" onclick="refreshData()">
-      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 6A4 4 0 1 1 6 2M10 2v4H6"/></svg>
-      Actualizar datos
-    </button>
-    <div class="last-update" id="last-update">—</div>
-  </div>
+  <div class="app-sidebar-foot">Datos cargados: <span id="last-upd-side">—</span><br><button class="tbtn" style="margin-top:6px" onclick="load()">↻ Actualizar datos</button></div>
 </nav>
 
-<main class="main">
+<div class="main">
   <div class="topbar">
-    <div class="topbar-top">
-      <div>
-        <div class="topbar-title">Dashboard de Pauta — Universidad Católica de Colombia</div>
-        <div style="margin-top:5px"><span class="period-tag" id="period-tag">Cargando...</span></div>
-      </div>
-      <div class="topbar-actions">
-        <span class="topbar-badge">PAUTA + CRM</span>
-        <button class="btn-pdf" type="button" onclick="downloadPDF()" title="Abrir la vista para guardar este reporte como PDF" aria-label="Descargar reporte en PDF">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v9m0 0 3-3m-3 3L5 7M2 11.5v2.25c0 .69.56 1.25 1.25 1.25h9.5c.69 0 1.25-.56 1.25-1.25V11.5"/></svg>
-          Descargar PDF
-        </button>
-      </div>
+    <div class="tb-row">
+      <span class="topbar-title">Tablero Pauta Católica</span>
+      <div class="f-sep"></div>
+      <div class="fg"><span class="fl">Desde</span><input type="date" id="f-desde" onchange="onDate()"></div>
+      <div class="fg"><span class="fl">Hasta</span><input type="date" id="f-hasta" onchange="onDate()"></div>
+      <div class="f-sep"></div>
+      <div id="quick" class="fg"></div>
+      <span class="last-upd" id="last-upd"></span>
     </div>
-    <div class="print-meta" id="print-meta" aria-hidden="true"></div>
-    <div class="topbar-filters">
-      <div class="tf-group">
-        <label>Período</label>
-        <input class="tf-input" type="date" id="f-desde" style="width:110px">
-        <span class="tf-sep">→</span>
-        <input class="tf-input" type="date" id="f-hasta" style="width:110px">
-      </div>
-      <div class="tf-group">
-        <label>Canal</label>
-        <select class="tf-select" id="f-medio">
-          <option value="">Todos</option>
-          <option value="facebook">Facebook</option>
-          <option value="google">Google</option>
-          <option value="tiktok">TikTok</option>
-          <option value="programatica">Programática</option>
-        </select>
-      </div>
-      <div class="tf-group">
-        <label>Modalidad</label>
-        <select class="tf-select" id="f-modalidad">
-          <option value="">Todas</option>
-          <option value="Pregrados">Pregrados</option>
-          <option value="Posgrados">Posgrados</option>
-          <option value="Branding">Branding</option>
-        </select>
-      </div>
-      <button class="btn-apply" onclick="applyFilters()">Aplicar</button>
-      <button class="btn-reset" onclick="resetFilters()">Limpiar</button>
+    <div class="tb-row">
+      <div class="fg"><span class="fl">Nivel</span><select id="f-nivel" onchange="onSel()"><option value="">Pregrado y posgrado</option><option>Pregrado</option><option>Posgrado</option></select></div>
+      <div class="fg"><span class="fl">Grupo</span><select id="f-grupo" onchange="onSel()"><option value="">Todos</option></select></div>
+      <div class="fg"><span class="fl">Medio</span><select id="f-medio" onchange="onSel()"><option value="">Todos</option></select></div>
+      <div class="fg"><span class="fl">Programa</span><select id="f-programa" onchange="onSel()"><option value="">Todos</option></select></div>
+      <label class="chk" title="Reparte la inversión de campañas generales entre los programas del mismo nivel según sus leads CRM"><input type="checkbox" id="f-repartir" checked onchange="render()">Repartir campañas generales</label>
+      <button class="btn-reset" onclick="resetFilters()">↺ Reset</button>
     </div>
   </div>
-  <div class="loading-bar" id="loading-bar"></div>
 
   <div class="content">
-    <div class="section visible" id="s1">
-      <div class="section-title">Resumen General</div>
-      <div class="kpi-grid" id="kpi-grid"></div>
-      <div class="section-title" style="margin-top:4px">Por Modalidad vs Meta</div>
-      <div class="kpi-grid" id="kpi-modal-grid"></div>
-      <div class="section-title" style="margin-top:4px">Performance por Canal</div>
-      <div class="medio-grid" id="medio-grid"></div>
-    </div>
-    <div class="section" id="s2">
-      <div class="section-title">Inversión Mes a Mes</div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">Inversión mensual por canal y modalidad</div></div>
-        <div class="table-scroll" id="mes-table"></div>
+    <div class="sec-title" id="sec-kpi"><span></span>Resumen del rango<span class="sec-note" id="rango-note"></span></div>
+    <div class="kpi-grid" id="kpi-grid"></div>
+
+    <div class="sec-title" id="sec-embudo"><span></span>Embudo<span class="sec-note" id="embudo-note"></span></div>
+    <div class="card funnel" id="funnel"></div>
+
+    <div class="sec-title" id="sec-nivel"><span></span>Por nivel</div>
+    <div class="two-col" id="nivel-grid"></div>
+
+    <div class="sec-title" id="sec-medio"><span></span>Por medio<span class="sec-note">el medio del CRM sale de la campaña del aspirante (Facebook_Ads, Google_Ads…)</span></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="medio-head"></thead><tbody id="medio-body"></tbody></table></div></div>
+
+    <div class="sec-title" id="sec-semana"><span></span>Evolución<span class="sec-note" id="semana-note"></span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-ev="mes" onclick="setEvo('mes')">Mes a mes</button><button class="qbtn" data-ev="sem" onclick="setEvo('sem')">Semana a semana</button></span></div>
+    <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-sem"></canvas></div></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="sem-head"></thead><tbody id="sem-body"></tbody></table></div></div>
+
+    <div class="sec-title" id="sec-detalle"><span></span>Nivel · grupo · programa</div>
+    <div class="card tcard">
+      <div class="tbar">
+        <button class="tbtn" onclick="expandAll(true)">Expandir todo</button>
+        <button class="tbtn" onclick="expandAll(false)">Contraer</button>
+        <span class="sec-note" id="gen-note"></span>
+        <span class="sp"></span>
+        <input type="search" id="q" placeholder="Buscar programa o grupo" oninput="renderDetalle()" style="width:240px">
       </div>
-      <div class="table-wrap">
-        <div class="table-header"><div class="table-title">Inversión, Leads y CPL mensual — Ene 2026 a hoy</div></div>
-        <div class="table-scroll" id="mes-leads-cpl-table"></div>
+      <div class="tscroll"><table><thead id="det-head"></thead><tbody id="det-body"></tbody></table></div>
+      <div class="foot-note">
+        <b>Inversión y leads plataforma</b>: pestaña RESUMEN GENERAL. <b>Leads CRM</b>: CRM_ASPIRANTES con fuente "Trafico_Pago" (remarketing no cuenta como pauta).
+        <b>Pre-inscritos, inscritos, admitidos y matriculados</b>: CRM_ADMISIONES con fuente "Trafico_Pago"; los matriculados cancelados no cuentan.
+        Con un periodo elegido en los atajos, el CRM se cuenta por su columna "Periodo"; con fechas libres, cada etapa por su propia fecha (creación, pre-inscrito, inscrito, admitido, matriculado).
+        <b>Metas</b>: se prorratean a los días del rango elegido. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel según sus leads CRM.
+        Branding y eventos van en su propia sección y no entran en los costos.
       </div>
     </div>
-    <div class="section" id="s3">
-      <div class="section-title">Detalle por Programa</div>
-      <div class="prog-controls">
-        <input class="prog-search" type="text" id="prog-search" placeholder="🔍 Buscar programa..." oninput="renderAllProgTables()">
-      </div>
-      <div id="prog-tables"></div>
-    </div>
+    <div class="sec-title" id="sec-brand"><span></span>Branding y eventos<span class="sec-note">no entra en los costos del embudo ni en la tabla de programas</span></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="brand-head"></thead><tbody id="brand-body"></tbody></table></div></div>
   </div>
-</main>
+</div>
 
 <script>
-const URL_RG    = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=1551290449";
+const SHEET_ID = '1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs';
 // CRM_ASPIRANTES pesa ~17 MB completa: se piden solo las columnas y filas de pauta.
-// B Fecha · C Fuente · D Campaña · E Código · F Programa · H Nivel · I Periodo
-const URL_ASP   = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=40171782&tq="+encodeURIComponent("select B,C,D,E,F,H,I where C='Trafico_Pago'");
-const URL_ADM   = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=2049412307";
-const FUENTE_PAUTA = 'Trafico_Pago';
-// Nombres del CRM que no coinciden con RESUMEN GENERAL ni normalizando tildes.
-const PROGRAMA_ALIAS = {
-  'especializacion en compliace y derecho de los negocios':'Especializacion en Compliance y Derecho de los Negocios',
+const SRC = {
+  rg:    { gid: 1551290449 },
+  asp:   { gid: 40171782, tq: "select B,C,D,E,F,H,I where C='Trafico_Pago'" },
+  adm:   { gid: 2049412307 },
+  metas: { gid: 2109044138 },
 };
-const URL_METAS = "https://docs.google.com/spreadsheets/d/1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs/gviz/tq?tqx=out:csv&gid=2109044138";
+const FUENTE_PAUTA = 'Trafico_Pago';
+const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const NIVELES = ['Pregrado','Posgrado','General'];
+const CANALES = ['Facebook','Google','TikTok','Programática'];
 
-let RAW_RG=[], RAW_LEADS=[], RAW_MAT=[], RAW_METAS=[];
-let REFRESH_TOKEN=0, JSONP_SEQUENCE=0;
-const $=id=>document.getElementById(id);
-const MEDIOS=['facebook','google','tiktok','programatica'];
-const MESES_ES=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+let RAW = [], METAS = [], PERIODOS = {}, DISP = {}, BRAND = [], BRAND_METAS = [];
+const CANAL_ORDER = CANALES, CANAL_LBL = {Facebook:'Meta Ads', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática'};
+let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '', EVO = 'mes';
 
-// ── FORMATO ──────────────────────────────────────────────────────────────────
-function fmtCOP(n){ if(!n||isNaN(n)||n===0) return '—'; return '$'+Math.round(n).toLocaleString('es-CO') }
-function fmtNz(n){ if(!n||isNaN(n)) return '—'; return Math.round(n).toLocaleString('es-CO') }
-function fmtP(n){ if(n===null||n===undefined||isNaN(n)) return '⏳'; return n.toFixed(1)+'%' }
+// ── Parsers y formato ─────────────────────────────────────────────────────────
+function num(v){ if(typeof v === 'number') return isFinite(v) ? v : 0;
+  const s = String(v ?? '').replace(/[$\s%]/g,''); if(!s) return 0;
+  return parseFloat(s.indexOf(',') >= 0 ? s.replace(/\./g,'').replace(',','.') : s.replace(/\./g,'')) || 0 }
+function iso(v){ const m = String(v||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  const i = String(v||'').match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  return i ? `${i[1]}-${i[2].padStart(2,'0')}-${i[3].padStart(2,'0')}` : '' }
+function norm(s){ return String(s||'').trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'') }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fCOP = n => (n && isFinite(n)) ? '$' + Math.round(n).toLocaleString('es-CO') : '—';
+const fN = n => (n && isFinite(n)) ? (Math.abs(n) < 10 && n % 1 ? n.toLocaleString('es-CO',{maximumFractionDigits:1}) : Math.round(n).toLocaleString('es-CO')) : '—';
+const fP = n => (n === null || !isFinite(n)) ? '—' : (n*100).toLocaleString('es-CO',{maximumFractionDigits:1}) + '%';
+const div = (a,b) => b ? a/b : null;
+const fDate = s => { const p = s.split('-'); return `${+p[2]} ${MESES[+p[1]]}` };
+function days(a,b){ return Math.round((Date.parse(b) - Date.parse(a)) / 864e5) + 1 }
+function addDays(s,n){ const d = new Date(Date.parse(s) + n*864e5); return d.toISOString().slice(0,10) }
+function weekStart(s){ const d = new Date(Date.parse(s)); const w = (d.getUTCDay() + 6) % 7; return addDays(s, -w) }
+const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10) };
+function cls(p){ return p === null ? 't-mute' : p >= .8 ? 't-pos' : p >= .5 ? 't-mid' : 't-neg' }
+function bgc(p){ return p >= .8 ? 'bg-pos' : p >= .5 ? 'bg-mid' : 'bg-neg' }
+function difCls(d){ return d === null ? 't-mute' : Math.abs(d) <= .1 ? 't-pos' : Math.abs(d) <= .25 ? 't-mid' : 't-neg' }
 
-function parseInv(val){
-  if(!val) return 0;
-  if(typeof val==='number') return Number.isFinite(val)?val:0;
-  const clean = String(val).replace(/[$\s]/g,'').replace(/\./g,'').replace(',','.');
-  return parseFloat(clean)||0
+// ── Homologación ─────────────────────────────────────────────────────────────
+// La llave ignora tildes, comas, mayúsculas y espacios; los alias cubren nombres que cambian entre fuentes.
+const pkey = s => norm(s).replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+const PROG_CANON = [
+  ['Especialización en Compliance y Derecho de los Negocios', ['Especializacion en Compliace y Derecho de los Negocios', 'Especialización Compliance y Derecho de los Negocios']],
+  ['Especialización en Formulación, Evaluación Social y Económica de Proyectos', ['Especialización en Formulación y Evaluación Social y Económica de Proyectos']],
+  ['Maestría en Derecho y Ciencias Políticas', ['Maestría en Derecho y Ciencia Política']],
+  ['Administración de Empresas e Inteligencia de Negocios', ['Administración de Empresas']],
+  ['Maestría en Gestión Económica y Evaluación de Impacto', []],
+  ['Especialización en Psicología Clínica', []],
+];
+const ALIAS = {};
+PROG_CANON.forEach(([c, al]) => [c, ...al].forEach(n => ALIAS[pkey(n)] = c));
+function prog(s){ // llave del programa; guarda el nombre a mostrar (el que tenga más tildes)
+  let t = String(s||'').trim();
+  // las campañas generales llegan como "Campaña General" (pauta) o "Campaña general Pregrados" (metas)
+  if(/^CAMPANA GENERAL( PREGRADOS| POSGRADOS)?$/.test(pkey(t))) t = 'Campaña general';
+  const canon = ALIAS[pkey(t)], k = pkey(canon || t);
+  const acc = x => (String(x).match(/[^\x00-\x7F]/g)||[]).length, up = x => /^[a-záéíóú]/.test(x) ? 0 : 1;
+  if(canon) DISP[k] = canon; else if(!DISP[k] || up(t) > up(DISP[k]) || (up(t) === up(DISP[k]) && acc(t) > acc(DISP[k]))) DISP[k] = t;
+  return k }
+const D = k => DISP[k] || k;
+// Campañas de leads sin programa: se quedan en su nivel (se pueden repartir).
+const esGeneral = nm => /^CAMPANA|^ESPECIALIZACIONES /.test(pkey(nm));
+const nivelDe = s => { const t = norm(s); return t.startsWith('PREGRADO') || t.startsWith('PROFESIONAL') ? 'Pregrado' : t.startsWith('POSGRADO') || /ESPECIALIZ|MAESTR|DOCTORADO/.test(t) ? 'Posgrado' : t.startsWith('GENERAL') ? 'General' : '' };
+const SIN_PROG = 'Sin programa definido';
+function grupoDe(niv, nm, gen){
+  if(gen) return 'Campañas generales';
+  if(niv === 'Pregrado') return 'Pregrados';
+  if(/^ESPECIALIZACI/.test(pkey(nm))) return 'Especializaciones';
+  if(/^MAESTR/.test(pkey(nm))) return 'Maestrías';
+  if(/^DOCTORADO/.test(pkey(nm))) return 'Doctorados';
+  return 'Otros posgrados' }
+const GEN_ORDER = ['Otros posgrados', 'Campañas generales'];
+function canal(s){ const t = norm(s);
+  if(t.startsWith('FACEBOOK') || t.startsWith('META') || t.startsWith('INSTAGRAM')) return 'Facebook';
+  if(t.startsWith('GOOGLE')) return 'Google'; if(t.startsWith('TIKTOK')) return 'TikTok'; if(t.startsWith('PROGRAMATICA')) return 'Programática';
+  return 'Otro' }
+
+// ── Carga (JSONP de gviz: funciona también abriendo el archivo local) ─────────
+let SEQ = 0;
+function gvizRows(res){
+  if(res?.status !== 'ok' || !res.table) throw new Error('Respuesta inválida de Google Sheets');
+  const cols = res.table.cols || [];
+  return (res.table.rows || []).map(row => cols.map((col, i) => { const c = row.c?.[i];
+    if(!c || c.v === null || c.v === undefined) return '';
+    if(col.type === 'date' || col.type === 'datetime'){ if(c.f) return c.f; const m = String(c.v).match(/^Date\((\d+),(\d+),(\d+)/); if(m) return `${m[3]}/${+m[2]+1}/${m[1]}` }
+    return c.v }));
+}
+// En la web se lee CSV (trae todas las celdas). Abriendo el archivo local no hay CORS, así que se usa
+// JSONP, que deja vacías las celdas de tipo distinto al resto de la columna.
+function fetchTab(src){ return location.protocol.startsWith('http') ? fetchCSV(src) : fetchJSONP(src) }
+function fetchCSV({gid, tq}){ return new Promise((ok, ko) => {
+  const u = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}&headers=1${tq ? '&tq=' + encodeURIComponent(tq) : ''}&_=${Date.now()}`;
+  Papa.parse(u, {download:true, header:false, skipEmptyLines:true, complete: r => ok(r.data.slice(1)), error: ko }) }) }
+function fetchJSONP({gid, tq}){ return new Promise((ok, ko) => {
+  const cb = `__cat_${Date.now()}_${++SEQ}`, s = document.createElement('script');
+  const t = setTimeout(() => { cleanup(); ko(new Error('timeout')) }, 30000);
+  const cleanup = () => { clearTimeout(t); s.remove(); delete window[cb] };
+  window[cb] = r => { cleanup(); try{ ok(gvizRows(r)) } catch(e){ ko(e) } };
+  const u = new URL(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`);
+  u.searchParams.set('tqx', `out:json;responseHandler:${cb}`); u.searchParams.set('gid', gid); u.searchParams.set('headers', '1'); u.searchParams.set('_', Date.now());
+  if(tq) u.searchParams.set('tq', tq);
+  s.src = u.toString(); s.async = true; s.onerror = () => { cleanup(); ko(new Error('red')) }; document.head.appendChild(s) }) }
+function load(){
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('ld-msg').textContent = 'Cargando datos...';
+  Promise.all([fetchTab(SRC.rg), fetchTab(SRC.asp), fetchTab(SRC.adm), fetchTab(SRC.metas)]).then(([rg, asp, adm, metas]) => {
+    build(rg, asp, adm, metas); prepare();
+    const t = new Date().toLocaleString('es-CO', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+    document.getElementById('last-upd').textContent = 'Datos cargados: ' + t;
+    document.getElementById('last-upd-side').textContent = t;
+    document.getElementById('loading').style.display = 'none';
+  }).catch(() => { document.getElementById('ld-msg').textContent = 'No se pudo leer la hoja de Católica' });
 }
 
-function parseFechaCompleta(val){
-  if(!val) return {date:null, mes:'', full:''};
-  const m = String(val).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-  if(m){
-    const yyyy=m[3], mm=m[2].padStart(2,'0'), dd=m[1].padStart(2,'0');
-    return {date:new Date(yyyy+'-'+mm+'-'+dd), mes:yyyy+'-'+mm, full:yyyy+'-'+mm+'-'+dd}
+function build(rg, asp, adm, metas){
+  RAW = []; METAS = []; PERIODOS = {}; DISP = {}; BRAND = []; BRAND_METAS = [];
+  const row = o => RAW.push({ inv:0, lp:0, lc:0, pre:0, ins:0, adm:0, mat:0, per:'', ...o });
+  // RESUMEN GENERAL: Fecha | Campaña | Inversión | Leads plataforma | Medio | Modalidad | Tipo programa | Programa
+  rg.forEach(x => {
+    const d = iso(x[0]), mod = String(x[5]||'').trim(), tipo = String(x[6]||'').trim(), nm = String(x[7]||'').trim(), medio = canal(x[4]);
+    if(!d || !nm) return;
+    if(mod === 'Branding'){ BRAND.push({ d, niv: nivelDe(tipo), nm, tipo: tipo === 'Evento' ? 'Evento' : 'Branding', medio, inv: num(x[2]), lp: num(x[3]) }); return }
+    const niv = nivelDe(mod); if(!niv) return;
+    const gen = esGeneral(nm), pk = prog(nm);
+    row({ src:'rg', d, niv, pk, gen, grp: grupoDe(niv, nm, gen), medio, inv: num(x[2]), lp: num(x[3]) });
+  });
+  // METAS: Periodo | Inicio | Fin | Modalidad | Tipo programa | Programa | Leads | Presupuesto | Matrículas
+  metas.forEach(x => {
+    const per = String(x[0]||'').trim(), ini = iso(x[1]), fin = iso(x[2]), mod = String(x[3]||'').trim(), nm = String(x[5]||'').trim();
+    if(!per || !ini || !fin || !nm) return;
+    PERIODOS[per] = PERIODOS[per] || [ini, fin]; if(ini < PERIODOS[per][0]) PERIODOS[per][0] = ini; if(fin > PERIODOS[per][1]) PERIODOS[per][1] = fin;
+    if(mod === 'Branding'){ BRAND_METAS.push({ per, ini, fin, niv: nivelDe(x[4]), grupo: nivelDe(x[4]) || 'Branding', ppto: num(x[7]) }); return }
+    const niv = nivelDe(mod); if(!niv) return;
+    const gen = esGeneral(nm), pk = prog(nm);
+    METAS.push({ per, ini, fin, niv, pk, gen, grp: grupoDe(niv, nm, gen), ppto: num(x[7]), lm: num(x[6]), mm: num(x[8]) });
+  });
+  // CRM_ASPIRANTES (solo Trafico_Pago): Fecha | Fuente | Campaña | Código | Programa | Nivel de formación | Periodo
+  asp.forEach(x => {
+    const d = iso(x[0]), nm = String(x[4]||'').trim(), niv = nivelDe(x[5]);
+    if(!d || !nm || !niv || String(x[1]).trim() !== FUENTE_PAUTA) return;
+    const pk = prog(nm);
+    row({ src:'crm', d, per: String(x[6]||'').trim(), niv, pk, gen:false, grp: grupoDe(niv, D(pk), false), medio: canal(x[2]), lc: 1 });
+  });
+  // CRM_ADMISIONES: ID adm | ID asp | Creación | Fase | Fuente | Campaña | Código | Programa | Nivel académico | Nivel de formación | Periodo |
+  //                 Fecha pre-inscrito | Fecha inscrito | Fecha admitido | Fecha matriculado | Fecha cancelado
+  adm.forEach(x => {
+    if(String(x[4]).trim() !== FUENTE_PAUTA) return;
+    const nm = String(x[7]||'').trim(), niv = nivelDe(x[8]) || nivelDe(x[9]); if(!nm || !niv) return;
+    const pk = prog(nm), cancel = norm(x[3]) === 'CANCELADO';
+    const b = { src:'adm', per: String(x[10]||'').trim(), niv, pk, gen:false, grp: grupoDe(niv, D(pk), false), medio: canal(x[5]) };
+    // cada etapa en su fecha; una etapa no puede quedar antes de la anterior
+    let prev = iso(x[2]);
+    [[11,'pre'],[12,'ins'],[13,'adm'],[14,'mat']].forEach(([c, k]) => { let d = iso(x[c]); if(!d) return; if(prev && d < prev) d = prev; prev = d;
+      if(k === 'mat' && cancel) return; row({ ...b, d, [k]: 1 }) });
+  });
+  RAW.forEach(r => { if(!r.gen) r.grp = grupoDe(r.niv, D(r.pk), false) });
+  METAS.forEach(m => { if(!m.gen) m.grp = grupoDe(m.niv, D(m.pk), false) });
+  fill('f-medio', CANALES.filter(c => RAW.some(r => r.medio === c)), document.getElementById('f-medio').value);
+}
+
+function prepare(){
+  const ps = Object.keys(PERIODOS).sort();
+  const q = [['sem','Esta semana'],['semAnt','Semana pasada'],['mes','Este mes']].concat(ps.map(p => ['P'+p, p]));
+  document.getElementById('quick').innerHTML = q.map(([k,l]) => `<button class="qbtn" data-q="${k}" onclick="setQuick('${k}')">${l}</button>`).join('');
+  const hoy = todayISO(), act = ps.slice().reverse().find(p => PERIODOS[p][0] <= hoy && PERIODOS[p][1] >= hoy);
+  setQuick(QUICK && (QUICK[0] !== 'P' || PERIODOS[QUICK.slice(1)]) ? QUICK : act ? 'P'+act : 'mes');
+}
+
+// ── Filtros ──────────────────────────────────────────────────────────────────
+function fill(id, opts, sel, labelFn){ const el = document.getElementById(id), first = el.options[0].outerHTML;
+  el.innerHTML = first + opts.map(o => `<option value="${esc(o)}"${o===sel?' selected':''}>${esc(labelFn ? labelFn(o) : o)}</option>`).join('');
+  if(sel && !opts.includes(sel)) el.value = '' }
+function setQuick(k){
+  const hoy = todayISO(); let a, b = hoy;
+  if(k === 'sem'){ a = weekStart(hoy) }
+  else if(k === 'semAnt'){ a = addDays(weekStart(hoy), -7); b = addDays(a, 6) }
+  else if(k === 'mes'){ a = hoy.slice(0,8) + '01' }
+  else { const p = PERIODOS[k.slice(1)]; a = p[0]; b = p[1] < hoy ? p[1] : hoy }
+  document.getElementById('f-desde').value = a; document.getElementById('f-hasta').value = b;
+  QUICK = k; cascade(); render() }
+function onDate(){ QUICK = ''; cascade(); render() }
+function onSel(){ cascade(); render() }
+function F(){ const g = id => document.getElementById(id).value;
+  return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), grp: g('f-grupo'), medio: g('f-medio'), prog: g('f-programa'),
+    per: QUICK[0] === 'P' ? QUICK.slice(1) : '', rep: document.getElementById('f-repartir').checked } }
+// La pauta no trae periodo: siempre por fechas. El CRM, con periodo elegido, por su columna Periodo.
+const enRango = (r, f) => (r.src !== 'rg' && f.per) ? r.per === f.per : (r.d >= f.desde && r.d <= f.hasta);
+const pasa = (r, f) => enRango(r, f) && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio);
+function cascade(){
+  const f = F(), base = RAW.filter(r => pasa(r, f));
+  fill('f-grupo', [...new Set(base.map(r => r.grp))].sort((a, b) => (GEN_ORDER.indexOf(a) - GEN_ORDER.indexOf(b)) || a.localeCompare(b)), f.grp);
+  const b2 = base.filter(r => !f.grp || r.grp === f.grp);
+  fill('f-programa', [...new Set(b2.filter(r => !r.gen).map(r => r.pk))].sort((x, y) => D(x).localeCompare(D(y))), f.prog, D);
+}
+function resetFilters(){ ['f-nivel','f-grupo','f-medio','f-programa'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; QUICK = ''; prepare() }
+
+// ── Cálculo ──────────────────────────────────────────────────────────────────
+const Z = () => ({inv:0, invG:0, lp:0, lc:0, pre:0, ins:0, adm:0, mat:0, ppto:0, lm:0, mm:0});
+const NUM = Object.keys(Z());
+function add(a, b){ NUM.forEach(k => a[k] += b[k] || 0); return a }
+function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpp: div(e.inv, e.pre), cpi: div(e.inv, e.ins), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
+  conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto) } }
+
+function entradas(f){
+  const E = {}, get = (niv, pk, grp, gen) => { const k = niv + '|' + pk; return E[k] = E[k] || { ...Z(), niv, pk, grp, gen } };
+  RAW.forEach(r => { if(pasa(r, f)) add(get(r.niv, r.pk, r.grp, r.gen), r) });
+  if(!f.medio) METAS.forEach(m => {
+    if(f.per && m.per !== f.per) return; if(f.niv && m.niv !== f.niv) return;
+    const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta; if(a > b) return;
+    const s = days(a, b) / days(m.ini, m.fin), e = get(m.niv, m.pk, m.grp, m.gen);
+    e.ppto += m.ppto * s; e.lm += m.lm * s; e.mm += m.mm * s });
+  let list = Object.values(E);
+  if(f.rep){
+    list.filter(g => g.gen).forEach(g => {
+      const prog = list.filter(e => !e.gen && e.lc > 0);
+      let c = prog.filter(e => e.niv === g.niv); if(!c.length && g.niv === 'General') c = prog; if(!c.length) return;
+      const t = c.reduce((a, e) => a + e.lc, 0);
+      c.forEach(e => { const s = e.lc / t; e.inv += g.inv * s; e.invG += g.inv * s; e.lp += g.lp * s; e.ppto += g.ppto * s; e.lm += g.lm * s; e.mm += g.mm * s });
+      g.repartido = true });
+    list = list.filter(e => !e.repartido);
   }
-  const m2 = String(val).match(/(\d{4})-(\d{2})-(\d{2})/);
-  if(m2) return {date:new Date(val), mes:m2[1]+'-'+m2[2], full:val};
-  return {date:null, mes:'', full:''}
+  return list.filter(e => (!f.grp || e.grp === f.grp) && (!f.prog || e.pk === f.prog));
+}
+function filasRango(f){ return RAW.filter(r => pasa(r, f) && (!f.grp || r.grp === f.grp) && (!f.prog || r.pk === f.prog)) }
+
+// ── Render ───────────────────────────────────────────────────────────────────
+let ENT = [];
+function render(){
+  const f = F(); if(!f.desde || !f.hasta) return;
+  document.querySelectorAll('.qbtn[data-q]').forEach(b => b.classList.toggle('on', b.dataset.q === QUICK));
+  ENT = entradas(f);
+  const T = M(ENT.reduce((a, e) => add(a, e), Z()));
+  document.getElementById('rango-note').textContent = `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
+  document.getElementById('embudo-note').textContent = f.per ? `CRM del periodo ${f.per} · pauta en el rango de fechas` : 'cada etapa del CRM por su propia fecha';
+  const gen = RAW.filter(r => r.gen && pasa(r, f)).reduce((a, r) => a + r.inv, 0);
+  document.getElementById('gen-note').textContent = gen ? `Campañas generales: ${fCOP(gen)}, ${f.rep ? 'repartidas entre programas según leads CRM' : 'en su propio grupo'}` : '';
+  const B = renderBrand(f, (r, f) => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio), r => r.tipo === 'Evento' ? 'Eventos' : (r.niv || 'Branding'));
+  renderKPIs(T, B); renderFunnel(T); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
 
-function leadMedio(r){ return String(r[3]||'') }
-// Tipo de programa del CRM → modalidad del dashboard (Branding no genera leads CRM).
-function leadModal(r){
-  const t=String(r[5]||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-  if(!t) return '';
-  return t.startsWith('profesional')?'Pregrados':'Posgrados'
+function bar(p, lbl){ if(p === null) return '';
+  return `<div class="kpi-bwrap"><div class="kpi-brow"><span>${lbl}</span><span class="${cls(p)}">${fP(p)}</span></div><div class="kpi-bar"><div class="kpi-bfill ${bgc(p)}" style="width:${Math.min(p*100,100)}%"></div></div></div>` }
+function renderKPIs(T, B){
+  const k = (l, v, sub, extra) => `<div class="card kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div>${sub ? `<div class="kpi-sub">${sub}</div>` : ''}${extra || ''}</div>`;
+  const cplMeta = div(T.ppto, T.lm);
+  document.getElementById('kpi-grid').innerHTML = [
+    k('Inversión total', fCOP(T.inv + B.inv), `conversión ${fCOP(T.inv)} · branding y eventos ${fCOP(B.inv)}`, bar(div(T.inv + B.inv, T.ppto + B.ppto), 'Ejecución vs presupuesto ' + fCOP(T.ppto + B.ppto))),
+    k('Leads plataforma', fN(T.lp), 'CPL plataforma ' + fCOP(T.cplP)),
+    k('Leads CRM', fN(T.lc), `<span class="${difCls(T.dif)}">${T.dif === null ? '' : (T.dif > 0 ? '+' : '') + fP(T.dif) + ' vs plataforma'}</span>`, bar(T.cumL, 'Meta ' + fN(T.lm))),
+    k('CPL CRM', fCOP(T.cplC), cplMeta ? 'CPL meta ' + fCOP(cplMeta) : ''),
+    k('Pre-inscritos', fN(T.pre), fP(div(T.pre, T.lc)) + ' de los leads CRM'),
+    k('Admitidos', fN(T.adm), fN(T.ins) + ' inscritos'),
+    k('Matriculados', fN(T.mat), fP(T.conv) + ' de los leads CRM', bar(T.cumM, 'Meta ' + fN(T.mm))),
+    k('Costo por matrícula', fCOP(T.cpm), T.mm ? 'meta ' + fCOP(div(T.ppto, T.mm)) : ''),
+    k('Costo por matrícula total', fCOP(div(T.inv + B.inv, T.mat)), 'incluye branding y eventos'),
+    k('Meta de matrículas del rango', fN(T.mm), 'prorrateada a los días elegidos'),
+  ].join('');
+}
+function renderFunnel(T){
+  // costo por etapa = inversión del rango / volumen de la etapa; se colorea contra el costo meta cuando existe
+  const cplMeta = div(T.ppto, T.lm), cpmMeta = div(T.ppto, T.mm);
+  const steps = [['Leads plataforma', T.lp, '', null], ['Leads CRM', T.lc, T.lp ? fP(div(T.lc, T.lp)) + ' de plataforma' : '', cplMeta],
+    ['Pre-inscritos', T.pre, fP(div(T.pre, T.lc)) + ' de leads CRM', null], ['Inscritos', T.ins, fP(div(T.ins, T.pre)) + ' de pre-inscritos', null],
+    ['Admitidos', T.adm, fP(div(T.adm, T.ins)) + ' de inscritos', null], ['Matriculados', T.mat, fP(div(T.mat, T.adm)) + ' de admitidos', cpmMeta]];
+  const mx = Math.max(...steps.map(s => s[1]), 1);
+  const costo = (v, meta) => { const c = div(T.inv, v); if(c === null) return '<span class="t-mute">—</span>';
+    const k = meta ? (c <= meta ? 't-pos' : c <= meta * 1.25 ? 't-mid' : 't-neg') : '';
+    return `<b class="${k}">${fCOP(c)}</b>${meta ? `<span class="t-mute">meta ${fCOP(meta)}</span>` : ''}` };
+  document.getElementById('funnel').innerHTML =
+    '<div class="f-row f-head"><div></div><div></div><div class="f-val"><span>Volumen</span><span>Tasa vs etapa anterior</span></div><div class="f-cost"><span>Costo por etapa</span></div></div>' +
+    steps.map(([l, v, c, meta], i) => `<div class="f-row"><div class="f-lbl">${l}</div>
+    <div class="f-track"><div class="f-fill${i === steps.length - 1 ? ' dark' : ''}" style="width:${Math.max(v/mx*100, .4)}%"></div></div>
+    <div class="f-val"><b>${fN(v)}</b><span class="t-mute">${c}</span></div><div class="f-cost">${costo(v, meta)}</div></div>`).join('');
+}
+function renderNivel(){
+  const card = (niv, tag) => { const e = M(ENT.filter(x => x.niv === niv).reduce((a, x) => add(a, x), Z()));
+    const it = (l, v, c) => `<div><div class="nm-label">${l}</div><div class="nm-value ${c||''}">${v}</div></div>`;
+    return `<div class="card nivel-card"><span class="nivel-tag ${tag}">${niv}</span><div class="nm-grid">
+      ${it('Inversión', fCOP(e.inv))}${it('Leads plataforma', fN(e.lp))}${it('Leads CRM', fN(e.lc))}${it('CRM vs plat.', e.dif === null ? '—' : (e.dif > 0 ? '+' : '') + fP(e.dif), difCls(e.dif))}
+      ${it('CPL CRM', fCOP(e.cplC))}${it('Costo / pre-inscrito', fCOP(e.cpp))}${it('Costo / admitido', fCOP(e.cpa))}${it('Costo / matrícula', fCOP(e.cpm))}
+      ${it('Pre-inscritos', fN(e.pre))}${it('Inscritos', fN(e.ins))}${it('Admitidos', fN(e.adm))}${it('Matriculados', fN(e.mat))}
+      ${it('Meta leads', fN(e.lm))}${it('Cumpl. leads', fP(e.cumL), cls(e.cumL))}${it('Meta matrículas', fN(e.mm))}${it('Cumpl. matrículas', fP(e.cumM), cls(e.cumM))}
+      ${it('Presupuesto', fCOP(e.ppto))}${it('Ejecución', fP(e.cumI), cls(e.cumI))}${it('Lead → matrícula', fP(e.conv))}
+    </div></div>` };
+  document.getElementById('nivel-grid').innerHTML = card('Pregrado', 'tag-pre') + card('Posgrado', 'tag-pos');
+}
+const COLS_BASE = [['inv','Inversión','cop'],['lp','Leads plat.','n'],['lc','Leads CRM','n'],['dif','CRM vs plat.','dif'],['cplP','CPL plat.','cop'],['cplC','CPL CRM','cop'],
+  ['pre','Pre-insc.','n'],['adm','Admitidos','n'],['mat','Matric.','n'],['cpm','Costo / mat.','cop'],['conv','Lead → mat.','pct']];
+const COLS_META = [['lm','Meta leads','n',1],['cumL','Cumpl. leads','cum'],['mm','Meta mat.','n'],['cumM','Cumpl. mat.','cum'],['ppto','Presupuesto','cop',1],['cumI','Ejecución','cum']];
+function cell(e, [k, , t, grp]){ const v = e[k], g = grp ? ' grp' : '';
+  if(t === 'cop') return `<td class="r${g}">${fCOP(v)}</td>`;
+  if(t === 'n') return `<td class="r${g}">${fN(v)}</td>`;
+  if(t === 'pct') return `<td class="r${g}">${fP(v)}</td>`;
+  if(t === 'dif') return `<td class="r${g} ${difCls(v)}">${v === null ? '—' : (v > 0 ? '+' : '') + fP(v)}</td>`;
+  if(t === 'cum') return `<td class="r${g} ${cls(v)}">${fP(v)}</td>` }
+function head(first, cols, sortable){ return '<tr><th>' + first + '</th>' + cols.map(c => {
+  const act = SORT.col === c[0]; return `<th class="r${c[3] ? ' grp' : ''}${sortable ? ' sortable' : ''}${sortable && act ? ' sort-act' : ''}"${sortable ? ` onclick="sortBy('${c[0]}')"` : ''}>${c[1]}${sortable && act ? (SORT.dir > 0 ? ' ↑' : ' ↓') : ''}</th>` }).join('') + '</tr>' }
+function groupRows(rows, keyFn){ const g = {}; rows.forEach(r => { const k = keyFn(r); g[k] = g[k] || Z(); add(g[k], r) }); return g }
+
+function renderMedio(f){
+  const rows = filasRango(f), g = groupRows(rows, r => r.medio);
+  const lbl = {Facebook:'Meta (Facebook e Instagram)', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática', Otro:'Otro (CRM)'};
+  const ks = Object.keys(g).filter(k => g[k].inv || g[k].lp || g[k].lc || g[k].pre).sort((a, b) => (CANALES.indexOf(a) + 1 || 9) - (CANALES.indexOf(b) + 1 || 9));
+  const cols = COLS_BASE.filter(c => c[0] !== 'conv'); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpp','Costo / pre-insc.','cop']);
+  document.getElementById('medio-head').innerHTML = head('Medio', cols, false);
+  const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
+  document.getElementById('medio-body').innerHTML = ks.map(k => '<tr><td>' + (lbl[k] || k) + '</td>' + cols.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
+    '<tr class="tr-total"><td>Total</td>' + cols.map(c => cell(T, c)).join('') + '</tr>';
+}
+function setEvo(k){ EVO = k; document.querySelectorAll('[data-ev]').forEach(b => b.classList.toggle('on', b.dataset.ev === k)); renderSemana(F()) }
+function renderSemana(f){
+  // con periodo elegido: pauta del rango y CRM del periodo, cada fila en su fecha
+  const mes = EVO === 'mes', rows = filasRango(f), g = groupRows(rows, r => mes ? r.d.slice(0,7) : weekStart(r.d)), ks = Object.keys(g).sort();
+  document.getElementById('semana-note').textContent = f.prog ? 'con filtro de programa la inversión es solo la directa' : (mes ? 'por mes calendario · cada etapa del CRM por su propia fecha' : 'semanas de lunes a domingo · cada etapa del CRM por su propia fecha');
+  const lab = k => mes ? MESES[+k.slice(5,7)].replace(/^./, c => c.toUpperCase()) + ' ' + k.slice(0,4) : `${fDate(k)} – ${fDate(addDays(k, 6))}`;
+  document.getElementById('sem-head').innerHTML = head(mes ? 'Mes' : 'Semana', COLS_BASE, false);
+  const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
+  document.getElementById('sem-body').innerHTML = ks.slice().reverse().map(k => '<tr><td>' + lab(k) + '</td>' + COLS_BASE.map(c => cell(M(g[k]), c)).join('') + '</tr>').join('') +
+    '<tr class="tr-total"><td>Total</td>' + COLS_BASE.map(c => cell(T, c)).join('') + '</tr>';
+  const css = getComputedStyle(document.body), fg = css.getPropertyValue('--fg-muted').trim() || '#888';
+  const data = { labels: ks.map(k => mes ? lab(k) : fDate(k)), datasets: [
+    { type:'bar', label:'Inversión', data: ks.map(k => Math.round(g[k].inv)), backgroundColor:'rgba(255,212,0,.55)', yAxisID:'y1', order:4 },
+    { type:'line', label:'Leads plataforma', data: ks.map(k => g[k].lp), borderColor:'#9ca3af', backgroundColor:'#9ca3af', tension:.25, yAxisID:'y', order:1 },
+    { type:'line', label:'Leads CRM', data: ks.map(k => g[k].lc), borderColor:'#111', backgroundColor:'#111', tension:.25, yAxisID:'y', order:0 },
+    { type:'line', label:'Pre-inscritos', data: ks.map(k => g[k].pre), borderColor:'#2563eb', backgroundColor:'#2563eb', tension:.25, yAxisID:'y', order:2 },
+    { type:'line', label:'Matriculados', data: ks.map(k => g[k].mat), borderColor:'#16a34a', backgroundColor:'#16a34a', borderDash:[4,3], tension:.25, yAxisID:'y', order:3 } ] };
+  const opts = { responsive:true, maintainAspectRatio:false, interaction:{mode:'index', intersect:false},
+    plugins:{ legend:{labels:{boxWidth:10, font:{family:'Poppins', size:11}, color:fg}},
+      tooltip:{callbacks:{label: c => c.dataset.label + ': ' + (c.dataset.yAxisID === 'y1' ? fCOP(c.raw) : fN(c.raw))}} },
+    scales:{ x:{ticks:{color:fg, font:{size:10}}, grid:{display:false}},
+      y:{position:'left', beginAtZero:true, ticks:{color:fg, font:{size:10}}, title:{display:true, text:'Leads', color:fg, font:{size:10}}},
+      y1:{position:'right', beginAtZero:true, grid:{display:false}, ticks:{color:fg, font:{size:10}, callback: v => '$' + (v/1e6).toLocaleString('es-CO') + 'M'}} } };
+  if(CHART) CHART.destroy();
+  CHART = new Chart(document.getElementById('chart-sem'), { data, options: opts });
 }
 
-function fmtMes(mesStr){
-  const p=mesStr.split('-');
-  if(p.length<2) return mesStr;
-  return MESES_ES[parseInt(p[1])]+' '+p[0]
+function sortBy(col){ SORT.dir = SORT.col === col ? -SORT.dir : -1; SORT.col = col; renderDetalle() }
+function sorter(a, b){ const x = a.m[SORT.col], y = b.m[SORT.col];
+  if(x === null && y === null) return 0; if(x === null) return 1; if(y === null) return -1; return SORT.dir * (x - y) }
+function renderDetalle(){
+  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP' && c[0] !== 'conv');
+  cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpp','Costo / pre-insc.','cop'], ['cpa','Costo / adm.','cop']);
+  cols.push(...COLS_META);
+  const q = norm(document.getElementById('q').value);
+  document.getElementById('det-head').innerHTML = head('Nivel / grupo / programa', cols, true);
+  const ents = ENT.filter(e => !q || norm(D(e.pk) + ' ' + e.grp + ' ' + e.niv).includes(q));
+  const tree = {};
+  ents.forEach(e => { const c = tree[e.niv] = tree[e.niv] || {t: Z(), grps: {}}; add(c.t, e);
+    const g = c.grps[e.grp] = c.grps[e.grp] || {t: Z(), progs: []}; add(g.t, e); g.progs.push(e) });
+  const nvTag = n => n === 'Pregrado' ? '<span class="nv nv-pre">PRE</span>' : n === 'Posgrado' ? '<span class="nv nv-pos">POS</span>' : '<span class="nv nv-gen">GRAL</span>';
+  let h = '';
+  NIVELES.filter(n => tree[n]).map(k => ({k, v: tree[k], m: M(tree[k].t)})).forEach(({k, v, m}) => {
+    const cid = 'n_' + k, oc = q ? true : !!OPEN[cid];
+    h += `<tr class="lv1" onclick="tog('${cid}')"><td><span class="tog${oc ? ' open' : ''}" id="t-${cid}">▶</span>${esc(k)}${nvTag(k)}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>';
+    Object.entries(v.grps).map(([gk, gv]) => ({gk, gv, m: M(gv.t)})).sort((a, b) => (GEN_ORDER.indexOf(a.gk) - GEN_ORDER.indexOf(b.gk)) || sorter(a, b)).forEach(({gk, gv, m}) => {
+      const gid = cid + '__' + gk.replace(/\W/g, '_'), og = q ? true : !!OPEN[gid];
+      h += `<tr class="lv2${oc ? '' : ' hidden'}" data-p="${cid}" onclick="tog('${gid}')"><td><span class="tog${og ? ' open' : ''}" id="t-${gid}">▶</span>${esc(gk)}<span class="t-mute" style="font-weight:400;margin-left:6px">${gv.progs.length}</span></td>` + cols.map(c => cell(m, c)).join('') + '</tr>';
+      gv.progs.map(e => ({e, m: M(e)})).sort(sorter).forEach(({e, m}) => {
+        const tag = (!e.gen && !e.inv && (e.lc || e.pre)) ? '<span class="nv nv-gen">sin pauta</span>' : '';
+        h += `<tr class="lv3${oc && og ? '' : ' hidden'}" data-p="${gid}" data-c="${cid}"><td>${esc(D(e.pk))}${tag}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>' }) }) });
+  const T = M(ents.reduce((a, e) => add(a, e), Z()));
+  h += '<tr class="tr-total"><td>Total</td>' + cols.map(c => cell(T, c)).join('') + '</tr>';
+  document.getElementById('det-body').innerHTML = h;
 }
-
-// ── CARGA ─────────────────────────────────────────────────────────────────────
-// Google Sheets no habilita CORS en sus CSV. JSONP permite cargar las mismas
-// hojas desde file:/// sin servidor local ni dependencias externas.
-function gvizRows(response){
-  if(response?.status!=='ok'||!response.table)throw new Error('Google Sheets devolvió una respuesta inválida');
-  const cols=response.table.cols||[];
-  const rows=(response.table.rows||[]).map(row=>cols.map((col,index)=>{
-    const cell=row.c?.[index];
-    if(!cell||cell.v===null||cell.v===undefined)return '';
-    if(col.type==='date'||col.type==='datetime'){
-      if(cell.f)return cell.f;
-      const match=String(cell.v).match(/^Date\((\d+),(\d+),(\d+)/);
-      if(match)return `${match[3]}/${Number(match[2])+1}/${match[1]}`
-    }
-    return cell.v
-  }));
-  rows.headers=cols.map(col=>String(col.label||'').trim());
-  return rows
+// ── Branding y eventos (sección aparte: fuera de los costos del embudo y de la tabla de programas) ──
+function renderBrand(f, enR, grupoDe){
+  const rows = BRAND.filter(r => r.inv && enR(r, f)), metas = BRAND_METAS.filter(m => (!f.per || !m.per || m.per === f.per) && (!f.niv || !m.niv || m.niv === f.niv) && (!f.mod || !m.mod || m.mod === f.mod));
+  const medios = CANAL_ORDER.filter(c => rows.some(r => r.medio === c && r.inv));
+  const conLp = rows.some(r => r.lp), G = {};
+  rows.forEach(r => { const g = G[grupoDe(r)] = G[grupoDe(r)] || {inv:0, lp:0, ppto:0, items:{}};
+    const it = g.items[r.nm] = g.items[r.nm] || {inv:0, lp:0, tipo:r.tipo, med:{}, dias:new Set()};
+    g.inv += r.inv; it.inv += r.inv; g.lp += r.lp || 0; it.lp += r.lp || 0; it.med[r.medio] = (it.med[r.medio] || 0) + r.inv; if(r.inv) it.dias.add(r.d) });
+  metas.forEach(m => { const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta; if(a > b) return;
+    const g = G[m.grupo] = G[m.grupo] || {inv:0, lp:0, ppto:0, items:{}}; g.ppto += m.ppto * days(a, b) / days(m.ini, m.fin) });
+  const tot = Object.values(G).reduce((a, g) => (a.inv += g.inv, a.lp += g.lp, a.ppto += g.ppto, a), {inv:0, lp:0, ppto:0});
+  const lpTd = x => conLp ? `<td class="r">${fN(x.lp)}</td><td class="r">${fCOP(div(x.inv, x.lp))}</td>` : '';
+  document.getElementById('brand-head').innerHTML = '<tr><th>Campaña</th><th class="r">Inversión</th>' + medios.map(m => `<th class="r">${CANAL_LBL[m] || m}</th>`).join('') +
+    (conLp ? '<th class="r">Leads plat.</th><th class="r">CPL plat.</th>' : '') + '<th class="r">% de branding y eventos</th><th class="r">Días con inversión</th><th class="r grp">Presupuesto</th><th class="r">Ejecución</th></tr>';
+  const pc = v => `<td class="r ${cls(v)}">${fP(v)}</td>`;
+  let h = '';
+  Object.entries(G).sort((a, b) => b[1].inv - a[1].inv).forEach(([gk, g]) => {
+    const ej = div(g.inv, g.ppto);
+    h += `<tr class="lv1"><td>${esc(gk)}</td><td class="r">${fCOP(g.inv)}</td>` + medios.map(m => `<td class="r">${fCOP(Object.values(g.items).reduce((a, it) => a + (it.med[m] || 0), 0))}</td>`).join('') +
+      lpTd(g) + `<td class="r">${fP(div(g.inv, tot.inv))}</td><td class="r"></td><td class="r grp">${fCOP(g.ppto)}</td>${pc(ej)}</tr>`;
+    Object.entries(g.items).sort((a, b) => b[1].inv - a[1].inv).forEach(([nm, it]) => {
+      h += `<tr class="lv3"><td>${esc(nm)}<span class="nv nv-gen">${esc(it.tipo)}</span></td><td class="r">${fCOP(it.inv)}</td>` + medios.map(m => `<td class="r">${fCOP(it.med[m])}</td>`).join('') +
+        lpTd(it) + `<td class="r">${fP(div(it.inv, tot.inv))}</td><td class="r">${fN(it.dias.size)}</td><td class="r grp"></td><td class="r"></td></tr>` }) });
+  h += `<tr class="tr-total"><td>Total</td><td class="r">${fCOP(tot.inv)}</td>` + medios.map(m => `<td class="r">${fCOP(rows.filter(r => r.medio === m).reduce((a, r) => a + r.inv, 0))}</td>`).join('') +
+    lpTd(tot) + `<td class="r">${tot.inv ? '100%' : '—'}</td><td class="r"></td><td class="r grp">${fCOP(tot.ppto)}</td>${pc(div(tot.inv, tot.ppto))}</tr>`;
+  document.getElementById('brand-body').innerHTML = Object.keys(G).length ? h : '<tr><td colspan="12" class="t-mute" style="padding:16px;text-align:center">Sin inversión en branding ni eventos en el rango</td></tr>';
+  return tot;
 }
-
-// ── CRM → formato posicional ─────────────────────────────────────────────────
-// CRM_ASPIRANTES y CRM_ADMISIONES llegan crudas desde la sincronización con el CRM
-// (se recargan completas en cada corrida), así que la normalización vive aquí.
-function normTexto(s){
-  return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim().replace(/\s+/g,' ')
+function tog(id){
+  OPEN[id] = !OPEN[id]; const ic = document.getElementById('t-' + id); if(ic) ic.classList.toggle('open', OPEN[id]);
+  document.querySelectorAll(`tr[data-p="${id}"]`).forEach(tr => {
+    tr.classList.toggle('hidden', !OPEN[id]);
+    if(tr.classList.contains('lv2')){ const sub = tr.querySelector('.tog').id.slice(2);
+      document.querySelectorAll(`tr[data-p="${sub}"]`).forEach(x => x.classList.toggle('hidden', !(OPEN[id] && OPEN[sub]))) } });
 }
-function normPrograma(s){
-  const nombre=String(s||'').trim();
-  return PROGRAMA_ALIAS[normTexto(nombre)]||nombre
-}
-// Campaña del CRM: Facebook_Ads, Google_Ads, Google_Pmax, programatica…
-function normMedio(s){
-  const t=normTexto(s);
-  if(t.startsWith('facebook'))return 'facebook';
-  if(t.startsWith('google'))return 'google';
-  if(t.startsWith('tiktok'))return 'tiktok';
-  if(t.startsWith('programatica'))return 'programatica';
-  return t
-}
-function crmCol(rows,...labels){
-  const heads=(rows.headers||[]).map(normTexto);
-  for(const label of labels){
-    const index=heads.indexOf(normTexto(label));
-    if(index!==-1)return index
-  }
-  throw new Error(`Falta la columna "${labels[0]}" en la hoja del CRM`)
-}
-// Salida: [0]Fecha [1]Cod [2]Fuente [3]Medio [4]Programa [5]Tipo [6]Periodo [7]Etapa
-//         [8]ASPIRANTES [9]PRE-INSCRITOS [10]INSCRITOS [11]ADMITIDOS [12]MATRICULAS
-function crmAspirantes(rows){
-  const c={fecha:crmCol(rows,'Fecha de creación'),fuente:crmCol(rows,'Fuente de Aspirante'),
-    medio:crmCol(rows,'Campaña','Medio'),cod:crmCol(rows,'Código de programa'),
-    prog:crmCol(rows,'Nombre del programa','Programa'),nivel:crmCol(rows,'Nivel de formación'),
-    periodo:crmCol(rows,'Periodo')};
-  return rows.filter(r=>String(r[c.fuente]).trim()===FUENTE_PAUTA).map(r=>[
-    r[c.fecha],r[c.cod],r[c.fuente],normMedio(r[c.medio]),normPrograma(r[c.prog]),
-    String(r[c.nivel]||'').trim(),r[c.periodo],'ASPIRANTE',1,0,0,0,0
-  ])
-}
-function crmAdmisiones(rows){
-  const c={fecha:crmCol(rows,'Fecha de creación'),fase:crmCol(rows,'Fase'),
-    fuente:crmCol(rows,'Fuente de Aspirante'),medio:crmCol(rows,'Campaña','Medio'),
-    cod:crmCol(rows,'Código de programa'),prog:crmCol(rows,'Nombre programa','Nombre del programa'),
-    nivel:crmCol(rows,'Nivel de formación'),periodo:crmCol(rows,'Periodo'),
-    pre:crmCol(rows,'Fecha Pre-inscrito'),ins:crmCol(rows,'Fecha Inscrito'),
-    adm:crmCol(rows,'Fecha Admitido'),mat:crmCol(rows,'Fecha Matriculado')};
-  const tiene=v=>String(v||'').trim()?1:0;
-  return rows.filter(r=>String(r[c.fuente]).trim()===FUENTE_PAUTA).map(r=>{
-    const cancelado=normTexto(r[c.fase])==='cancelado';
-    return [
-      r[c.fecha],r[c.cod],r[c.fuente],normMedio(r[c.medio]),normPrograma(r[c.prog]),
-      String(r[c.nivel]||'').trim(),r[c.periodo],String(r[c.fase]||'').trim(),
-      0,tiene(r[c.pre]),tiene(r[c.ins]),tiene(r[c.adm]),cancelado?0:tiene(r[c.mat])
-    ]
-  })
-}
+function expandAll(on){ document.querySelectorAll('#det-body .tog').forEach(t => OPEN[t.id.slice(2)] = on); renderDetalle() }
 
-function loadGoogleSheet(url){
-  return new Promise((resolve,reject)=>{
-    const callbackName=`__catolicaGviz_${Date.now()}_${++JSONP_SEQUENCE}`;
-    const script=document.createElement('script');
-    let settled=false;
-    const cleanup=()=>{
-      clearTimeout(timer);
-      script.remove();
-      delete window[callbackName]
-    };
-    const finish=(error,rows)=>{
-      if(settled)return;
-      settled=true;
-      cleanup();
-      error?reject(error):resolve(rows)
-    };
-    const timer=setTimeout(()=>finish(new Error('Tiempo de espera agotado al consultar Google Sheets')),20000);
-    window[callbackName]=response=>{
-      try{ finish(null,gvizRows(response)) }
-      catch(error){ finish(error) }
-    };
-    const source=new URL(url);
-    source.searchParams.set('tqx',`out:json;responseHandler:${callbackName}`);
-    source.searchParams.set('headers','1');
-    source.searchParams.set('_',Date.now());
-    script.src=source.toString();
-    script.async=true;
-    script.onerror=()=>finish(new Error('No fue posible conectar con Google Sheets'));
-    document.head.appendChild(script)
-  })
-}
-
-async function refreshData(){
-  const token=++REFRESH_TOKEN;
-  showLoading(true);
-  $('last-update').textContent='Cargando...';
-  const results=await Promise.allSettled([
-    loadGoogleSheet(URL_RG),
-    loadGoogleSheet(URL_ASP).then(crmAspirantes),
-    loadGoogleSheet(URL_ADM).then(crmAdmisiones),
-    loadGoogleSheet(URL_METAS)
-  ]);
-  if(token!==REFRESH_TOKEN)return;
-
-  const current=[RAW_RG,RAW_LEADS,RAW_MAT,RAW_METAS];
-  const datasets=results.map((result,index)=>result.status==='fulfilled'?result.value:current[index]);
-  [RAW_RG,RAW_LEADS,RAW_MAT,RAW_METAS]=datasets;
-  const failures=results.filter(result=>result.status==='rejected');
-  failures.forEach(result=>console.error('[Dashboard Catolica]',result.reason));
-
-  if(RAW_RG.length){
-    processAndRender();
-    if(failures.length)$('last-update').textContent+=` · ${failures.length} fuente(s) sin actualizar`
-  }else{
-    $('period-tag').textContent='Sin conexión con los datos';
-    $('last-update').textContent='Error de carga';
-    $('kpi-grid').innerHTML='<div style="grid-column:1/-1;padding:32px;text-align:center;color:#777">⚠️ No fue posible cargar Google Sheets. Revisa tu conexión e intenta actualizar.</div>'
-  }
-  showLoading(false)
-}
-
-// ── PROCESAR ──────────────────────────────────────────────────────────────────
-// RAW_LEADS y RAW_MAT ya vienen en formato posicional (ver crmAspirantes / crmAdmisiones).
-function processAndRender(){
-  const fDesde=$('f-desde')?.value||'';
-  const fHasta=$('f-hasta')?.value||'';
-  const fMedio=$('f-medio')?.value||'';
-  const fModal=$('f-modalidad')?.value||'';
-
-  if(!RAW_RG.length){ $('kpi-grid').innerHTML='<div style="grid-column:1/-1;padding:32px;text-align:center;color:#aaa">⚠️ Sin datos</div>'; return }
-
-  // Parsear RG
-  const rgRows = RAW_RG.map(r=>{
-    const f=parseFechaCompleta(r[0]);
-    return {
-      fecha:f.full, mes:f.mes, date:f.date,
-      medio:String(r[4]||'').toLowerCase().trim(),
-      modal:String(r[5]||'').trim(),
-      tipo:String(r[6]||'').trim(),
-      prog:String(r[7]||'').trim(),
-      inv:parseInv(r[2]),
-      leadsP:Math.round(parseFloat(String(r[3]||'0').replace(/[$\s]/g,'').replace(',','.'))||0)
-    }
-  }).filter(r=>r.date);
-
-  // Filtro RG
-  const filtered=rgRows.filter(r=>{
-    if(fDesde&&r.fecha<fDesde) return false;
-    if(fHasta&&r.fecha>fHasta) return false;
-    if(fMedio&&r.medio!==fMedio) return false;
-    if(fModal&&r.modal!==fModal) return false;
-    return true
-  });
-
-  // ✅ FIX: filtLeads y filtMat con filtro de FECHA completo
-  const filtLeads=RAW_LEADS.filter(r=>{
-    const fd=parseFechaCompleta(r[0]).full;
-    if(!fd) return false;
-    if(fDesde&&fd<fDesde) return false;
-    if(fHasta&&fd>fHasta) return false;
-    if(fMedio&&leadMedio(r)!==fMedio) return false;
-    return true
-  });
-
-  const filtMat=RAW_MAT.filter(r=>{
-    const fd=parseFechaCompleta(r[0]).full;
-    if(!fd) return false;
-    if(fDesde&&fd<fDesde) return false;
-    if(fHasta&&fd>fHasta) return false;
-    if(fMedio&&leadMedio(r)!==fMedio) return false;
-    return true
-  });
-
-  // KPIs globales
-  const inv_total   = filtered.reduce((a,r)=>a+r.inv,0);
-  const leads_pauta = filtered.reduce((a,r)=>a+r.leadsP,0);
-  // ✅ FIX: sumar col r[8] ASPIRANTES en lugar de contar filas
-  const leads_crm   = filtLeads.reduce((a,r)=>a+(parseInt(r[8])||0),0);
-  const admitidos   = filtMat.reduce((a,r)=>a+(parseInt(r[11])||0),0);
-  const matriculas  = filtMat.reduce((a,r)=>a+(parseInt(r[12])||0),0);
-
-  // KPIs por modalidad
-  const modales=['Pregrados','Posgrados','Branding'];
-  const modalStats={};
-  modales.forEach(m=>{
-    const rm=filtered.filter(r=>r.modal===m);
-    modalStats[m]={
-      inv:rm.reduce((a,r)=>a+r.inv,0),
-      leads_pauta:rm.reduce((a,r)=>a+r.leadsP,0)
-    }
-  });
-
-  // Metas
-  const metasByModal={};
-  if(RAW_METAS.length&&fDesde&&fHasta){
-    RAW_METAS.forEach(r=>{
-      const fIni=parseFechaCompleta(r[1]).full;
-      const fFin=parseFechaCompleta(r[2]).full;
-      const modal=String(r[3]||'').trim();
-      if(fIni<=fHasta&&fFin>=fDesde&&modal){
-        if(!metasByModal[modal]) metasByModal[modal]={leads:0,inv:0,mat:0};
-        metasByModal[modal].leads+=parseFloat(String(r[6]||'0').replace(/[,$]/g,''))||0;
-        metasByModal[modal].inv+=parseInv(r[7]);
-        metasByModal[modal].mat+=parseFloat(r[8])||0
-      }
-    })
-  }
-
-  renderKPIs({inv_total,leads_pauta,leads_crm,admitidos,matriculas});
-  renderModalKPIs(modalStats,metasByModal);
-
-  // Cards por medio
-  const medioCards=MEDIOS.map(m=>{
-    const rm=filtered.filter(r=>r.medio===m);
-    const inv=rm.reduce((a,r)=>a+r.inv,0);
-    const lp=rm.reduce((a,r)=>a+r.leadsP,0);
-    // ✅ FIX: sumar r[8] por medio
-    const lc=filtLeads.filter(r=>leadMedio(r)===m).reduce((a,r)=>a+(parseInt(r[8])||0),0);
-    const mt=filtMat.filter(r=>leadMedio(r)===m).reduce((a,r)=>a+(parseInt(r[12])||0),0);
-    return {medio:m,inv,leads_pauta:lp,leads_crm:lc,matriculas:mt,
-      cpl_pauta:lp?inv/lp:0, cpl_crm:lc?inv/lc:0}
-  });
-  renderMedioCards(medioCards);
-
-  // Mes a mes
-  const mesModalMap={};
-  filtered.forEach(r=>{
-    if(!mesModalMap[r.mes]) mesModalMap[r.mes]={};
-    const modal=r.modal||'Sin modalidad';
-    if(!mesModalMap[r.mes][modal]) mesModalMap[r.mes][modal]={};
-    MEDIOS.forEach(m=>{ if(!mesModalMap[r.mes][modal][m]) mesModalMap[r.mes][modal][m]={inv:0} });
-    mesModalMap[r.mes][modal][r.medio]=mesModalMap[r.mes][modal][r.medio]||{inv:0};
-    mesModalMap[r.mes][modal][r.medio].inv+=r.inv
-  });
-  window._mesModalData=mesModalMap;
-
-  // Por programa
-  const progMap={};
-  filtered.forEach(r=>{
-    if(!r.prog) return;
-    const key=r.prog+'||'+(r.modal||'');
-    if(!progMap[key]) progMap[key]={Programa:r.prog,Modalidad:r.modal,Tipo:r.tipo,inv_total:0,inv_facebook:0,inv_google:0,inv_tiktok:0,inv_programatica:0,leads_pauta:0};
-    const p=progMap[key];
-    p.inv_total+=r.inv;
-    if(MEDIOS.includes(r.medio)) p['inv_'+r.medio]=(p['inv_'+r.medio]||0)+r.inv;
-    p.leads_pauta+=r.leadsP
-  });
-
-  window._progData=Object.values(progMap).map(p=>{
-    // ✅ FIX: filtrar también por fecha y programa, sumar r[8]
-    const progKey=normTexto(p.Programa);
-    const la=filtLeads.filter(r=>normTexto(r[4])===progKey);
-    const ma=filtMat.filter(r=>normTexto(r[4])===progKey);
-    // ✅ FIX: sumar columna r[8] en lugar de .length
-    const lc=la.reduce((a,r)=>a+(parseInt(r[8])||0),0);
-    const mt=ma.reduce((a,r)=>a+(parseInt(r[12])||0),0);
-    const ad=ma.reduce((a,r)=>a+(parseInt(r[11])||0),0);
-    const lc_fb=la.filter(r=>leadMedio(r)==='facebook').reduce((a,r)=>a+(parseInt(r[8])||0),0);
-    const lc_go=la.filter(r=>leadMedio(r)==='google').reduce((a,r)=>a+(parseInt(r[8])||0),0);
-    return {...p,leads_crm:lc,admitidos:ad,matriculas:mt,
-      crm_facebook:lc_fb,crm_google:lc_go,
-      cpl_pauta:p.leads_pauta?p.inv_total/p.leads_pauta:0,
-      cpl_crm:lc?p.inv_total/lc:0,
-      conv_pct:lc?mt/lc*100:0}
-  });
-
-  const meses=Object.keys(mesModalMap).sort();
-  const desde=fDesde||meses[0]||'';
-  const hasta=fHasta||meses[meses.length-1]||'';
-  $('period-tag').textContent='📅 '+desde+' → '+hasta;
-  $('last-update').textContent='Act: '+new Date().toLocaleTimeString('es-CO');
-
-  renderMesTable();
-  renderMesLeadsCplTable();
-  renderAllProgTables();
-  revealSections()
-}
-
-// ── RENDER KPIs GLOBALES ──────────────────────────────────────────────────────
-function renderKPIs(k){
-  const cpl_p=k.leads_pauta?k.inv_total/k.leads_pauta:0;
-  const cpl_c=k.leads_crm?k.inv_total/k.leads_crm:0;
-  const conv=k.leads_crm?k.matriculas/k.leads_crm*100:0;
-  const cards=[
-    {label:'Inversión Total',    value:fmtCOP(k.inv_total),  sub:'Pauta digital total',  accent:'accent'},
-    {label:'Leads Pauta',        value:fmtNz(k.leads_pauta), sub:'Generados por ads'},
-    {label:'CPL Pauta',          value:fmtCOP(cpl_p),        sub:'Costo por lead pauta'},
-    {label:'Leads CRM',          value:fmtNz(k.leads_crm),   sub:'Aspirantes CRM',       accent:'accent'},
-    {label:'Admitidos',          value:fmtNz(k.admitidos),   sub:'Admitidos CRM'},
-    {label:'Matrículas',         value:fmtNz(k.matriculas),  sub:'Total matrículas'},
-    {label:'CPL CRM',            value:fmtCOP(cpl_c),        sub:'Inversión / Aspirantes CRM'},
-    {label:'Tasa de Conversión', value:fmtP(conv),           sub:'Aspirantes CRM → Matrícula'},
-  ];
-  $('kpi-grid').innerHTML=cards.map(c=>
-    `<div class="kpi-card${c.accent?' '+c.accent:''}">
-      <div class="kpi-label">${c.label}</div>
-      <div class="kpi-value">${c.value}</div>
-      <div class="kpi-sub">${c.sub}</div>
-    </div>`).join('')
-}
-
-// ── RENDER KPIs POR MODALIDAD ─────────────────────────────────────────────────
-function renderModalKPIs(stats,metas){
-  const cfg={
-    Pregrados:{accent:'accent-pre',fill:'fill-pre',label:'Pregrados'},
-    Posgrados:{accent:'accent-pos',fill:'fill-pos',label:'Posgrados'},
-    Branding: {accent:'accent-brd',fill:'fill-brd',label:'Branding'},
-  };
-  const cards=Object.entries(cfg).map(([modal,c])=>{
-    const s=stats[modal]||{inv:0,leads_pauta:0};
-    const meta=metas[modal];
-    const cpl=s.leads_pauta?s.inv/s.leads_pauta:0;
-    const pctInv=meta?.inv?Math.min(s.inv/meta.inv*100,100):null;
-    const pctLeads=(modal!=='Branding'&&meta?.leads)?Math.min(s.leads_pauta/meta.leads*100,100):null;
-    const metaBar=(pct,label,fill,metaVal)=>pct!==null?`
-      <div class="kpi-meta">
-        <div class="kpi-meta-row"><span>${label}</span><span>${pct.toFixed(0)}%${metaVal?' · Meta: '+metaVal:''}</span></div>
-        <div class="kpi-bar"><div class="kpi-bar-fill ${fill}" style="width:${pct}%"></div></div>
-      </div>`:'';
-    const subLine=modal==='Branding'
-      ?(meta?.inv?`Meta: ${fmtCOP(meta.inv)}`:'Sin leads de campaña')
-      :`Leads: ${fmtNz(s.leads_pauta)} · CPL: ${fmtCOP(cpl)}`;
-    return `<div class="kpi-card ${c.accent}">
-      <div class="kpi-label">${c.label}</div>
-      <div class="kpi-value">${fmtCOP(s.inv)}</div>
-      <div class="kpi-sub">${subLine}</div>
-      ${metaBar(pctInv,'vs Presupuesto meta',c.fill,fmtCOP(meta?.inv))}
-      ${metaBar(pctLeads,'vs Meta leads',c.fill,fmtNz(meta?.leads))}
-    </div>`
-  }).join('');
-  $('kpi-modal-grid').innerHTML=cards
-}
-
-// ── RENDER MEDIO CARDS ────────────────────────────────────────────────────────
-function renderMedioCards(cards){
-  const medioCfg={
-    facebook:    {icon:'FB',bg:'#1877F2',label:'Facebook / Meta'},
-    google:      {icon:'G', bg:'#EA4335',label:'Google Ads'},
-    tiktok:      {icon:'TT',bg:'#000000',label:'TikTok Ads'},
-    programatica:{icon:'PG',bg:'#6366F1',label:'Programática'},
-  };
-  $('medio-grid').innerHTML=cards.map(c=>{
-    const m=medioCfg[c.medio]||{icon:'?',bg:'#888',label:c.medio};
-    return `<div class="medio-card">
-      <div class="medio-card-header">
-        <div class="medio-icon" style="background:${m.bg}">${m.icon}</div>
-        <div class="medio-name">${m.label}</div>
-      </div>
-      <div class="medio-body">
-        <div><div class="m-label">Inversión</div><div class="m-value">${fmtCOP(c.inv)}</div></div>
-        <div><div class="m-label">Leads Pauta</div><div class="m-value">${fmtNz(c.leads_pauta)}</div></div>
-        <div><div class="m-label">CPL Pauta</div><div class="m-value yellow">${fmtCOP(c.cpl_pauta)}</div></div>
-        <div><div class="m-label">Aspirantes CRM</div><div class="m-value">${fmtNz(c.leads_crm)}</div></div>
-      </div>
-      <div class="medio-footer">
-        <div><div class="mf-label">Matrículas</div><div class="mf-value">${fmtNz(c.matriculas)}</div></div>
-        <div style="text-align:right"><div class="mf-label">CPL CRM</div><div class="mf-value">${fmtCOP(c.cpl_crm)}</div></div>
-      </div>
-    </div>`
-  }).join('')
-}
-
-// ── RENDER MES A MES ──────────────────────────────────────────────────────────
-function renderMesTable(){
-  const data=window._mesModalData||{};
-  const meses=Object.keys(data).sort();
-  if(!meses.length){ $('mes-table').innerHTML='<div style="padding:24px;text-align:center;color:#aaa">Sin datos</div>'; return }
-  const totGlobal={};
-  MEDIOS.forEach(m=>totGlobal[m]=0);
-  let totTotal=0;
-  const bodyRows=meses.map(mes=>{
-    const modales=data[mes];
-    const mesByMedio={};
-    MEDIOS.forEach(m=>mesByMedio[m]=0);
-    const modalRows=Object.keys(modales).sort().map(modal=>{
-      const cols=MEDIOS.map(m=>{
-        const v=modales[modal][m]?.inv||0;
-        mesByMedio[m]+=v;
-        return `<td class="num">${fmtCOP(v)}</td>`
-      });
-      const modTot=MEDIOS.reduce((a,m)=>a+(modales[modal][m]?.inv||0),0);
-      return `<tr class="modal-row hidden" data-mes="${mes}"><td>${modal}</td>${cols.join('')}<td class="num bold">${fmtCOP(modTot)}</td></tr>`
-    }).join('');
-    MEDIOS.forEach(m=>{ totGlobal[m]+=mesByMedio[m] });
-    const mesTot=MEDIOS.reduce((a,m)=>a+mesByMedio[m],0);
-    totTotal+=mesTot;
-    const medCols=MEDIOS.map(m=>`<td class="num">${fmtCOP(mesByMedio[m])}</td>`).join('');
-    return `<tr class="mes-row" onclick="toggleMes('${mes}',this)">
-      <td><span class="toggle-icon" id="ti-${mes}">▶</span>${fmtMes(mes)}</td>
-      ${medCols}<td class="num bold">${fmtCOP(mesTot)}</td>
-    </tr>${modalRows}`
-  }).join('');
-  const totRow=`<tr class="total-row"><td>TOTAL</td>${MEDIOS.map(m=>`<td class="num yellow">${fmtCOP(totGlobal[m])}</td>`).join('')}<td class="num yellow">${fmtCOP(totTotal)}</td></tr>`;
-  $('mes-table').innerHTML=`<table>
-    <thead><tr><th>Mes / Modalidad</th><th class="num">Facebook</th><th class="num">Google</th><th class="num">TikTok</th><th class="num">Programática</th><th class="num">Total</th></tr></thead>
-    <tbody>${bodyRows}${totRow}</tbody></table>`
-}
-
-// ── RENDER INVERSIÓN, LEADS Y CPL MENSUAL ─────────────────────────────────────
-// Ventana fija Ene 2026 → hoy (igual que Compensar); respeta Canal y Modalidad.
-function renderMesLeadsCplTable(){
-  const fMedio=$('f-medio')?.value||'';
-  const fModal=$('f-modalidad')?.value||'';
-  const hoy=new Date();
-  const desdeStr='2026-01-01';
-  const hastaStr=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
-  const enRango=fd=>fd&&fd>=desdeStr&&fd<=hastaStr;
-
-  const byMes={};
-  const bucket=mes=>byMes[mes]||(byMes[mes]={inv:0,leadsP:0,leadsCRM:0});
-  RAW_RG.forEach(r=>{
-    const f=parseFechaCompleta(r[0]);
-    if(!enRango(f.full)) return;
-    if(fMedio&&String(r[4]||'').toLowerCase().trim()!==fMedio) return;
-    if(fModal&&String(r[5]||'').trim()!==fModal) return;
-    const b=bucket(f.mes);
-    b.inv+=parseInv(r[2]);
-    b.leadsP+=Math.round(parseFloat(String(r[3]||'0').replace(/[$\s]/g,'').replace(',','.'))||0)
-  });
-  RAW_LEADS.forEach(r=>{
-    const f=parseFechaCompleta(r[0]);
-    if(!enRango(f.full)) return;
-    if(fMedio&&leadMedio(r)!==fMedio) return;
-    if(fModal&&leadModal(r)!==fModal) return;
-    bucket(f.mes).leadsCRM+=parseInt(r[8])||0
-  });
-
-  const meses=Object.keys(byMes).filter(Boolean).sort();
-  if(!meses.length){
-    $('mes-leads-cpl-table').innerHTML='<div style="padding:24px;text-align:center;color:#aaa">Sin datos</div>';
-    return
-  }
-  let tInv=0,tLP=0,tLC=0;
-  const body=meses.map(mes=>{
-    const d=byMes[mes];
-    tInv+=d.inv; tLP+=d.leadsP; tLC+=d.leadsCRM;
-    return `<tr>
-      <td>${fmtMes(mes)}</td>
-      <td class="num bold">${fmtCOP(d.inv)}</td>
-      <td class="num">${fmtNz(d.leadsP)}</td>
-      <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(d.leadsP?d.inv/d.leadsP:0)}</td>
-      <td class="num bold">${fmtNz(d.leadsCRM)}</td>
-      <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(d.leadsCRM?d.inv/d.leadsCRM:0)}</td>
-    </tr>`
-  }).join('');
-  const totRow=`<tr class="total-row">
-    <td>TOTAL</td>
-    <td class="num yellow">${fmtCOP(tInv)}</td>
-    <td class="num yellow">${fmtNz(tLP)}</td>
-    <td class="num yellow">${fmtCOP(tLP?tInv/tLP:0)}</td>
-    <td class="num yellow">${fmtNz(tLC)}</td>
-    <td class="num yellow">${fmtCOP(tLC?tInv/tLC:0)}</td>
-  </tr>`;
-  $('mes-leads-cpl-table').innerHTML=`<table>
-    <thead><tr>
-      <th>Mes</th>
-      <th class="num">Inversión</th>
-      <th class="num">Leads Plataforma</th>
-      <th class="num">CPL Plataforma</th>
-      <th class="num">Leads CRM</th>
-      <th class="num">CPL CRM</th>
-    </tr></thead>
-    <tbody>${body}${totRow}</tbody></table>`
-}
-
-function toggleMes(mes){
-  const icon=document.getElementById('ti-'+mes);
-  const rows=document.querySelectorAll(`tr.modal-row[data-mes="${mes}"]`);
-  const isOpen=icon.classList.contains('open');
-  icon.classList.toggle('open',!isOpen);
-  rows.forEach(r=>r.classList.toggle('hidden',isOpen))
-}
-
-// ── RENDER POR PROGRAMA ───────────────────────────────────────────────────────
-const progSort={Pregrados:{col:'inv_total',dir:-1},Posgrados:{col:'inv_total',dir:-1},Branding:{col:'inv_total',dir:-1}};
-function sortProgGroup(gkey,col){
-  const s=progSort[gkey];
-  if(s.col===col) s.dir*=-1; else{s.col=col;s.dir=-1}
-  renderAllProgTables()
-}
-
-function renderAllProgTables(){
-  const search=($('prog-search')?.value||'').toLowerCase();
-  const grupos=[
-    {key:'Pregrados',cls:'pre',label:'📘 Pregrados'},
-    {key:'Posgrados',cls:'pos',label:'🎓 Posgrados'},
-    {key:'Branding', cls:'brd',label:'🎨 Branding'},
-  ];
-  $('prog-tables').innerHTML=grupos.map(g=>{
-    const s=progSort[g.key];
-    let rows=(window._progData||[])
-      .filter(p=>p.Modalidad===g.key)
-      .filter(p=>!search||p.Programa.toLowerCase().includes(search));
-    rows.sort((a,b)=>{
-      const av=a[s.col]||0,bv=b[s.col]||0;
-      return typeof av==='string'?av.localeCompare(bv)*s.dir:(av-bv)*s.dir
-    });
-    const tI  =rows.reduce((a,r)=>a+(r.inv_total||0),0);
-    const tFB =rows.reduce((a,r)=>a+(r.inv_facebook||0),0);
-    const tGO =rows.reduce((a,r)=>a+(r.inv_google||0),0);
-    const tPRG=rows.reduce((a,r)=>a+(r.inv_programatica||0),0);
-    const tLP =rows.reduce((a,r)=>a+(r.leads_pauta||0),0);
-    const tLC =rows.reduce((a,r)=>a+(r.leads_crm||0),0);
-    const tFBc=rows.reduce((a,r)=>a+(r.crm_facebook||0),0);
-    const tGOc=rows.reduce((a,r)=>a+(r.crm_google||0),0);
-    const tMt =rows.reduce((a,r)=>a+(r.matriculas||0),0);
-    const badge=v=>`<span class="badge b-${v||'General'}">${v||'—'}</span>`;
-    const isBranding=g.key==='Branding';
-    const th=(col,lbl,isNum,style)=>{
-      const act=s.col===col;
-      return `<th class="${isNum?'num ':''} sortable${act?' sort-active':''}" ${style?`style="${style}"`:''}
-        onclick="sortProgGroup('${g.key}','${col}')">${lbl}${act?(s.dir>0?' ↑':' ↓'):''}</th>`
-    };
-    const tbody=rows.map(p=>{
-      const base=`<td class="prog-name" title="${p.Programa}">${p.Programa}</td>
-        <td>${badge(p.Tipo)}</td>
-        <td class="num bold">${fmtCOP(p.inv_total)}</td>
-        <td class="num" style="color:var(--fg)">${fmtCOP(p.inv_facebook)}</td>
-        <td class="num" style="color:var(--fg)">${fmtCOP(p.inv_google)}</td>
-        <td class="num" style="color:var(--fg-muted)">${fmtCOP(p.inv_programatica)}</td>`;
-      const extra=isBranding?'':`
-        <td class="num">${fmtNz(p.leads_pauta)}</td>
-        <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(p.cpl_pauta)}</td>
-        <td class="num bold">${fmtNz(p.leads_crm)}</td>
-        <td class="num" style="color:var(--fg)">${fmtNz(p.crm_facebook)}</td>
-        <td class="num" style="color:var(--fg)">${fmtNz(p.crm_google)}</td>
-        <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(p.cpl_crm)}</td>
-        <td class="num bold">${fmtNz(p.matriculas)}</td>
-        <td class="num" style="font-weight:700;color:${p.conv_pct>5?'#166534':p.conv_pct>2?'#92400E':'var(--fg-muted)'}">${fmtP(p.conv_pct)}</td>`;
-      return `<tr>${base}${extra}</tr>`
-    }).join('');
-    const totRow=isBranding
-      ?`<tr class="total-row"><td colspan="2">TOTAL (${rows.length})</td><td class="num yellow">${fmtCOP(tI)}</td><td class="num yellow">${fmtCOP(tFB)}</td><td class="num yellow">${fmtCOP(tGO)}</td><td class="num yellow">${fmtCOP(tPRG)}</td></tr>`
-      :`<tr class="total-row"><td colspan="2">TOTAL (${rows.length})</td><td class="num yellow">${fmtCOP(tI)}</td><td class="num yellow">${fmtCOP(tFB)}</td><td class="num yellow">${fmtCOP(tGO)}</td><td class="num yellow">${fmtCOP(tPRG)}</td><td class="num yellow">${fmtNz(tLP)}</td><td class="num yellow">${fmtCOP(tLP?tI/tLP:0)}</td><td class="num yellow">${fmtNz(tLC)}</td><td class="num yellow">${fmtNz(tFBc)}</td><td class="num yellow">${fmtNz(tGOc)}</td><td class="num yellow">${fmtCOP(tLC?tI/tLC:0)}</td><td class="num yellow">${fmtNz(tMt)}</td><td class="num yellow">${fmtP(tLC?tMt/tLC*100:0)}</td></tr>`;
-    const extraHeaders=isBranding?'':`
-      ${th('leads_pauta','Leads Pauta',true)}
-      ${th('cpl_pauta','CPL Pauta',true,'color:#B8860B')}
-      ${th('leads_crm','Aspirantes CRM',true)}
-      <th class="num sortable" style="color:var(--fg)" onclick="sortProgGroup('${g.key}','crm_facebook')">CRM FB</th>
-      <th class="num sortable" style="color:var(--fg)" onclick="sortProgGroup('${g.key}','crm_google')">CRM GO</th>
-      ${th('cpl_crm','CPL CRM',true)}
-      ${th('matriculas','Matrículas',true)}
-      ${th('conv_pct','Conv%',true)}`;
-    return `<div class="prog-section">
-      <div class="prog-section-title ${g.cls}">${g.label} — ${rows.length} programas · ${fmtCOP(tI)}</div>
-      <div class="table-wrap" style="border-radius:0 0 var(--r-md) var(--r-md)">
-        <div class="table-scroll"><table>
-          <thead><tr>
-            ${th('Programa','Programa',false)}${th('Tipo','Tipo',false)}
-            ${th('inv_total','Inv. Total',true)}
-            <th class="num sortable" style="color:var(--fg)" onclick="sortProgGroup('${g.key}','inv_facebook')">FB</th>
-            <th class="num sortable" style="color:var(--fg)" onclick="sortProgGroup('${g.key}','inv_google')">GO</th>
-            <th class="num sortable" style="color:var(--fg-muted)" onclick="sortProgGroup('${g.key}','inv_programatica')">PROG</th>
-            ${extraHeaders}
-          </tr></thead>
-          <tbody>${tbody}${totRow}</tbody>
-        </table></div>
-      </div>
-    </div>`
-  }).join('')
-}
-
-// ── UTILS ─────────────────────────────────────────────────────────────────────
-function applyFilters(){ processAndRender() }
-function resetFilters(){
-  const h=new Date();
-  $('f-desde').value=h.getFullYear()+'-01-01';
-  $('f-hasta').value=h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-'+String(h.getDate()).padStart(2,'0');
-  $('f-medio').value=''; $('f-modalidad').value='';
-  processAndRender()
-}
-function printDate(value){
-  if(!value)return 'Sin definir';
-  return new Date(value+'T00:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'})
-}
-function selectedLabel(id,fallback){
-  const select=$(id);
-  return select?.selectedOptions?.[0]?.textContent||fallback
-}
-function updatePrintMeta(){
-  const meta=$('print-meta');
-  const items=[
-    ['Período',`${printDate($('f-desde').value)} – ${printDate($('f-hasta').value)}`],
-    ['Canal',selectedLabel('f-medio','Todos')],
-    ['Modalidad',selectedLabel('f-modalidad','Todas')],
-    ['Generado',new Date().toLocaleString('es-CO',{dateStyle:'medium',timeStyle:'short'})]
-  ];
-  meta.replaceChildren(...items.map(([label,value])=>{
-    const item=document.createElement('span');
-    item.className='print-meta-item';
-    const key=document.createElement('span');
-    key.className='print-meta-label';
-    key.textContent=label+':';
-    const text=document.createElement('span');
-    text.textContent=value;
-    item.append(key,text);
-    return item
-  }))
-}
-function downloadPDF(){
-  processAndRender();
-  updatePrintMeta();
-  const previousTitle=document.title;
-  const stamp=new Date().toISOString().slice(0,10);
-  document.title=`Reporte_Catolica_${stamp}`;
-  window.print();
-  document.title=previousTitle
-}
-function revealSections(){ document.querySelectorAll('.section').forEach((el,i)=>setTimeout(()=>el.classList.add('visible'),i*100)) }
-function showLoading(on){ $('loading-bar').classList.toggle('active',on); if(!on)$('loader').style.display='none' }
-
-window.addEventListener('DOMContentLoaded',()=>{
-  const h=new Date();
-  $('f-desde').value=h.getFullYear()+'-02-15';
-  $('f-hasta').value=h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-'+String(h.getDate()).padStart(2,'0');
-  refreshData()
-});
+load();
 </script>
 </body>
 </html>
