@@ -106,6 +106,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 .lv2{cursor:pointer;background:#fafafa}
 .lv2 td:first-child{padding-left:30px}
 .lv3 td:first-child{padding-left:56px;color:var(--gray-600)}
+.lv4 td{font-size:10.5px;color:var(--gray-400)} .lv4 td:first-child{padding-left:78px}
 .lv2 td:first-child,.lv2 td{font-weight:500}
 .hidden{display:none}
 .tog{display:inline-block;transition:transform .18s;margin-right:6px;color:var(--accent-fg);font-size:11px;width:9px}
@@ -157,6 +158,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
     <a href="#sec-semana"><b></b>Mes a mes · semanal</a>
     <a href="#sec-detalle"><b></b>Nivel · grupo · programa</a>
     <a href="#sec-brand"><b></b>Branding y eventos</a>
+    <a href="#sec-ec"><b></b>Educación continua</a>
   </div>
   <div class="app-sidebar-foot">Datos cargados: <span id="last-upd-side">—</span><br><button class="tbtn" style="margin-top:6px" onclick="load()">↻ Actualizar datos</button></div>
 </nav>
@@ -218,11 +220,16 @@ select:focus,input:focus{border-color:var(--accent-fg)}
         <b>Pre-inscritos, inscritos, admitidos y matriculados</b>: CRM_ADMISIONES con fuente "Trafico_Pago"; los matriculados cancelados no cuentan.
         Cada etapa del CRM se cuenta por su propia fecha (creación, pre-inscrito, inscrito, admitido, matriculado). Con un periodo elegido en los atajos, el rango de fechas va del inicio del periodo a hoy y las metas son las del periodo completo; leads, etapas y matrículas del CRM se cuentan siempre por su fecha (las matrículas, en la fecha en que se matricularon).
         <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → mat.</b>: matrículas sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel según sus leads CRM.
-        Branding y eventos van en su propia sección y no entran en los costos.
+        Branding y eventos van en su propia sección y no entran en los costos; Educación continua (cursos y seminarios) también.
+        <b>Diurna / Nocturna</b>: bajo cada programa con campaña nocturna (la que lleva "Nocturna" en el nombre) se abre la inversión y los leads plataforma de cada jornada, con su % de la inversión directa. El CRM no trae la jornada: leads CRM, matrículas y metas quedan en el programa.
       </div>
     </div>
     <div class="sec-title" id="sec-brand"><span></span>Branding y eventos<span class="sec-note">no entra en los costos del embudo ni en la tabla de programas</span></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="brand-head"></thead><tbody id="brand-body"></tbody></table></div></div>
+    <div class="sec-title" id="sec-ec"><span></span>Educación continua<span class="sec-note">cursos y seminarios · presupuesto aparte: no entra en los KPI, el embudo ni la tabla de programas · aplican fechas y medio</span></div>
+    <div class="card tcard"><div class="tscroll"><table><thead id="ec-head"></thead><tbody id="ec-body"></tbody></table></div>
+      <div class="foot-note"><b>Inversión y leads plataforma</b>: RESUMEN GENERAL con modalidad Curso o Seminario. <b>Metas</b>: pestaña METAS con la misma modalidad; con fechas libres, proporcionales a los días del rango dentro de las fechas de cada meta. Los leads de estos programas no llegan al CRM de admisiones, por eso no hay leads CRM ni matrículas.</div>
+    </div>
   </div>
 </div>
 
@@ -246,7 +253,7 @@ let META_TOTAL = false;
 const NIVELES = ['Pregrado','Posgrado','General'];
 const CANALES = ['Facebook','Google','TikTok','Programática'];
 
-let RAW = [], METAS = [], PERIODOS = {}, DISP = {}, BRAND = [], BRAND_METAS = [];
+let RAW = [], METAS = [], PERIODOS = {}, DISP = {}, BRAND = [], BRAND_METAS = [], EC = [], EC_METAS = [];
 const CANAL_ORDER = CANALES, CANAL_LBL = {Facebook:'Meta Ads', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática'};
 let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '', EVO = 'mes';
 
@@ -298,6 +305,11 @@ const D = k => DISP[k] || k;
 // Campañas de leads sin programa: se quedan en su nivel (se pueden repartir).
 const esGeneral = nm => /^CAMPANA|^ESPECIALIZACIONES /.test(pkey(nm));
 const nivelDe = s => { const t = norm(s); return t.startsWith('PREGRADO') || t.startsWith('PROFESIONAL') ? 'Pregrado' : t.startsWith('POSGRADO') || /ESPECIALIZ|MAESTR|DOCTORADO/.test(t) ? 'Posgrado' : t.startsWith('GENERAL') ? 'General' : '' };
+// Educación continua: modalidad Curso / Seminario (y similares); va en su propia sección
+const esEC = s => /^(CURSO|SEMINARIO|DIPLOMADO|TALLER|EDUCON|EDUCACION CONTINUA)/.test(norm(s));
+const grupoEC = s => { const t = norm(s); return t.startsWith('CURSO') ? 'Cursos' : t.startsWith('SEMINARIO') ? 'Seminarios' : t.startsWith('DIPLOMADO') ? 'Diplomados' : t.startsWith('TALLER') ? 'Talleres' : 'Otros' };
+// jornada de la campaña de pauta: la nocturna lleva "Nocturna" en el nombre
+const jornadaDe = s => /NOCTURN/.test(norm(s)) ? 'Nocturna' : 'Diurna';
 const SIN_PROG = 'Sin programa definido';
 function grupoDe(niv, nm, gen){
   if(gen) return 'Campañas generales';
@@ -350,7 +362,7 @@ function load(){
 }
 
 function build(rg, asp, adm, metas, fu){
-  RAW = []; METAS = []; PERIODOS = {}; DISP = {}; BRAND = []; BRAND_METAS = []; FUE = [];
+  RAW = []; METAS = []; PERIODOS = {}; DISP = {}; BRAND = []; BRAND_METAS = []; FUE = []; EC = []; EC_METAS = [];
   const fuenteDe = s => s === FUENTE_PAUTA ? 'Pauta' : s === 'Trafico_Organico' ? 'Orgánico' : 'Otras fuentes';
   const perDe = v => { const s = String(v||'').trim(), m = s.match(/^(\d{4})-(\d{1,2})-1$/); return m ? m[1] + '-' + m[2] : s };
   // demás fuentes (agrupado): fecha | fuente | nivel de formación | periodo | conteo
@@ -362,9 +374,10 @@ function build(rg, asp, adm, metas, fu){
     const d = iso(x[0]), mod = String(x[5]||'').trim(), tipo = String(x[6]||'').trim(), nm = String(x[7]||'').trim(), medio = canal(x[4]);
     if(!d || !nm) return;
     if(mod === 'Branding'){ BRAND.push({ d, niv: nivelDe(tipo), nm, tipo: tipo === 'Evento' ? 'Evento' : 'Branding', medio, inv: num(x[2]), lp: num(x[3]) }); return }
+    if(esEC(mod)){ EC.push({ d, grp: grupoEC(mod), pk: prog(nm), medio, inv: num(x[2]), lp: num(x[3]) }); return }
     const niv = nivelDe(mod); if(!niv) return;
     const gen = esGeneral(nm), pk = prog(nm);
-    row({ src:'rg', d, niv, pk, gen, grp: grupoDe(niv, nm, gen), medio, inv: num(x[2]), lp: num(x[3]) });
+    row({ src:'rg', d, niv, pk, gen, grp: grupoDe(niv, nm, gen), medio, jor: jornadaDe(x[1]), inv: num(x[2]), lp: num(x[3]) });
   });
   // METAS: Periodo | Inicio | Fin | Modalidad | Tipo programa | Programa | Leads | Presupuesto | Matrículas
   metas.forEach(x => {
@@ -372,6 +385,7 @@ function build(rg, asp, adm, metas, fu){
     if(!per || !ini || !fin || !nm) return;
     PERIODOS[per] = PERIODOS[per] || [ini, fin]; if(ini < PERIODOS[per][0]) PERIODOS[per][0] = ini; if(fin > PERIODOS[per][1]) PERIODOS[per][1] = fin;
     if(mod === 'Branding'){ BRAND_METAS.push({ per, ini, fin, niv: nivelDe(x[4]), grupo: nivelDe(x[4]) || 'Branding', ppto: num(x[7]) }); return }
+    if(esEC(mod)){ EC_METAS.push({ per, ini, fin, grp: grupoEC(mod), pk: prog(nm), ppto: num(x[7]), lm: num(x[6]), mm: num(x[8]) }); return }
     const niv = nivelDe(mod); if(!niv) return;
     const gen = esGeneral(nm), pk = prog(nm);
     METAS.push({ per, ini, fin, niv, pk, gen, grp: grupoDe(niv, nm, gen), ppto: num(x[7]), lm: num(x[6]), mm: num(x[8]) });
@@ -495,7 +509,7 @@ function render(){
   const gen = RAW.filter(r => r.gen && pasa(r, f)).reduce((a, r) => a + r.inv, 0);
   document.getElementById('gen-note').textContent = gen ? `Campañas generales: ${fCOP(gen)}, ${f.rep ? 'repartidas entre programas según leads CRM' : 'en su propio grupo'}` : '';
   const B = renderBrand(f, (r, f) => r.d >= f.desde && r.d <= f.hasta && (!f.niv || r.niv === f.niv) && (!f.medio || r.medio === f.medio), r => r.tipo === 'Evento' ? 'Eventos' : (r.niv || 'Branding'));
-  renderKPIs(T, B); renderFunnel(T); renderFuentes(f, (r, f) => (r.d >= f.desde && r.d <= f.hasta) && (!f.niv || r.niv === f.niv)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
+  renderKPIs(T, B); renderFunnel(T); renderFuentes(f, (r, f) => (r.d >= f.desde && r.d <= f.hasta) && (!f.niv || r.niv === f.niv)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle(); renderEC(f);
 }
 
 function bar(p, lbl){ if(p === null) return '';
@@ -620,6 +634,14 @@ function renderDetalle(){
   ents.forEach(e => { const c = tree[e.niv] = tree[e.niv] || {t: Z(), grps: {}}; add(c.t, e);
     const g = c.grps[e.grp] = c.grps[e.grp] || {t: Z(), progs: []}; add(g.t, e); g.progs.push(e) });
   const nvTag = n => n === 'Pregrado' ? '<span class="nv nv-pre">PRE</span>' : n === 'Posgrado' ? '<span class="nv nv-pos">POS</span>' : '<span class="nv nv-gen">GRAL</span>';
+  // inversión directa y leads plataforma por jornada (solo programas con campaña nocturna en el rango)
+  const f = F(), JOR = {};
+  RAW.forEach(r => { if(r.src !== 'rg' || !pasa(r, f)) return; const j = JOR[r.niv + '|' + r.pk] = JOR[r.niv + '|' + r.pk] || {};
+    add(j[r.jor] = j[r.jor] || Z(), r) });
+  const jornadas = (e, vis, gid, cid) => { const j = JOR[e.niv + '|' + e.pk]; if(!j || !j.Nocturna || !(j.Nocturna.inv || j.Nocturna.lp)) return '';
+    const tot = (j.Diurna?.inv || 0) + j.Nocturna.inv;
+    return ['Diurna', 'Nocturna'].filter(k => j[k]).map(k => `<tr class="lv4${vis ? '' : ' hidden'}" data-p="${gid}" data-c="${cid}"><td>${k}<span class="t-mute" style="margin-left:6px">${fP(div(j[k].inv, tot))} de la inversión</span></td>` +
+      cols.map(c => ['inv', 'lp'].includes(c[0]) ? cell(M(j[k]), c) : `<td class="r${c[3] ? ' grp' : ''}"></td>`).join('') + '</tr>').join('') };
   let h = '';
   NIVELES.filter(n => tree[n]).map(k => ({k, v: tree[k], m: M(tree[k].t)})).forEach(({k, v, m}) => {
     const cid = 'n_' + k, oc = q ? true : !!OPEN[cid];
@@ -629,7 +651,7 @@ function renderDetalle(){
       h += `<tr class="lv2${oc ? '' : ' hidden'}" data-p="${cid}" onclick="tog('${gid}')"><td><span class="tog${og ? ' open' : ''}" id="t-${gid}">▶</span>${esc(gk)}<span class="t-mute" style="font-weight:400;margin-left:6px">${gv.progs.length}</span></td>` + cols.map(c => cell(m, c)).join('') + '</tr>';
       gv.progs.map(e => ({e, m: M(e)})).sort(sorter).forEach(({e, m}) => {
         const tag = (!e.gen && !e.inv && (e.lc || e.pre)) ? '<span class="nv nv-gen">sin pauta</span>' : '';
-        h += `<tr class="lv3${oc && og ? '' : ' hidden'}" data-p="${gid}" data-c="${cid}"><td>${esc(D(e.pk))}${tag}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>' }) }) });
+        h += `<tr class="lv3${oc && og ? '' : ' hidden'}" data-p="${gid}" data-c="${cid}"><td>${esc(D(e.pk))}${tag}</td>` + cols.map(c => cell(m, c)).join('') + '</tr>' + jornadas(e, oc && og, gid, cid) }) }) });
   const T = M(ents.reduce((a, e) => add(a, e), Z()));
   h += '<tr class="tr-total"><td>Total</td>' + cols.map(c => cell(T, c)).join('') + '</tr>';
   document.getElementById('det-body').innerHTML = h;
@@ -661,6 +683,32 @@ function renderBrand(f, enR, grupoDe){
     lpTd(tot) + `<td class="r">${tot.inv ? '100%' : '—'}</td><td class="r"></td><td class="r grp">${fCOP(tot.ppto)}</td>${pc(div(tot.inv, tot.ppto))}</tr>`;
   document.getElementById('brand-body').innerHTML = Object.keys(G).length ? h : '<tr><td colspan="12" class="t-mute" style="padding:16px;text-align:center">Sin inversión en branding ni eventos en el rango</td></tr>';
   return tot;
+}
+// ── Educación continua (cursos y seminarios: presupuesto aparte, sin CRM) ────
+function renderEC(f){
+  const rows = EC.filter(r => r.d >= f.desde && r.d <= f.hasta && (!f.medio || r.medio === f.medio));
+  const metas = f.medio ? [] : EC_METAS.filter(m => m.per === META_PER);
+  const medios = CANAL_ORDER.filter(c => rows.some(r => r.medio === c && r.inv));
+  const Ze = () => ({inv:0, lp:0, ppto:0, lm:0, mm:0, med:{}}), G = {};
+  const it = (grp, pk) => { const g = G[grp] = G[grp] || {t: Ze(), items: {}}; return [g.t, g.items[pk] = g.items[pk] || Ze()] };
+  rows.forEach(r => it(r.grp, r.pk).forEach(x => { x.inv += r.inv; x.lp += r.lp; x.med[r.medio] = (x.med[r.medio] || 0) + r.inv }));
+  metas.forEach(m => { const s = share(m, f); if(!s) return; it(m.grp, m.pk).forEach(x => { x.ppto += m.ppto * s; x.lm += m.lm * s; x.mm += m.mm * s }) });
+  const tot = Object.values(G).reduce((a, g) => { ['inv','lp','ppto','lm','mm'].forEach(k => a[k] += g.t[k]); Object.entries(g.t.med).forEach(([k, v]) => a.med[k] = (a.med[k] || 0) + v); return a }, Ze());
+  const conMm = tot.mm > 0;
+  document.getElementById('ec-head').innerHTML = '<tr><th>Modalidad / programa</th><th class="r">Inversión</th>' + medios.map(m => `<th class="r">${CANAL_LBL[m] || m}</th>`).join('') +
+    '<th class="r">Leads plat.</th><th class="r">CPL plat.</th><th class="r grp">Meta leads</th><th class="r">Cumpl. leads</th><th class="r">CPL meta</th>' +
+    (conMm ? '<th class="r">Meta mat.</th>' : '') + '<th class="r grp">Presupuesto</th><th class="r">Ejecución</th></tr>';
+  const pc = v => `<td class="r ${cls(v)}">${fP(v)}</td>`;
+  const cplCls = x => { const c = div(x.inv, x.lp), m = div(x.ppto, x.lm); return c === null || !m ? '' : c <= m ? 't-pos' : c <= m * 1.25 ? 't-mid' : 't-neg' };
+  const fila = (cl, lab, x) => `<tr class="${cl}"><td>${lab}</td><td class="r">${fCOP(x.inv)}</td>` + medios.map(m => `<td class="r">${fCOP(x.med[m])}</td>`).join('') +
+    `<td class="r">${fN(x.lp)}</td><td class="r ${cplCls(x)}">${fCOP(div(x.inv, x.lp))}</td><td class="r grp">${fN(x.lm)}</td>${pc(div(x.lp, x.lm))}<td class="r">${fCOP(div(x.ppto, x.lm))}</td>` +
+    (conMm ? `<td class="r">${fN(x.mm)}</td>` : '') + `<td class="r grp">${fCOP(x.ppto)}</td>${pc(div(x.inv, x.ppto))}</tr>`;
+  let h = '';
+  Object.entries(G).sort((a, b) => b[1].t.inv - a[1].t.inv).forEach(([gk, g]) => {
+    h += fila('lv1', esc(gk), g.t);
+    Object.entries(g.items).sort((a, b) => b[1].inv - a[1].inv || b[1].ppto - a[1].ppto).forEach(([pk, x]) => { h += fila('lv3', esc(D(pk)), x) }) });
+  h += fila('tr-total', 'Total', tot);
+  document.getElementById('ec-body').innerHTML = Object.keys(G).length ? h : `<tr><td colspan="12" class="t-mute" style="padding:16px;text-align:center">Sin inversión ni metas de educación continua en el rango${f.medio ? ' (con filtro de medio no se muestran metas)' : ''}</td></tr>`;
 }
 // ── Pauta vs orgánico y otras fuentes (CRM de todas las fuentes) ─────────────
 const FUENTES = ['Pauta', 'Orgánico', 'Otras fuentes'];
