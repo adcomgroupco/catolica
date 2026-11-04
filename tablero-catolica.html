@@ -220,7 +220,7 @@ tr.nv-det td{background:var(--gray-50);padding:10px 14px}
     <div class="sec-title" id="sec-medio"><span></span>Por nivel y medio<span class="sec-note">el medio del CRM sale de la campaña del aspirante (Facebook_Ads, Google_Ads…)</span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-mv="niv" onclick="setMedioVista('niv')">Nivel · medio</button><button class="qbtn" data-mv="medio" onclick="setMedioVista('medio')">Solo medio</button></span></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="medio-head"></thead><tbody id="medio-body"></tbody></table></div></div>
 
-    <div class="sec-title" id="sec-semana"><span></span>Evolución<span class="sec-note" id="semana-note"></span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-ev="mes" onclick="setEvo('mes')">Mes a mes</button><button class="qbtn" data-ev="sem" onclick="setEvo('sem')">Semana a semana</button></span></div>
+    <div class="sec-title" id="sec-semana"><span></span>Evolución<span class="sec-note" id="semana-note"></span><span style="margin-left:auto;display:flex;gap:6px"><button class="qbtn on" data-ev="mes" onclick="setEvo('mes')">Mes a mes</button><button class="qbtn" data-ev="sem" onclick="setEvo('sem')">Semana a semana</button><button class="qbtn" onclick="abrirGeneral()" title="Abre la evolución de todas las fuentes del CRM con estos mismos filtros">Todas las fuentes ↗</button></span></div>
     <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-sem"></canvas></div></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="sem-head"></thead><tbody id="sem-body"></tbody></table></div></div>
 
@@ -249,6 +249,8 @@ tr.nv-det td{background:var(--gray-50);padding:10px 14px}
     <div class="card tcard"><div class="tscroll"><table><thead id="ec-head"></thead><tbody id="ec-body"></tbody></table></div>
       <div class="foot-note"><b>Inversión y leads plataforma</b>: RESUMEN GENERAL con modalidad Curso o Seminario. <b>Metas</b>: pestaña METAS con la misma modalidad; con fechas libres, proporcionales a los días del rango dentro de las fechas de cada meta. Los leads de estos programas no llegan al CRM de admisiones, por eso no hay leads CRM ni matrículas.</div>
     </div>
+    <div class="sec-title" id="sec-general"><span></span>Más tableros</div>
+    <div class="card tcard"><div class="foot-note">Todas las fuentes del CRM (pauta, remarketing, orgánico, PAW, eventos y más), embudo y evolución por mes y semana: <a href="tablero-catolica-general.html" style="color:inherit;font-weight:600">Católica · Todas las fuentes</a></div></div>
   </div>
 </div>
 
@@ -652,6 +654,13 @@ function renderMedio(f){
 }
 let OPEN_EVO = {};
 function togEvo(k){ OPEN_EVO[k] = !OPEN_EVO[k]; renderSemana(F()) }
+function abrirGeneral(){
+  const p = new URLSearchParams(), n = document.getElementById('f-nivel').value, d = document.getElementById('f-desde').value, h = document.getElementById('f-hasta').value;
+  if(n === 'Pregrado' || n === 'Posgrado') p.set('niv', n);
+  if(d && h){ p.set('desde', d); p.set('hasta', h) }
+  p.set('g', EVO === 'mes' ? 'm' : 's');
+  location.href = 'tablero-catolica-general.html?' + p + '#evolucion';
+}
 function setEvo(k){ EVO = k; document.querySelectorAll('[data-ev]').forEach(b => b.classList.toggle('on', b.dataset.ev === k)); renderSemana(F()) }
 function renderSemana(f){
   // con periodo elegido: pauta del rango y CRM del periodo, cada fila en su fecha
