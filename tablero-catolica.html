@@ -55,7 +55,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 .kpi-brow{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-600);margin-bottom:3px}
 .kpi-bar{height:4px;background:var(--gray-200);border-radius:999px;overflow:hidden}
 .kpi-bfill{height:100%;border-radius:999px}
-.med-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:-8px 0 20px}
+.med-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:-8px 0 20px}
 .med-card{padding:14px}
 .med-head{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--gray-600);margin-bottom:4px}
 .med-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -274,10 +274,10 @@ const META_PER = '2027-1';
 let META_TOTAL = false;
 let MENS = [];
 const NIVELES = ['Pregrado','Posgrado','General'];
-const CANALES = ['Facebook','Google','TikTok','Programática'];
+const CANALES = ['Facebook','Google','TikTok','Programática','ChatGPT'];
 
 let RAW = [], METAS = [], PERIODOS = {}, DISP = {}, BRAND = [], BRAND_METAS = [], EC = [], EC_METAS = [];
-const CANAL_ORDER = CANALES, CANAL_LBL = {Facebook:'Meta Ads', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática'};
+const CANAL_ORDER = CANALES, CANAL_LBL = {Facebook:'Meta Ads', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática', ChatGPT:'ChatGPT Ads'};
 let SORT = {col: 'inv', dir: -1}, OPEN = {}, CHART = null, QUICK = '', EVO = 'mes';
 
 // ── Parsers y formato ─────────────────────────────────────────────────────────
@@ -345,6 +345,7 @@ const GEN_ORDER = ['Otros posgrados', 'Campañas generales'];
 function canal(s){ const t = norm(s);
   if(t.startsWith('FACEBOOK') || t.startsWith('META') || t.startsWith('INSTAGRAM')) return 'Facebook';
   if(t.startsWith('GOOGLE')) return 'Google'; if(t.startsWith('TIKTOK')) return 'TikTok'; if(t.startsWith('PROGRAMATICA')) return 'Programática';
+  if(/^CHAT-?GPT/.test(t)) return 'ChatGPT';
   return 'Otro' }
 
 // ── Carga (JSONP de gviz: funciona también abriendo el archivo local) ─────────
@@ -490,10 +491,10 @@ function resetFilters(){ ['f-nivel','f-grupo','f-medio','f-programa'].forEach(id
   document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; QUICK = 'mes'; prepare() }
 
 // ── Cálculo ──────────────────────────────────────────────────────────────────
-const Z = () => ({inv:0, invG:0, lp:0, lc:0, pre:0, ins:0, adm:0, mat:0, ppto:0, lm:0, mm:0, pm:0, lmm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcO:0});
+const Z = () => ({inv:0, invG:0, lp:0, lc:0, pre:0, ins:0, adm:0, mat:0, ppto:0, lm:0, mm:0, pm:0, lmm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcC:0, lcO:0});
 // leads CRM por medio (columnas de la tabla de programas; no se reparten)
-const LCM = [['lcF','Meta'],['lcG','Google'],['lcT','TikTok'],['lcL','LinkedIn'],['lcP','Programática'],['lcO','Otros']];
-const lcKey = m => { const t = norm(m); return /FACE|META|INSTA/.test(t) ? 'lcF' : /GOOGLE/.test(t) ? 'lcG' : /TIKTOK/.test(t) ? 'lcT' : /LINKEDIN/.test(t) ? 'lcL' : /PROGRAM/.test(t) ? 'lcP' : 'lcO' };
+const LCM = [['lcF','Meta'],['lcG','Google'],['lcT','TikTok'],['lcL','LinkedIn'],['lcP','Programática'],['lcC','ChatGPT'],['lcO','Otros']];
+const lcKey = m => { const t = norm(m); return /FACE|META|INSTA/.test(t) ? 'lcF' : /GOOGLE/.test(t) ? 'lcG' : /TIKTOK/.test(t) ? 'lcT' : /LINKEDIN/.test(t) ? 'lcL' : /PROGRAM/.test(t) ? 'lcP' : /CHAT-?GPT/.test(t) ? 'lcC' : 'lcO' };
 const NUM = Object.keys(Z());
 function add(a, b){ NUM.forEach(k => a[k] += b[k] || 0); return a }
 function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpp: div(e.inv, e.pre), cpi: div(e.inv, e.ins), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
@@ -565,7 +566,7 @@ function renderKPIs(T, B){
   ].join('');
 }
 // Tarjetas por medio del resumen: mismas filas y reglas que la tabla "Por nivel y medio"
-const MEDIO_CARD = [['Facebook','Meta','#1877F2'],['TikTok','TikTok','#111111'],['Google','Google','#EA4335'],['Programática','Programática','#7C3AED']];
+const MEDIO_CARD = [['Facebook','Meta','#1877F2'],['TikTok','TikTok','#111111'],['Google','Google','#EA4335'],['Programática','Programática','#7C3AED'],['ChatGPT','ChatGPT','#10A37F']];
 function renderMedios(f){
   const g = groupRows(filasRango(f), r => r.medio);
   const cards = MEDIO_CARD.filter(([k]) => !f.medio || f.medio === k || (g[k] && NUM.some(x => g[k][x])));
@@ -643,7 +644,7 @@ let MEDIO_VISTA = 'niv';
 function setMedioVista(k){ MEDIO_VISTA = k; document.querySelectorAll('[data-mv]').forEach(b => b.classList.toggle('on', b.dataset.mv === k)); renderMedio(F()) }
 function renderMedio(f){
   const rows = filasRango(f);
-  const lbl = {Facebook:'Meta (Facebook e Instagram)', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática', Otro:'Otro (CRM)'};
+  const lbl = {Facebook:'Meta (Facebook e Instagram)', Google:'Google Ads', TikTok:'TikTok', 'Programática':'Programática', ChatGPT:'ChatGPT Ads', Otro:'Otro (CRM)'};
   const orden = (a, b) => (CANALES.indexOf(a) + 1 || 9) - (CANALES.indexOf(b) + 1 || 9);
   const conDatos = g => k => g[k].inv || g[k].lp || g[k].lc || g[k].pre;
   const cols = COLS_BASE.slice(); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpp','Costo / pre-insc.','cop']);
@@ -677,7 +678,7 @@ function renderSemana(f){
   const cols = COLS_BASE.concat(COLS_MES);
   document.getElementById('sem-head').innerHTML = head(mes ? 'Mes' : 'Semana', cols, false);
   const T = M(ks.reduce((a, k) => add(a, g[k]), Z()));
-  const lblM = {Facebook:'Meta', Google:'Google', TikTok:'TikTok', 'Programática':'Programática'};
+  const lblM = {Facebook:'Meta', Google:'Google', TikTok:'TikTok', 'Programática':'Programática', ChatGPT:'ChatGPT'};
   const ordM = (a, b) => (CANALES.indexOf(a) + 1 || 9) - (CANALES.indexOf(b) + 1 || 9);
   // el chip abre una fila por medio con las mismas columnas; las metas son del total, no del medio
   const subM = k => { const gm = groupRows(rows.filter(r => (mes ? r.d.slice(0,7) : weekStart(r.d)) === k), r => r.medio);
