@@ -318,8 +318,11 @@ function tryFetchSheets(silencioso){
 
     if(!rawProg.length) throw new Error('Pestaña Programa vacía.');
 
-    DATA.programa = rawProg.map(mapPrograma).filter(r=>r._periodo&&r.Programa);
-    DATA.medio    = rawMedio.map(mapMedio).filter(r=>r._periodo&&r.Programa);
+    // Educación Continua va por fuera del forecast formal: no entra en los totales; se muestra aparte en el desglose.
+    const progAll = rawProg.map(mapPrograma).filter(r=>r._periodo&&r.Programa);
+    DATA.programa = progAll.filter(r=>r.Modalidad!=='Educon');
+    DATA.educon   = progAll.filter(r=>r.Modalidad==='Educon');
+    DATA.medio    = rawMedio.map(mapMedio).filter(r=>r._periodo&&r.Programa&&r.Modalidad!=='Educon');
     DATA.mensual  = rawMensual.map(mapMensual).filter(r=>r._periodo&&r.Mes);
 
     // Re-render
@@ -561,7 +564,34 @@ function buildProgramasTable(periodo, color){
     <td class="r">${fmtN(tProg.mats)}</td>
     <td class="r">${fmtN(tProg.meta)}</td><td class="r">${fmtAporte(tProg.mats,tProg.meta)}</td>
   </tr>`;
-  
+
+  // Educación Continua: fuera del total del periodo, con su propio subtotal
+  const educon=(DATA.educon||[]).filter(r=>periodo?r._periodo===periodo:true);
+  if(educon.length){
+    h+=`<tr class="tbl-group"><td colspan="10">Educación Continua (fuera del forecast formal)</td></tr>`;
+    educon.forEach(r=>{
+      h+=`<tr>
+        <td title="${r.Programa}">${r.Programa.length>38?r.Programa.substring(0,36)+'…':r.Programa}</td>
+        <td><span class="bdg bdg-brd">Educon</span></td>
+        <td class="r">—</td>
+        <td class="r">${fmtM(r.Presupuesto)}</td>
+        <td class="r">—</td><td class="r">${fmtN(r.Leads)}</td><td class="r">—</td>
+        <td class="r">—</td><td class="r">—</td><td class="r">—</td>
+      </tr>`
+    });
+    const tEdu=sum(educon,'Presupuesto');
+    h+=`<tr class="tbl-sub">
+      <td colspan="3">SUBTOTAL EDUCACIÓN CONTINUA</td>
+      <td class="r">${fmtM(tEdu)}</td>
+      <td colspan="6"></td>
+    </tr>
+    <tr class="tbl-grand">
+      <td colspan="3">TOTAL PERIODO + EDUCACIÓN CONTINUA</td>
+      <td class="r">${fmtM(totAll+tEdu)}</td>
+      <td colspan="6"></td>
+    </tr>`
+  }
+
   h+='</tbody></table></div>';
   return h
 }
