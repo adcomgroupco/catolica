@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --meta:#1877F2;--google:#4285F4;--tiktok:#fe2c55;
+  --meta:#1877F2;--google:#4285F4;--tiktok:#fe2c55;--youtube:#ff0000;
   /* colores de las apps: el mockup imita la pantalla real, no sigue el tema del tablero */
   --app-bg:#fff;--app-fg:#050505;--app-mute:#65676b;--app-line:#e4e6eb;--app-soft:#f0f2f5;
 }
@@ -159,6 +159,41 @@ a{color:inherit}
 .tt .foot small{display:inline-block;background:rgba(255,255,255,.2);font-size:10px;padding:1px 5px;border-radius:3px;margin-top:5px}
 .tt .foot .btn{margin-top:9px;background:var(--tiktok);text-align:center;font-weight:700;padding:8px;border-radius:4px}
 
+
+/* YouTube */
+.yt{position:absolute;inset:0;background:#000;color:#fff}
+.yt .ytp{position:absolute;inset:0;cursor:pointer;background:#000}
+.yt .ytp img{width:100%;height:100%;object-fit:cover;display:block}
+.yt .ytp iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:5}
+.yt .ytp .play{position:absolute;inset:0;margin:auto;width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:2;pointer-events:none}
+.yt .ytp.playing .play{display:none}
+.yt .rail{position:absolute;right:8px;bottom:150px;z-index:3;display:flex;flex-direction:column;gap:16px;align-items:center;pointer-events:none}
+.yt .rail i{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:block}
+.yt .foot{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:46px 56px 18px 12px;background:linear-gradient(transparent,rgba(0,0,0,.78));font-size:12px;line-height:1.35;pointer-events:none}
+.yt .foot .who{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.yt .foot .who .av{width:26px;height:26px}
+.yt .foot .who small{display:block;opacity:.8;font-size:10.5px}
+.yt .foot .btn{display:block;margin-top:10px;background:#3ea6ff;color:#0f0f0f;text-align:center;font-weight:700;padding:9px;border-radius:999px}
+.yt.playing-s .rail,.yt.playing-s .foot{display:none}
+.yth{position:absolute;inset:0;background:#fff;color:#0f0f0f;display:flex;flex-direction:column;padding-top:36px}
+.yth .bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;font-weight:800;font-size:15px;letter-spacing:-.04em}
+.yth .bar b{display:flex;align-items:center;gap:4px}
+.yth .bar b i{width:22px;height:15px;border-radius:4px;background:#f00;display:block;position:relative}
+.yth .bar b i::after{content:"";position:absolute;left:8px;top:4px;border-left:7px solid #fff;border-top:3.5px solid transparent;border-bottom:3.5px solid transparent}
+.yth .ytp{position:relative;aspect-ratio:16/9;background:#000;cursor:pointer;flex:none}
+.yth .ytp img{width:100%;height:100%;object-fit:cover;display:block}
+.yth .ytp iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:5}
+.yth .ytp .play{position:absolute;inset:0;margin:auto;width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center;pointer-events:none}
+.yth .ytp.playing .play{display:none}
+.yth .meta{padding:10px 12px;display:flex;gap:10px}
+.yth .meta .t{font-size:13.5px;font-weight:600;line-height:1.3}
+.yth .meta .s{font-size:11.5px;color:#606060;margin-top:3px}
+.yth .meta .s b{font-weight:700;color:#0f0f0f}
+.yth .cta{margin:2px 12px 0;background:#065fd4;color:#fff;text-align:center;font-weight:600;font-size:13px;padding:10px;border-radius:999px}
+.yth .sk{padding:16px 12px;display:flex;flex-direction:column;gap:12px}
+.yth .sk div{display:flex;gap:10px}.yth .sk i{display:block;border-radius:6px;background:#eceef1}
+.yth .sk i.a{width:84px;height:48px}.yth .sk i.b{flex:1;height:48px}
+
 /* ficha */
 .info{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
 .prog-n{font-size:1rem;font-weight:700;letter-spacing:-.02em;line-height:1.25}
@@ -215,6 +250,7 @@ details[open] summary::after{content:"–"}
     <button class="tab on" data-tab="all">Todos <span class="n" id="n-all">0</span></button>
     <button class="tab" data-tab="Meta"><span class="dot" style="background:var(--meta)"></span>Meta <span class="n" id="n-Meta">0</span></button>
     <button class="tab" data-tab="Google"><span class="dot" style="background:var(--google)"></span>Google <span class="n" id="n-Google">0</span></button>
+    <button class="tab" data-tab="YouTube"><span class="dot" style="background:var(--youtube)"></span>YouTube <span class="n" id="n-YouTube">0</span></button>
   </div>
   <div id="filters" style="display:contents"></div>
   <div class="seg" id="view" title="Cómo se muestran los anuncios de Meta">
@@ -229,7 +265,7 @@ details[open] summary::after{content:"–"}
 
 <script>
 // Los anuncios salen de data/anuncios-catolica.json, que genera Ads-CLI
-// (scripts/clients/compensar/anuncios_tablero.py --client catolica) con las APIs de Meta, Google y TikTok.
+// (scripts/clients/compensar/anuncios_tablero.py --client catolica) con las APIs de Meta, Google (búsqueda y YouTube) y TikTok.
 // La homologación se lee en vivo de la pestaña Homologacion del Sheet y se cruza por nombre de campaña (exacto); si falla, se usa la copia del JSON.
 const DATA_URL='../data/anuncios-catolica.json';
 const SHEET_ID='1uIBe2IadpAWIpVbqUp0RO8THfEw8Mjlrl_1VvORw_rs';
@@ -258,7 +294,7 @@ async function init(){
     return
   }
   S.avatars=d.avatars||{};
-  S.ads=[...(d.m||[]),...(d.g||[]),...(d.t||[])];
+  S.ads=[...(d.m||[]),...(d.g||[]),...(d.y||[]),...(d.t||[])];
   S.ads.forEach((a,i)=>a._i=i);
   S.homoRows=d.h||[];S.homoKeys=d.hk||[];
   const old=(Date.now()-new Date(d.generado))/36e5>72;
@@ -324,7 +360,7 @@ function filtered(){
     if(S.tab!=='all'&&a.medium!==S.tab) return false;
     for(const [k,v] of fs) if(a.h[k]!==v) return false;
     if(q){
-      const hay=[a.campaign_name,a.ad_name,a.adset_name,a.headline,a.body_text,a.description,...(a.headlines||[]),...(a.descriptions||[]),...(a.bodies||[]),...(a.keywords||[]).map(k=>k.text),...Object.values(a.h)].join(' ');
+      const hay=[a.campaign_name,a.ad_name,a.adset_name,a.headline,a.long_headline,a.yt_title,a.body_text,a.description,...(a.headlines||[]),...(a.descriptions||[]),...(a.bodies||[]),...(a.keywords||[]).map(k=>k.text),...Object.values(a.h)].join(' ');
       if(!norm(hay).includes(q)) return false
     }
     return true
@@ -406,6 +442,36 @@ function googleSerp(ad){
     +'</div><div class="g-org"><i class="t"></i><i></i><i></i><i style="width:60%"></i><br><i class="t"></i><i></i><i style="width:80%"></i></div></div>'
 }
 
+/* ── YouTube ── */
+const YT_PLAY='<div class="play">'+PLAY+'</div>';
+function ytPlayer(ad,thumb){
+  return '<div class="ytp" data-act="ytplay" data-yt="'+esc(ad.yt)+'"><img src="https://i.ytimg.com/vi/'+esc(ad.yt)+'/'+thumb+'.jpg" alt="Video del anuncio" loading="lazy">'+YT_PLAY+'</div>'
+}
+function ytAvatar(ad){return S.avatars[ad.page]?avatar(ad):avatar({page:'Universidad Católica de Colombia'})}
+function youtubeScreen(ad){
+  const name=ad.page||'UCatolicaCo',title=ad.long_headline||ad.headline||ad.yt_title||'';
+  if(ad.vertical!==false){
+    return '<div class="yt">'+ytPlayer(ad,'hqdefault')+'<div class="island"></div>'
+      +'<div class="rail"><i></i><i></i><i></i><i></i></div>'
+      +'<div class="foot"><div class="who">'+ytAvatar(ad)+'<div><b>'+esc(name)+'</b><small>Patrocinado</small></div></div>'+esc(ad.headline||title)
+      +(ad.cta?'<span class="btn">'+esc(ad.cta)+'</span>':'<span class="btn">Más información</span>')+'</div></div>'
+  }
+  return '<div class="yth"><div class="island"></div><div class="bar"><b><i></i>YouTube</b><span></span></div>'+ytPlayer(ad,'mqdefault')
+    +'<div class="meta">'+ytAvatar(ad)+'<div><div class="t">'+esc(title)+'</div><div class="s"><b>Patrocinado</b> · '+esc(name)+'</div></div></div>'
+    +'<div class="cta">'+esc(ad.cta||'Más información')+'</div>'
+    +'<div class="sk"><div><i class="a"></i><i class="b"></i></div><div><i class="a"></i><i class="b"></i></div></div></div>'
+}
+function stopYt(scope){(scope||document).querySelectorAll('.ytp.playing').forEach(b=>{const f=b.querySelector('iframe');if(f) f.remove();b.classList.remove('playing');const y=b.closest('.yt');if(y) y.classList.remove('playing-s')})}
+function playYt(box){
+  if(box.classList.contains('playing')){stopYt(box.parentElement);return}
+  stopYt();stopVideos();
+  const f=document.createElement('iframe');
+  f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(box.dataset.yt)+'?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+  f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;
+  box.appendChild(f);box.classList.add('playing');
+  const y=box.closest('.yt');if(y) y.classList.add('playing-s')
+}
+
 /* ── TikTok ── */
 function tiktokScreen(ad){
   return '<div class="tt"><div class="media">'+mediaHtml(ad.feed,true)+'</div><div class="island"></div>'
@@ -431,6 +497,9 @@ function card(ad){
     med='<span class="medium"><i style="background:var(--google)">G</i>Google Ads</span>';
     screen=googleSerp(ad);
     ctrl='<button class="rot" data-act="rot">↻ Otra combinación de titulares</button>'
+  }else if(ad.medium==='YouTube'){
+    med='<span class="medium"><i style="background:var(--youtube)">▶</i>YouTube Ads</span>';
+    screen=youtubeScreen(ad)
   }else{
     med='<span class="medium"><i style="background:#000">♪</i>TikTok Ads</span>';
     screen=tiktokScreen(ad)
@@ -451,6 +520,12 @@ function card(ad){
       +((ad.sitelinks||[]).length?'<div class="h">Sitelinks</div><div class="kw">'+ad.sitelinks.map(s=>'<span>'+esc(s.text)+'</span>').join('')+'</div>':'')
       +((ad.callouts||[]).length?'<div class="h">Textos destacados</div><div class="kw">'+ad.callouts.map(s=>'<span>'+esc(s)+'</span>').join('')+'</div>':'')
       +'</div></details>'
+  }else if(ad.medium==='YouTube'){
+    const it=(k,t)=>t?'<div class="it"><b>'+k+'</b><span>'+esc(t)+'</span></div>':'';
+    det='<details><summary>Textos del anuncio de video</summary><div class="lst">'
+      +it('Titular',ad.headline)+it('Titular largo',ad.long_headline)+it('Descripción',ad.body_text)+it('Descripción 2',ad.description)+it('Botón',ad.cta)
+      +'<div class="it"><b>Video</b><span><a href="https://www.youtube.com/watch?v='+esc(ad.yt)+'" target="_blank" rel="noopener">'+esc(ad.yt_title||ad.yt)+' ↗</a></span></div>'
+      +'</div></details>'
   }else if(ad.bodies&&ad.bodies.length>1){
     det='<details><summary>'+ad.bodies.length+' variantes de texto</summary><div class="lst">'+ad.bodies.map((t,j)=>'<div class="it"><b>'+(j+1)+'</b><span style="white-space:pre-line">'+esc(t)+'</span></div>').join('')+'</div></details>'
   }
@@ -468,7 +543,7 @@ function card(ad){
 function render(){
   stopVideos();
   const f=filtered(),by=m=>S.ads.filter(a=>a.medium===m).length;
-  $('n-all').textContent=S.ads.length;['Meta','Google','TikTok'].forEach(m=>{if($('n-'+m)) $('n-'+m).textContent=by(m)});
+  $('n-all').textContent=S.ads.length;['Meta','Google','YouTube','TikTok'].forEach(m=>{if($('n-'+m)) $('n-'+m).textContent=by(m)});
   $('count').textContent=f.length+(f.length===1?' anuncio':' anuncios');
   $('view').style.display=(S.tab==='all'||S.tab==='Meta')&&by('Meta')?'':'none';
   if(!f.length){
@@ -484,7 +559,7 @@ function rerenderCard(i){
 }
 
 /* ── video ── */
-function stopVideos(scope){(scope||document).querySelectorAll('.vid.playing').forEach(v=>{v.querySelector('video').pause();v.classList.remove('playing')})}
+function stopVideos(scope){stopYt(scope);(scope||document).querySelectorAll('.vid.playing').forEach(v=>{v.querySelector('video').pause();v.classList.remove('playing')})}
 function togglePlay(box){
   const v=box.querySelector('video');
   if(box.classList.contains('playing')){v.pause();box.classList.remove('playing');return}
@@ -505,6 +580,7 @@ document.addEventListener('click',e=>{
   const card=t.closest('.ad'),i=card&&+card.dataset.i;
   switch(t.dataset.act){
     case 'play': togglePlay(t);break;
+    case 'ytplay': playYt(t);break;
     case 'mute':{e.stopPropagation();const v=t.closest('.vid').querySelector('video');v.muted=!v.muted;t.textContent=v.muted?'🔇':'🔊';break}
     case 'more':{const c=t.closest('.copy'),open=t.textContent==='Ver más';c.textContent=open?c.dataset.full:c.dataset.short;t.textContent=open?'Ver menos':'Ver más';c.append(' ',t);break}
     case 'view': S.cardView[i]=t.dataset.v;rerenderCard(i);break;
