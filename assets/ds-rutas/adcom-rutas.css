@@ -1,0 +1,107 @@
+/* Adcom · capa común de rutas estratégicas (documentos de escritorio con riel de navegación).
+   Va después de fonts.css, tokens.css y bundle.css. Solo usa variables de tokens.css.
+   Incluye: alias de variables heredadas (para que los estilos en línea de las rutas sigan
+   funcionando), el riel lateral + barra superior, etiquetas tipo Notion, estados, tablas,
+   línea lima de titular, movimiento y móvil. */
+
+:root {
+  /* etiquetas tipo Notion y estados (mismos valores que adcom-dash.css) */
+  --tg-gris-bg:#ebeae6; --tg-gris:#46463f;
+  --tg-naranja-bg:#fbe6d3; --tg-naranja:#93430a;
+  --tg-amarillo-bg:#f9eec2; --tg-amarillo:#725200;
+  --tg-verde-bg:#d9eedf; --tg-verde:#1a6a3c;
+  --tg-azul-bg:#d8e7f8; --tg-azul:#1b4d8c;
+  --tg-morado-bg:#e8dff8; --tg-morado:#573799;
+  --tg-rosa-bg:#f8dfee; --tg-rosa:#96296a;
+  --tg-rojo-bg:#f9dcd8; --tg-rojo:#a3241b;
+  --est-ok:#1a6a3c; --est-medio:#725200; --est-mal:#a3241b;
+  --est-ok-bg:#d9eedf; --est-medio-bg:#f9eec2; --est-mal-bg:#f9dcd8;
+  --est-ok-barra:#2f9e5f; --est-medio-barra:#e3a600; --est-mal-barra:#d9483b;
+  --ru-texto-2:#4a4a46;      /* párrafos */
+  --ru-texto-3:#55554f;      /* mínimo para texto secundario */
+  --ru-riel:264px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--washi); color: var(--sumi); font: var(--text-body-sm); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--sumi); outline-offset: 3px; }
+::selection { background: var(--lima); color: var(--sumi); }
+
+/* línea lima bajo la palabra clave de un titular */
+.ru-hl { background: linear-gradient(var(--lima), var(--lima)) 0 100% / 100% .13em no-repeat; font-style: normal; color: inherit; }
+
+/* ---------- riel lateral + barra superior (body.con-shell) ---------- */
+body.con-shell { display: flex; align-items: stretch; min-height: 100vh; }
+.app-sidebar { position: sticky; top: 0; align-self: flex-start; flex: 0 0 var(--ru-riel); width: var(--ru-riel); height: 100vh; overflow-y: auto; display: flex; flex-direction: column; background: var(--papel); border-right: 1px solid var(--piedra); color: var(--sumi); scrollbar-width: thin; }
+.app-sidebar-top { padding: 22px 20px 18px; border-bottom: 1px solid var(--piedra); }
+.app-sidebar-brand { display: flex; align-items: center; gap: 12px; min-height: var(--target-min); text-decoration: none; color: var(--sumi); font: 500 14px/1.3 var(--font-display); }
+.app-sidebar-brand img { height: 26px; width: auto; display: block; }
+.app-sidebar-brand span { padding-left: 12px; border-left: 1px solid var(--piedra-borde); color: var(--ru-texto-2); font-weight: 400; }
+.app-sidebar-client { margin-top: 14px; padding: 14px 0 0; border-top: 1px solid var(--piedra); }
+.app-sidebar-client-label { display: block; font-size: 13px; color: var(--ru-texto-3); }
+.app-sidebar-client-name { display: block; margin-top: 4px; font: 500 17px/1.25 var(--font-display); letter-spacing: -.01em; }
+.app-sidebar-client-period { display: block; margin-top: 4px; font-size: 13px; color: var(--ru-texto-3); }
+.app-sidebar-nav { flex: 1; padding: 14px 12px; }
+.app-sidebar-nav-title { display: block; padding: 14px 10px 6px; font-size: 13px; color: var(--ru-texto-3); }
+.app-sidebar-nav a { display: flex; align-items: center; gap: 10px; min-height: var(--target-min); padding: 8px 12px; border-radius: var(--radius-pill); color: var(--ru-texto-2); text-decoration: none; font-size: 14px; line-height: 1.3; }
+.app-sidebar-nav a b { width: 6px; height: 6px; border-radius: 50%; background: var(--piedra-borde); flex: 0 0 auto; }
+.app-sidebar-nav a:hover { background: var(--crema); color: var(--sumi); }
+.app-sidebar-nav a.active { background: var(--sumi); color: #fff; }
+.app-sidebar-nav a.active b { background: var(--lima); }
+.app-sidebar-foot { padding: 16px 20px; border-top: 1px solid var(--piedra); font-size: 13px; line-height: 1.5; color: var(--ru-texto-3); }
+.app-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.app-topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 clamp(20px,4vw,48px); background: var(--washi-vidrio); backdrop-filter: blur(var(--blur-header)); border-bottom: 1px solid var(--piedra); font-size: 14px; }
+.app-topbar-crumb { color: var(--ru-texto-3); white-space: nowrap; }
+.app-topbar-section { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-topbar-crumb + .app-topbar-section::before { content: "›"; margin-right: 10px; color: var(--ru-texto-3); font-weight: 400; }
+.app-topbar-meta { margin-left: auto; color: var(--ru-texto-3); white-space: nowrap; }
+.app-content { display: flex; flex-direction: column; gap: 96px; padding: 40px clamp(20px,4vw,48px) 96px; max-width: 1240px; width: 100%; }
+
+/* ---------- etiquetas (tipo Notion) ---------- */
+.ru-tag { display: inline-block; padding: 1px 10px; border-radius: 4px; background: var(--tg-gris-bg); color: var(--tg-gris); font-size: 12px; font-weight: 500; line-height: 1.6; }
+.ru-tag--azul { background: var(--tg-azul-bg); color: var(--tg-azul); }
+.ru-tag--morado { background: var(--tg-morado-bg); color: var(--tg-morado); }
+.ru-tag--naranja { background: var(--tg-naranja-bg); color: var(--tg-naranja); }
+.ru-tag--verde { background: var(--tg-verde-bg); color: var(--tg-verde); }
+.ru-tag--amarillo { background: var(--tg-amarillo-bg); color: var(--tg-amarillo); }
+.ru-tag--rojo { background: var(--tg-rojo-bg); color: var(--tg-rojo); }
+.ru-tag--rosa { background: var(--tg-rosa-bg); color: var(--tg-rosa); }
+/* estado: pastilla pastel + texto oscuro + símbolo (nunca solo color) */
+.ru-est { display: inline-flex; align-items: center; gap: 6px; padding: 1px 10px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 500; line-height: 1.6; white-space: nowrap; }
+.ru-est::before { font-size: 10px; }
+.ru-est--ok { background: var(--est-ok-bg); color: var(--est-ok); }
+.ru-est--ok::before { content: "\25CF"; }
+.ru-est--medio { background: var(--est-medio-bg); color: var(--est-medio); }
+.ru-est--medio::before { content: "\25C6"; }
+.ru-est--mal { background: var(--est-mal-bg); color: var(--est-mal); }
+.ru-est--mal::before { content: "\25B2"; }
+/* píldora de acción (lo que se toca es redondo) */
+.ru-pill { display: inline-flex; align-items: center; min-height: 32px; padding: 4px 14px; border: 1px solid var(--piedra-borde); border-radius: var(--radius-pill); background: var(--papel); color: var(--sumi); font-size: 13px; font-weight: 500; line-height: 1.2; }
+
+/* ---------- tablas ---------- */
+.ru-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ---------- movimiento ---------- */
+@keyframes ruRise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- móvil: el riel pasa a franja horizontal ---------- */
+@media (max-width: 900px) {
+  body.con-shell { flex-direction: column; min-height: 0; }
+  .app-sidebar { position: sticky; top: 0; z-index: 30; flex: none; width: 100%; height: auto; overflow: visible; flex-direction: row; align-items: center; border-right: 0; border-bottom: 1px solid var(--piedra); }
+  .app-sidebar-top { padding: 0 16px; border: 0; flex: 0 0 auto; }
+  .app-sidebar-brand span, .app-sidebar-client, .app-sidebar-foot, .app-sidebar-nav-title { display: none; }
+  .app-sidebar-nav { display: flex; gap: 4px; padding: 6px 12px 6px 0; overflow-x: auto; flex: 1; min-width: 0; scrollbar-width: none; }
+  .app-sidebar-nav::-webkit-scrollbar { display: none; }
+  .app-sidebar-nav a { white-space: nowrap; flex: 0 0 auto; }
+  .app-topbar { top: 56px; }
+  .app-topbar-meta { display: none; }
+  .app-content { padding-top: 24px; }
+}
+@media print { .app-sidebar, .app-topbar { display: none !important; } body.con-shell { display: block; } }

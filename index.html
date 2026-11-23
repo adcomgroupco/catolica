@@ -1,243 +1,48 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Índice de los documentos y tableros de la cuenta Universidad Católica de Colombia.">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#f4f4f1">
-  <title>Católica | Documentos</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="assets/css/adcom.css">
-  <script defer src="assets/js/adcom.js"></script>
-<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Índice de los documentos y tableros de la cuenta Universidad Católica de Colombia.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f6f2">
+<title>Católica · Documentos · Adcom</title>
+<link rel="icon" type="image/png" href="assets/favicon-adcom.png">
+<link rel="stylesheet" href="assets/ds/fonts.css">
+<link rel="stylesheet" href="assets/ds/tokens.css">
+<link rel="stylesheet" href="assets/ds/bundle.css">
+<link rel="stylesheet" href="assets/ds/adcom-portal.css">
 </head>
-<body>
+<body class="portal ad-root">
 <a class="skip-link" href="#top">Ir a los documentos</a>
-
-<header class="masthead">
-  <a class="wordmark" href="index.html"><i></i>Católica <span>documentos</span></a>
-  <nav aria-label="Documentos">
-    <a href="#tableros">Tableros</a>
-    <a href="#planeacion">Planeación</a>
-    <a href="#creatividad">Creatividad</a>
-    <a href="#informes">Informes</a>
-  </nav>
-  <span class="stamp">Colombia</span>
-</header>
-
-<main id="top">
-
-<section class="opening wrap">
-  <h1>Documentos de la cuenta</h1>
-  <p class="lede">Tableros, planeación, creatividad e informes de Católica, en un solo lugar.</p>
-  <nav class="categorias" aria-label="Categorías de documentos">
-    <a href="#tableros">Tableros <b>2</b></a>
-    <a href="#planeacion">Planeación <b>4</b></a>
-    <a href="#creatividad">Creatividad <b>2</b></a>
-    <a href="#informes">Informes <b>7</b></a>
-  </nav>
-</section>
-
-<section class="grupo wrap" id="tableros">
-  <div class="grupo-head">
-    <h2>Tableros</h2>
-    <p>Seguimiento en vivo de inversión y resultados.</p>
-  </div>
-
-  <div class="shelf">
-    <a class="card card-breve" href="https://analytics.zoho.com/open-view/2744088000002198621/a07d1f93535107b089b9c86724441ee1" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-tabla"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Dashboard analytics</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/tableros/tablero-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-tabla"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Seguimiento semanal</h3>
-    </a>
+<header class="ad-nav"><div class="ad-nav__in">
+  <a class="p-nav__brand" href="index.html" aria-label="Adcom, inicio"><img src="assets/ds/logos/adcom-mark.png" alt="Adcom"><i>Católica</i></a>
+  <nav class="ad-nav__links" aria-label="Documentos"><a href="#tableros">Tableros</a><a href="#planeacion">Planeación</a><a href="#creatividad">Creatividad</a><a href="#informes">Informes</a></nav>
+</div></header>
+<main id="top" class="p-wrap">
+<section class="p-hero">
+  <div>
+    <span class="ad-eyebrow">Universidad Católica de Colombia · cuenta digital</span>
+    <h1><span class="ad-ln">Todo lo de Católica.</span><span class="ad-ln">En <span class="ad-line">un solo lugar</span>.</span></h1>
+    <p class="lead">Tableros, planeación, creatividad e informes de la cuenta.</p>
+    <nav class="p-chips" aria-label="Categorías"><a class="ad-chip" href="#tableros" role="link" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px">Tableros <b style="font-weight:400;color:var(--tinta-suave);font-size:13px">2</b></a><a class="ad-chip" href="#planeacion" role="link" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px">Planeación <b style="font-weight:400;color:var(--tinta-suave);font-size:13px">5</b></a><a class="ad-chip" href="#creatividad" role="link" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px">Creatividad <b style="font-weight:400;color:var(--tinta-suave);font-size:13px">2</b></a><a class="ad-chip" href="#informes" role="link" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px">Informes <b style="font-weight:400;color:var(--tinta-suave);font-size:13px">7</b></a></nav>
   </div>
 </section>
-
-<section class="grupo wrap" id="planeacion">
-  <div class="grupo-head">
-    <h2>Planeación</h2>
-    <p>Presupuesto, rutas estratégicas y propuesta.</p>
-  </div>
-
-  <div class="shelf">
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/forecast/forecast-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-grafico"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Forecast</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/rutas/ruta-estrategica-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-ruta"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Ruta estratégica 2026-3</h3>
-    </a>
-
-    <div class="card card-breve">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-ruta"></use></svg>
-        <a href="https://adcomgroupco.github.io/catolica/rutas/ruta-20271" target="_blank" rel="noopener" aria-label="Abrir Ruta estratégica 2027-1">
-          <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-        </a>
-      </span>
-      <a href="https://adcomgroupco.github.io/catolica/rutas/ruta-20271" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
-        <h3>Ruta estratégica 2027-1</h3>
-      </a>
-      <a class="go" href="https://adcomgroupco.github.io/catolica/rutas/estrategia-comunicacion-20271" target="_blank" rel="noopener">
-        ↳ Estrategia y comunicación 2027-1
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </a>
-    </div>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-propuesta-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-tendencia"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Propuesta estratégica</h3>
-      <p>Estado de las 7 acciones y avance vs. meta</p>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/propuestas/propuesta-chatgpt-ads-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-tendencia"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Propuesta ChatGPT Ads</h3>
-      <p>Prueba de 2 semanas con 4 programas</p>
-    </a>
-  </div>
-</section>
-
-<section class="grupo wrap" id="creatividad">
-  <div class="grupo-head">
-    <h2>Creatividad</h2>
-    <p>Anuncios activos y copys en revisión.</p>
-  </div>
-
-  <div class="shelf">
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/anuncios/anuncios-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-pieza"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Anuncios</h3>
-    </a>
-
-    <div class="card card-breve">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-      </span>
-      <h3>Revisión de copys</h3>
-      <a class="go" href="https://adcomgroupco.github.io/catolica/copys/copys-catolica" target="_blank" rel="noopener">
-        ↳ 2026-3
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </a>
-      <a class="go" href="https://adcomgroupco.github.io/catolica/copys/copys-catolica-20271" target="_blank" rel="noopener">
-        ↳ 2027-1
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="grupo wrap" id="informes">
-  <div class="grupo-head">
-    <h2>Informes</h2>
-    <p>Cierres de campaña por programa.</p>
-  </div>
-
-  <div class="shelf">
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-pauta-catolica-20271" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Informe de pauta 2027-1</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-maestria-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Cierre Maestría</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-formulacion-proyectos-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Formulación y Evaluación de Proyectos</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-administracion-financiera-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Administración Financiera 2026-3</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-admin-financiera-20271" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Administración Financiera 2027-1</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-programatica-ingenieria-datos-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Programática: Ingeniería de Datos e IA</h3>
-    </a>
-
-    <a class="card card-breve" href="https://adcomgroupco.github.io/catolica/informes/informe-arquitectura-catolica" target="_blank" rel="noopener">
-      <span class="card-top">
-        <svg class="ico ico-lg" aria-hidden="true"><use href="#i-documento"></use></svg>
-        <svg class="ico" aria-hidden="true"><use href="#i-abrir"></use></svg>
-      </span>
-      <h3>Arquitectura</h3>
-    </a>
-  </div>
-</section>
-
-<section class="colophon wrap">
-  <dl>
-    <dt>Cuenta</dt><dd>Universidad Católica de Colombia, Colombia</dd>
-    <dt>Uso</dt>
-    <dd>Abrir <code>index.html</code> en el navegador, o servir la carpeta con
-    <code>python -m http.server</code></dd>
-    <dt>Alcance</dt>
-    <dd>Documentos internos de la cuenta</dd>
-  </dl>
-</section>
-
+<section class="p-group" id="tableros"><div class="p-group__in">
+  <div class="p-group__h"><span class="ad-n ad-n--md">1</span><h2>Tableros</h2><p>Seguimiento en vivo de inversión y resultados.</p></div>
+  <div><div class="p-feature">
+        <a class="ad-cat ad-cat--dark" href="https://adcomgroupco.github.io/catolica/tableros/tablero-catolica" target="_blank" rel="noopener"><span class="ad-cat__body"><span class="ad-cat__k p-link-arrow">Seguimiento semanal</span><span class="ad-cat__t">Pauta, del lead a la matrícula.</span><span class="ad-cat__d">Inversión, leads CRM, matrículas y costo por etapa, con metas del periodo.</span></span></a>
+        <a class="ad-cat" href="https://analytics.zoho.com/open-view/2744088000002198621/a07d1f93535107b089b9c86724441ee1" target="_blank" rel="noopener"><span class="ad-cat__body"><span class="ad-cat__k p-link-arrow">Dashboard analytics</span><span class="ad-cat__t">Zoho Analytics.</span><span class="ad-cat__d">Vista del CRM en vivo.</span></span></a></div></div></div></section>
+<section class="p-group" id="planeacion"><div class="p-group__in">
+  <div class="p-group__h"><span class="ad-n ad-n--md">2</span><h2>Planeación</h2><p>Presupuesto, rutas estratégicas y propuestas.</p></div>
+  <div><ul class="p-list"><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/forecast/forecast-catolica" target="_blank" rel="noopener"><span><h3>Forecast</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/rutas/ruta-estrategica-catolica" target="_blank" rel="noopener"><span><h3>Ruta estratégica 2026-3</h3></span><span class="p-go">Abrir ›</span></a></li><li class="p-multi"><h3>Ruta estratégica 2027-1</h3><div class="p-sub"><a href="https://adcomgroupco.github.io/catolica/rutas/ruta-20271" target="_blank" rel="noopener">Ruta estratégica</a><a href="https://adcomgroupco.github.io/catolica/rutas/estrategia-comunicacion-20271" target="_blank" rel="noopener">Estrategia y comunicación</a></div></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-propuesta-catolica" target="_blank" rel="noopener"><span><h3>Propuesta estratégica</h3><p>Estado de las 7 acciones y avance vs. meta</p></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/propuestas/propuesta-chatgpt-ads-catolica" target="_blank" rel="noopener"><span><h3>Propuesta ChatGPT Ads</h3><p>Prueba de 2 semanas con 4 programas</p></span><span class="p-go">Abrir ›</span></a></li></ul></div></div></section>
+<section class="p-group" id="creatividad"><div class="p-group__in">
+  <div class="p-group__h"><span class="ad-n ad-n--md">3</span><h2>Creatividad</h2><p>Anuncios activos y copys en revisión.</p></div>
+  <div><ul class="p-list"><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/anuncios/anuncios-catolica" target="_blank" rel="noopener"><span><h3>Anuncios</h3></span><span class="p-go">Abrir ›</span></a></li><li class="p-multi"><h3>Revisión de copys</h3><div class="p-sub"><a href="https://adcomgroupco.github.io/catolica/copys/copys-catolica" target="_blank" rel="noopener">2026-3</a><a href="https://adcomgroupco.github.io/catolica/copys/copys-catolica-20271" target="_blank" rel="noopener">2027-1</a></div></li></ul></div></div></section>
+<section class="p-group" id="informes"><div class="p-group__in">
+  <div class="p-group__h"><span class="ad-n ad-n--md">4</span><h2>Informes</h2><p>Cierres de campaña por programa.</p></div>
+  <div><ul class="p-list"><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-pauta-catolica-20271" target="_blank" rel="noopener"><span><h3>Informe de pauta 2027-1</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-maestria-catolica" target="_blank" rel="noopener"><span><h3>Cierre Maestría</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-formulacion-proyectos-catolica" target="_blank" rel="noopener"><span><h3>Formulación y Evaluación de Proyectos</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-administracion-financiera-catolica" target="_blank" rel="noopener"><span><h3>Administración Financiera 2026-3</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-admin-financiera-20271" target="_blank" rel="noopener"><span><h3>Administración Financiera 2027-1</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-programatica-ingenieria-datos-catolica" target="_blank" rel="noopener"><span><h3>Programática: Ingeniería de Datos e IA</h3></span><span class="p-go">Abrir ›</span></a></li><li><a class="p-row" href="https://adcomgroupco.github.io/catolica/informes/informe-arquitectura-catolica" target="_blank" rel="noopener"><span><h3>Arquitectura</h3></span><span class="p-go">Abrir ›</span></a></li></ul></div></div></section>
 </main>
-
-<footer class="footer">
-  <span>Católica, biblioteca de documentos</span>
-  <span>Colombia</span>
-</footer>
-
+<footer class="ad-foot p-foot"><div class="ad-foot__in"><span>Católica · biblioteca de documentos</span><span>Adcom · Brand Group</span></div></footer>
 </body>
 </html>

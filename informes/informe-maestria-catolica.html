@@ -4,201 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cierre Maestría en Gestión Económica — Universidad Católica de Colombia</title>
-<link rel="stylesheet" href="../assets/css/adcom-tokens.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
-<style>
-:root {
-  --black:#050505; --white:#fcfcfa; --yellow:var(--accent); --yellow-light:#FFF8E1;
-  --gray-50:var(--ground); --gray-100:var(--sunken); --gray-200:var(--rule);
-  --gray-400:var(--fg-muted); --gray-600:var(--fg-secondary);
- --radius-md:var(--radius); --radius-lg:var(--radius); --radius-xl:var(--radius);
-  --red:var(--neg); --green:var(--pos)
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);
-  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
-/* Ojo: .wrap tambien existe en el sistema. Aqui gana esta por orden. */
-.wrap{max-width:1180px;margin:0 auto;padding:32px 28px 80px}
-
-
-
-
-/* El unico h1 del documento es el de la portada, y lo resuelve el componente
-   del sistema: escala de titular, tracking y color heredado del suelo. Esta
-   regla de elemento desnudo venia del hero oscuro viejo y su color absoluto
-   ganaba por herencia directa. */
-
-
-
-
-
-
-
-
-
-
-
-section{margin-bottom:38px}
-h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
-.intro{font-size:13.5px;color:var(--gray-600);font-weight:300;max-width:82ch;margin-bottom:20px}
-
-/* La tabla va abierta, como en el sistema (.table-wrap): sin caja, sin
-   esquina redonda. La estructura la da el encabezado, no un marco. */
-.tbl{background:none;border:0}
-.scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:var(--fs-body-min)}
-th{font-weight:700;font-size:12px;padding:13px 14px;text-align:left;white-space:nowrap;color:var(--fg-muted);border-bottom:1px solid var(--rule-strong)}
-th.n{text-align:right}
-th.grp{background:#1C1C1C;color:var(--accent);text-align:center;border-left:1px solid #333}
-td{padding:12px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
-tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:var(--gray-50)}
-td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-td.prog{color:var(--black);font-weight:600}
-td.prog .sub{display:block;font-size:13px;color:var(--gray-400);font-weight:300;margin-top:2px;max-width:var(--measure)}
-td.fuerte{color:var(--black);font-weight:700}
-td.t-ok{color:var(--pos);font-weight:700}
-td.t-med{color:var(--accent-fg);font-weight:700}
-tr.total td{background:var(--yellow);color:var(--black);font-weight:800;border-bottom:none}
-
-.card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
-  padding:24px 22px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.mini .dato{font-size:29px;font-weight:900;color:var(--accent-fg);line-height:1;display:block;margin-bottom:9px;letter-spacing:-.02em}
-.mini h4{font-size:13.5px;font-weight:800;margin-bottom:7px}
-.mini p{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
-.mini p b{color:var(--black);font-weight:700}
-.sub-h{font-size:16px;font-weight:800;margin:26px 0 14px;max-width:var(--measure)}
-tr.destacada td{background:var(--yellow-light)}
-tr.destacada td b{color:var(--black);font-weight:700}
-.acc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.ico{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--black);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ico svg{width:21px;height:21px}
-.badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.05em}
-.b-ok{background:#E8F5EC;color:var(--pos)}
-.accion h4{font-size:16px;font-weight:800;margin-bottom:8px}
-.pedido{font-size:13px;color:var(--gray-400);font-style:italic;border-left:2px solid var(--gray-100);
-  padding-left:11px;margin-bottom:14px;line-height:1.5}
-.detalle{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300;margin-bottom:14px}
-.detalle b{color:var(--black);font-weight:700}
-.next{background:var(--gray-50);border-radius:var(--radius-sm);padding:13px 15px;
-  font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
-.next span{display:block;font-size:12px;font-weight:800;color:var(--accent-fg);margin-bottom:5px}
-
-/* ---- pestanas ---- */
-.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-.tab{background:var(--white);border:1px solid var(--gray-200);border-radius:999px;
-  padding:8px 18px;font-family:inherit;font-size:13px;font-weight:600;color:var(--gray-600);
-  cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-.tab:hover{border-color:var(--accent-fg)}
-/* La pestana activa se invierte con los roles del sistema, no con dos
-   colores absolutos: asi tambien imprime bien. */
-.tab[aria-selected="true"]{background:var(--fg);color:var(--ground);border-color:var(--fg)}
-.panel[hidden]{display:none}
-
-/* ---- graficas ---- */
-.chart-box{background:var(--white);border:1px solid var(--gray-200);
-  border-radius:var(--radius-lg);padding:24px 20px 14px;
-  position:relative}
-.chart{width:100%;height:auto;display:block;overflow:visible}
-.rej{stroke:var(--gray-100);stroke-width:1}
-.barra{fill:var(--yellow);transition:fill .15s}
-.barra:hover{fill:#E0A800}
-.linea{fill:none;stroke:var(--black);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
-.linea-meta{fill:none;stroke:var(--gray-400);stroke-width:2;stroke-dasharray:6 5}
-.linea-g{fill:none;stroke:var(--gray-400);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:7 4}
-.pto-g{stroke:var(--gray-400)}
-.area{fill:rgba(255,212,0,.14)}
-.pto{fill:var(--white);stroke:var(--black);stroke-width:2.5}
-.val{font-size:12px;font-weight:700;fill:var(--black);text-anchor:middle}
-.lbl-x{font-size:12px;fill:var(--gray-400);text-anchor:middle;font-weight:500}
-.lbl-y{font-size:12px;fill:var(--gray-400);text-anchor:end}
-.lbl-y2{font-size:12px;fill:var(--gray-400);text-anchor:start}
-.leyenda{display:flex;gap:20px;justify-content:center;margin-top:6px;flex-wrap:wrap}
-.leyenda span{font-size:13px;color:var(--gray-600);font-weight:500;display:flex;
-  align-items:center;gap:7px}
-.sw{width:13px;height:9px;border-radius:0;display:inline-block}
-.sw.y{background:var(--yellow)}
-.sw.k{background:var(--black);height:3px}
-.sw.g{background:var(--gray-400);height:3px}
-.sw.a{background:rgba(255,212,0,.35)}
-.sw.gg{background:var(--gray-400);height:3px}
-#tip,#tip2{position:absolute;border-radius:var(--radius-sm);
-  padding:9px 12px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .12s;
-  white-space:nowrap;z-index:5;font-weight:300;line-height:1.5}
-#tip b,#tip2 b{color:var(--accent-fg);font-weight:700}
-#tip .t,#tip2 .t{font-weight:700;color:var(--fg);display:block;margin-bottom:3px}
-
-/* ---- previews ---- */
-.prev-grid{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start}
-.shots{display:flex;gap:14px}
-.shot{border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;
-  background:var(--white)}
-.shot img{display:block;width:100%;height:auto}
-.shot figcaption{font-size:var(--fs-body-min);color:var(--gray-400);text-align:center;padding:7px 4px;
-  font-weight:600;border-top:1px solid var(--gray-100)}
-.feed{width:230px} .story{width:150px}
-.ad-copy{background:var(--gray-50);border-radius:var(--radius-md);padding:18px 20px}
-.ad-copy .ttl{font-size:15px;font-weight:800;margin-bottom:9px}
-.ad-copy p{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
-.cta{display:inline-block;margin-top:14px;background:var(--yellow);color:var(--black);
-  font-size:12px;font-weight:800;padding:8px 18px;border-radius:var(--radius-sm);letter-spacing:.05em}
-.serp{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);
-  padding:18px 20px}
-.serp .patro{font-size:12px;font-weight:700;color:var(--black);margin-bottom:5px}
-.serp .url{font-size:13px;color:var(--gray-600);font-weight:300;margin-bottom:3px}
-.serp .tit{font-size:16px;color:#1a0dab;font-weight:500;margin-bottom:4px;line-height:1.3}
-.serp .desc{font-size:12.5px;color:var(--gray-600);font-weight:300}
-.tag{display:inline-block;background:var(--yellow-light);color:#7A5C00;font-size:12px;
-  font-weight:600;padding:5px 12px;border-radius:999px;margin:0 6px 7px 0}
-
-/* Enmarcada con el borde en acento completo, como .marco del sistema: la
-   barra lateral gruesa se lee como pestana suelta. */
-.nota{background:var(--yellow-light);border:1px solid var(--accent);
-  border-radius:var(--radius-sm);padding:16px 20px;font-size:13px;
-  color:#5E4A16;font-weight:400;margin-top:16px}
-.nota b{color:var(--black);font-weight:700}
-
-/* El fondo lo pinta el suelo declarado, no una regla a mano. */
-.cierre{border-radius:var(--radius-xl);padding:38px 40px}
-.cierre h2{color:var(--fg-muted);margin-bottom:16px}
-.cierre p{font-size:13.5px;color:var(--fg-muted);font-weight:400;margin-bottom:14px;max-width:88ch}
-.cierre p:last-child{margin-bottom:0}
-.cierre b{color:var(--accent-fg);font-weight:700}
-
-footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
-  font-size:var(--fs-body-min);color:var(--gray-400);font-weight:300}
-:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
-@media (max-width:980px){
-  .grid-2,.grid-3,.prev-grid{grid-template-columns:1fr}h1{font-size:32px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-
-/* @movil:inicio */
-/* Colapso para telefono. Se escribe solo para los contenedores
-   que MIDIERON desbordamiento a 390px, no para todas las
-   rejillas del documento. El escritorio no se toca. */
-@media (max-width:560px){
-  .shots{flex-wrap:wrap}
-}
-/* @movil:fin */
-</style>
-<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="stylesheet" href="../assets/ds/fonts.css">
+<link rel="stylesheet" href="../assets/ds/tokens.css">
+<link rel="stylesheet" href="../assets/ds-doc/adcom-doc.css">
+<link rel="icon" type="image/png" href="../assets/favicon-adcom.png">
+<link rel="apple-touch-icon" href="../assets/ds/logos/apple-touch-icon.png">
 </head>
-<body>
+<body class="doc">
 
-<section class="portada">
-  <div class="portada-wrap">
-  <div class="portada-copy">
-    <span class="portada-kicker">U. Católica · Cierre</span>
+<div class="doc-bar"><div class="doc-in"><img src="../assets/ds/logos/adcom-mark.png" alt="Adcom" width="30"><span>Cierre Maestría en Gestión Económica</span></div></div>
+
+<header class="doc-cover">
+  <div class="doc-in">
+    <span class="doc-kicker">U. Católica · Cierre</span>
     <h1>Maestría en Gestión Económica y <em>Evaluación de Impacto</em></h1>
-    <p class="portada-lede">Universidad Católica de Colombia. Periodo del 6 de julio al 3 de septiembre de 2026 · Meta Ads y
+    <p class="doc-lede">Universidad Católica de Colombia. Periodo del 6 de julio al 3 de septiembre de 2026 · Meta Ads y
     Google Ads · Lanzamiento del programa. <b>Campaña finalizada el 3 de septiembre.</b></p>
-    <dl class="portada-cifras">
-      <div>
+
+    <dl class="doc-cifras">
+<div>
         <dt>Inversión ejecutada</dt>
         <dd>10.644.545<small><b>67,8%</b> de 15.700.000</small></dd>
       </div>
@@ -216,8 +40,8 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
       </div>
     </dl>
   </div>
-  </div>
-</section>
+</header>
+
 
 <div class="wrap">
 
@@ -248,7 +72,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   <td class="prog">Google Ads<span class="sub">Búsqueda y generación de demanda</span></td>
   <td class="n">10.700.000</td>
   <td class="n">4.070.034</td>
-  <td class="n t-med">38%</td>
+  <td class="n t-med"><span class="est">38%</span></td>
   <td class="n">204</td>
   <td class="n">53,2</td>
   <td class="n">52.451</td>
@@ -258,7 +82,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   <td class="prog">Meta Lead Ads<span class="sub">Captación directa de leads — formularios nativos en Instagram/Facebook</span></td>
   <td class="n">5.000.000</td>
   <td class="n">6.574.511</td>
-  <td class="n t-ok">131%</td>
+  <td class="n t-ok"><span class="est">131%</span></td>
   <td class="n">111</td>
   <td class="n">142,0</td>
   <td class="n">45.000</td>
@@ -382,7 +206,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
   interés declarado en formación de posgrado y economía.</p>
   <div class="grid-2">
     <article class="card">
-      <h3 style="font-size:15px;font-weight:800;margin-bottom:14px">Segmentación en Meta</h3>
+      <h3 style="margin-bottom:14px">Segmentación en Meta</h3>
       <table style="font-size:var(--fs-body-min)">
         <tbody>
           <tr><td class="prog" style="width:44%">Objetivo de optimización</td>
@@ -393,11 +217,11 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
           <td>Activa</td></tr>
         </tbody>
       </table>
-      <p style="font-size:var(--fs-body-min);color:var(--gray-400);font-weight:600;margin:18px 0 10px">Capas de interés</p>
+      <p style="font-size:var(--fs-body-min);color:var(--gray-400);font-weight:500;margin:18px 0 10px">Capas de interés</p>
       <div><span class="tag">Economía (economía)</span><span class="tag">Educación de posgrado (educación superior)</span><span class="tag">Educación superior (educación)</span><span class="tag">Maestría (educación superior)</span><span class="tag">Universidad (educación superior)</span><span class="tag">Universidad privada (educación superior)</span></div>
     </article>
     <article class="card">
-      <h3 style="font-size:15px;font-weight:800;margin-bottom:8px">Estrategia de palabras clave</h3>
+      <h3 style="margin-bottom:8px">Estrategia de palabras clave</h3>
       <p class="detalle">Las 15 palabras clave cubren tres frentes: la
       <b>consulta de marca</b> de la Universidad, el <b>nombre exacto</b> del programa y la
       <b>temática</b> de evaluación de impacto y proyectos. Todas en concordancia amplia, para
@@ -595,6 +419,7 @@ footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
 </footer>
 
 </div>
+<div class="doc-foot"><div class="doc-in">Adcom · Brand Group</div></div>
 <script>
 const DATOS = [{"s": "6 jul", "inv": 894074, "l": 25.0, "cpl": 35763, "ac": 25.0, "meta": 34.9, "x": 103.1, "fbl": 25.0, "ggl": 0.0, "fbcpl": 35763, "ggcpl": 0}, {"s": "13 jul", "inv": 770849, "l": 12.0, "cpl": 64237, "ac": 37.0, "meta": 69.8, "x": 189.3, "fbl": 12.0, "ggl": 0.0, "fbcpl": 64237, "ggcpl": 0}, {"s": "20 jul", "inv": 442445, "l": 7.0, "cpl": 63206, "ac": 44.0, "meta": 104.7, "x": 275.6, "fbl": 7.0, "ggl": 0.0, "fbcpl": 63206, "ggcpl": 0}, {"s": "27 jul", "inv": 520211, "l": 9.0, "cpl": 57801, "ac": 53.0, "meta": 139.6, "x": 361.8, "fbl": 8.0, "ggl": 1.0, "fbcpl": 55250, "ggcpl": 78209}, {"s": "3 ago", "inv": 1106215, "l": 18.0, "cpl": 61456, "ac": 71.0, "meta": 174.4, "x": 448.0, "fbl": 13.0, "ggl": 5.0, "fbcpl": 60097, "ggcpl": 64992}, {"s": "10 ago", "inv": 2281465, "l": 33.5, "cpl": 68103, "ac": 104.5, "meta": 209.3, "x": 534.2, "fbl": 17.0, "ggl": 16.5, "fbcpl": 83933, "ggcpl": 51794}, {"s": "17 ago", "inv": 1844605, "l": 25.5, "cpl": 72337, "ac": 130.0, "meta": 244.2, "x": 620.4, "fbl": 14.0, "ggl": 11.5, "fbcpl": 59425, "ggcpl": 88057}, {"s": "24 ago", "inv": 1846204, "l": 39.3, "cpl": 46977, "ac": 169.3, "meta": 279.1, "x": 706.7, "fbl": 26.0, "ggl": 13.3, "fbcpl": 25377, "ggcpl": 89202}, {"s": "31 ago", "inv": 938477, "l": 26.0, "cpl": 36095, "ac": 195.2, "meta": 314.0, "x": 792.9, "fbl": 20.0, "ggl": 6.0, "fbcpl": 16263, "ggcpl": 102201}];
 

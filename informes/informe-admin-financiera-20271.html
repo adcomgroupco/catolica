@@ -1,219 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f6f2">
 <title>Administración Financiera 2027-1 · Católica</title>
-<link rel="stylesheet" href="../assets/css/adcom-tokens.css">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@500;600;700;800&display=swap">
+<link rel="icon" type="image/png" href="../assets/favicon-adcom.png">
+<link rel="apple-touch-icon" href="../assets/ds/logos/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/ds/fonts.css">
+<link rel="stylesheet" href="../assets/ds/tokens.css">
+<link rel="stylesheet" href="../assets/ds/bundle.css">
+<link rel="stylesheet" href="../assets/ds-doc-b/adcom-doc-b.css">
 <style>
-:root {
-  --black:#050505; --white:#fcfcfa; --yellow:var(--accent); --yellow-light:#FFF8E1;
-  --gray-50:var(--ground); --gray-100:var(--sunken); --gray-200:var(--rule);
-  --gray-400:var(--fg-muted); --gray-600:var(--fg-secondary);
- --radius-md:var(--radius); --radius-lg:var(--radius); --radius-xl:var(--radius);
-  --red:var(--neg); --green:var(--pos)
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--black);
-  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1180px;margin:0 auto;padding:32px 28px 80px}
-
-.hero{background:var(--black);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:34px}
-
-
-/* El unico h1 del documento es el de la portada, y lo resuelve el
-   componente del sistema. Esta regla venia del hero oscuro viejo. */
-
-
-
-
-
-
-
-
-
-
-
-section{margin-bottom:38px}
-h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
-.intro{font-size:13.5px;color:var(--gray-600);font-weight:300;max-width:82ch;margin-bottom:20px}
-
-/* La tabla va abierta, como .table-wrap del sistema: sin caja ni
-   esquina redonda. La estructura la da el encabezado. */
-.tbl{background:none;border:0}
-.scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px}
-/* Encabezado de tabla como el del sistema: sin relleno oscuro, en
-   --fg-muted y con una regla fuerte debajo. El relleno negro con texto
-   en rol daba 1.00:1 en papel, porque --fg ahi es casi negro. */
-th{background:none;color:var(--fg-muted);font-weight:700;font-size:12px;padding:0 14px 12px 0;
-  text-align:left;white-space:nowrap;border-bottom:1px solid var(--rule-strong)}
-th.n{text-align:right}
-th.grp{background:none;color:var(--accent-fg);text-align:center;
-  border-left:1px solid var(--rule)}
-td{padding:12px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);font-weight:300}
-tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:var(--gray-50)}
-td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-td.prog{color:var(--black);font-weight:600}
-td.prog .sub{display:block;font-size:12px;color:var(--gray-400);font-weight:300;margin-top:2px;max-width:var(--measure)}
-td.fuerte{color:var(--black);font-weight:700}
-td.t-ok{color:var(--pos);font-weight:700}
-td.t-med{color:var(--accent-fg);font-weight:700}
-tr.total td{background:var(--yellow);color:var(--black);font-weight:800;border-bottom:none}
-
-.card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);
-  padding:24px 22px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.mini .dato{font-size:29px;font-weight:900;color:var(--accent-fg);line-height:1;display:block;margin-bottom:9px;letter-spacing:-.02em}
-.mini h4{font-size:13.5px;font-weight:800;margin-bottom:7px}
-.mini p{font-size:12.5px;color:var(--gray-600);font-weight:300}
-.mini p b{color:var(--black);font-weight:700}
-.sub-h{font-size:16px;font-weight:800;margin:26px 0 14px;max-width:var(--measure)}
-tr.destacada td{background:var(--yellow-light)}
-tr.destacada td b{color:var(--black);font-weight:700}
-.acc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.ico{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--black);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ico svg{width:21px;height:21px}
-.badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.05em}
-.b-ok{background:#E8F5EC;color:var(--pos)}
-.accion h4{font-size:16px;font-weight:800;margin-bottom:8px}
-.pedido{font-size:var(--fs-body-min);color:var(--gray-400);font-style:italic;border-left:2px solid var(--gray-100);
-  padding-left:11px;margin-bottom:14px;line-height:1.5}
-.detalle{font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300;margin-bottom:14px}
-.detalle b{color:var(--black);font-weight:700}
-.next{background:var(--gray-50);border-radius:var(--radius-sm);padding:13px 15px;
-  font-size:var(--fs-body-min);color:var(--gray-600);font-weight:300}
-.next span{display:block;font-size:12px;font-weight:800;color:var(--accent-fg);margin-bottom:5px}
-
-/* ---- pestanas ---- */
-.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-.tab{background:var(--white);border:1px solid var(--gray-200);border-radius:999px;
-  padding:8px 18px;font-family:inherit;font-size:12px;font-weight:600;color:var(--gray-600);
-  cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-.tab:hover{border-color:var(--accent-fg)}
-/* La pestana activa se invierte con los roles del sistema, no con dos
-   colores absolutos: asi tambien imprime bien. */
-.tab[aria-selected="true"]{background:var(--fg);color:var(--ground);border-color:var(--fg)}
-.panel[hidden]{display:none}
-
-/* ---- graficas ---- */
-.chart-box{background:var(--white);border:1px solid var(--gray-200);
-  border-radius:var(--radius-lg);padding:24px 20px 14px;
-  position:relative}
-.chart{width:100%;height:auto;display:block;overflow:visible}
-.rej{stroke:var(--gray-100);stroke-width:1}
-.barra{fill:var(--yellow);transition:fill .15s}
-.barra:hover{fill:#E0A800}
-.linea{fill:none;stroke:var(--black);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
-.linea-meta{fill:none;stroke:var(--gray-400);stroke-width:2;stroke-dasharray:6 5}
-.linea-g{fill:none;stroke:var(--gray-400);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:7 4}
-.pto-g{stroke:var(--gray-400)}
-.area{fill:rgba(255,212,0,.14)}
-.pto{fill:var(--white);stroke:var(--black);stroke-width:2.5}
-.val{font-size:12px;font-weight:700;fill:var(--black);text-anchor:middle}
-.lbl-x{font-size:12px;fill:var(--gray-400);text-anchor:middle;font-weight:500}
-.lbl-y{font-size:12px;fill:var(--gray-400);text-anchor:end}
-.lbl-y2{font-size:12px;fill:var(--gray-400);text-anchor:start}
-.leyenda{display:flex;gap:20px;justify-content:center;margin-top:6px;flex-wrap:wrap}
-.leyenda span{font-size:12px;color:var(--gray-600);font-weight:500;display:flex;
-  align-items:center;gap:7px}
-.sw{width:13px;height:9px;border-radius:0;display:inline-block}
-.sw.y{background:var(--yellow)}
-.sw.k{background:var(--black);height:3px}
-.sw.g{background:var(--gray-400);height:3px}
-.sw.a{background:rgba(255,212,0,.35)}
-.sw.gg{background:var(--gray-400);height:3px}
-#tip,#tip2{position:absolute;border-radius:var(--radius-sm);
-  padding:9px 12px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .12s;
-  white-space:nowrap;z-index:5;font-weight:300;line-height:1.5}
-#tip b,#tip2 b{color:var(--accent-fg);font-weight:700}
-#tip .t,#tip2 .t{font-weight:700;color:var(--fg);display:block;margin-bottom:3px}
-
-/* ---- previews ---- */
-.prev-grid{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start}
-.shots{display:flex;gap:14px}
-.shot{border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;
-  background:var(--white)}
-.shot img{display:block;width:100%;height:auto}
-.shot figcaption{font-size:12px;color:var(--gray-400);text-align:center;padding:7px 4px;
-  font-weight:600;border-top:1px solid var(--gray-100)}
-.feed{width:230px} .story{width:150px}
-.ad-copy{background:var(--gray-50);border-radius:var(--radius-md);padding:18px 20px}
-.ad-copy .ttl{font-size:15px;font-weight:800;margin-bottom:9px}
-.ad-copy p{font-size:12.5px;color:var(--gray-600);font-weight:300}
-.cta{display:inline-block;margin-top:14px;background:var(--yellow);color:var(--black);
-  font-size:12px;font-weight:800;padding:8px 18px;border-radius:var(--radius-sm);letter-spacing:.05em}
-.serp{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);
-  padding:18px 20px}
-.serp .patro{font-size:12px;font-weight:700;color:var(--black);margin-bottom:5px}
-.serp .url{font-size:12px;color:var(--gray-600);font-weight:300;margin-bottom:3px}
-.serp .tit{font-size:16px;color:#1a0dab;font-weight:500;margin-bottom:4px;line-height:1.3}
-.serp .desc{font-size:12.5px;color:var(--gray-600);font-weight:300}
-.tag{display:inline-block;background:var(--yellow-light);color:#7A5C00;font-size:12px;
-  font-weight:600;padding:5px 12px;border-radius:999px;margin:0 6px 7px 0}
-
-.nota{background:var(--yellow-light);border: 1px solid var(--yellow);
-  border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;font-size:var(--fs-body-min);
-  color:#5E4A16;font-weight:300;margin-top:16px}
-.nota b{color:var(--black);font-weight:700}
-
-.cierre{border-radius:var(--radius-xl);padding:38px 40px}
-.cierre h2{color:var(--fg-muted);margin-bottom:16px}
-.cierre p{font-size:13.5px;color:var(--fg-muted);font-weight:300;margin-bottom:14px;max-width:88ch}
-.cierre p:last-child{margin-bottom:0}
-.cierre b{color:var(--accent-fg);font-weight:700}
-
-footer{margin-top:34px;padding-top:20px;border-top:1px solid var(--gray-200);
-  font-size:var(--fs-body-min);color:var(--gray-400);font-weight:300}
-:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
-@media (max-width:980px){
-  .grid-2,.grid-3,.prev-grid{grid-template-columns:1fr}h1{font-size:32px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-.b-prop{background:#FFF3D6;color:#8A5A00}
-.b-info{background:#E8F0FE;color:#1A56DB}
-.funnel{display:flex;flex-direction:column;gap:2px}
-.frow{display:flex;align-items:center;gap:10px}
-.fbar{height:26px;border-radius:var(--radius-sm);background:var(--yellow);display:flex;align-items:center;
-  padding:0 10px;font-size:12px;font-weight:700;color:var(--black);white-space:nowrap}
-.flabel{width:110px;font-size:12px;color:var(--gray-600);font-weight:600;flex-shrink:0}
-.fpct{width:52px;font-size:12px;color:var(--gray-400);text-align:right;flex-shrink:0}
-.adcard{display:flex;gap:16px;align-items:flex-start}
-.adcard img{width:120px;height:120px;object-fit:cover;border-radius:var(--radius);flex-shrink:0;
-  border:1px solid var(--gray-200)}
-.adcard .stats{display:flex;gap:16px;margin-top:8px}
-.adstat{font-size:12px;color:var(--gray-600)}
-.adstat b{display:block;font-size:15px;color:var(--black);font-weight:800}
-.copybox{background:var(--gray-50);border-radius:var(--radius-sm);padding:10px 13px;font-size:12px;
-  color:var(--gray-600);font-weight:300;margin-top:8px;white-space:pre-line}
-.varhead{font-size:12.5px;font-weight:800;color:var(--black);margin-bottom:3px}
-.varbody{font-size:12px;color:var(--gray-600);font-weight:300;margin-bottom:14px}
-
-
-/* @movil:inicio */
-/* Colapso para telefono. Se escribe solo para los contenedores
-   que MIDIERON desbordamiento a 390px, no para todas las
-   rejillas del documento. El escritorio no se toca. */
-@media (max-width:560px){
-  .adcard{flex-wrap:wrap}
-  .stats{flex-wrap:wrap}
-}
-/* @movil:fin */
-
-.barra.b27{fill:var(--fg)}
-.cierre{background:var(--black)}
-.cierre p{color:#cfcec8}.cierre h2{color:#f4f4f1}.cierre b{color:var(--accent)}
-.grid-2,.grid-3{grid-template-columns:repeat(var(--cols,2),minmax(0,1fr))}.grid-3{--cols:3}
-.card,.chart-box,.tbl{min-width:0;max-width:100%}
-.portada-cifras{min-width:0}
-.wrap{padding-inline:clamp(16px,3vw,28px)}
-table.rt{table-layout:auto}
-table.rt th,table.rt td{white-space:normal}
-table.rt td.n{white-space:nowrap}
+.card,.chart-box,.tbl{min-width:0;max-width:100%}.portada-cifras{min-width:0}
+table.rt{table-layout:auto}table.rt th,table.rt td{white-space:normal}table.rt td.n{white-space:nowrap}
 .mock-row{display:grid;grid-template-columns:minmax(0,340px) minmax(0,230px) minmax(0,1fr);gap:24px;align-items:start}
 .mock{margin:0}
 .mock figcaption{font-size:12px;color:var(--gray-400);font-weight:600;text-align:center;margin-top:8px}
@@ -291,7 +88,7 @@ table.rt td.n{white-space:nowrap}
 .ld-bar i{width:9px;height:9px;border-radius:50%;background:#444;flex:none}
 .ld-url{flex:1;min-width:0;background:#0d0d0d;color:#aaa;border-radius:999px;padding:4px 12px;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--fuente-mono)}
 .ld-chip{font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 10px;background:#ffc72a;color:#12304f;white-space:nowrap}
-.ld{font-family:'Montserrat',ui-sans-serif,-apple-system,sans-serif;color:#10233a;position:relative;line-height:1.45}
+.ld{font-family:Inter,system-ui,sans-serif;color:#10233a;position:relative;line-height:1.45}
 .ld-head{display:flex;justify-content:center;padding:10px 16px;background:#1b3a63;border-bottom:1px solid rgba(255,255,255,.14)}
 .ld-head img{height:40px;width:auto}
 .ld-hero{position:relative;color:#fff;background:#1b3a63;overflow:hidden}
@@ -349,14 +146,23 @@ table.rt td.n{white-space:nowrap}
 .ld-foot{font-size:11.5px;color:var(--gray-400);padding:9px 12px;border-top:1px solid var(--gray-100);background:var(--white)}
 .ld [hidden]{display:none!important}
 @media (max-width:760px){.ld-in{grid-template-columns:minmax(0,1fr);padding:22px 18px}.ld-bul,.ld-opts{grid-template-columns:1fr}.ld-typ{padding:26px 18px}}
+
+.paso.fin{background:var(--sumi)}.paso.fin .pn{color:var(--washi)}
+.ab em{background:var(--sumi);color:var(--washi)}.btns span{background:var(--lima);color:var(--sumi)}
+.barra{fill:var(--yellow)}.barra:hover{fill:#a8a497}.sw.y{background:var(--yellow)}.area{fill:rgba(20,20,20,.06)}
+.pn{color:var(--tinta-secundaria)}.next span{color:var(--sumi)}
+.ld-chip,.ld-pill{white-space:nowrap}
+@media (max-width:640px){table.rt tr.total{background:var(--crema)}.old-pair{grid-template-columns:1fr .5625fr}}
+
 </style>
-<link rel="icon" type="image/png" href="data:image/png;base64,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">
 </head>
 <body>
+<header class="db-bar"><div class="db-bar__in"><a class="db-brand" href="../index.html" aria-label="Adcom, inicio"><img src="../assets/ds/logos/adcom-mark.png" alt="Adcom"></a><span class="db-sep"></span><span class="db-name">Católica · Administración Financiera 2027-1</span></div></header>
 
 <section class="portada" data-roles="tinta"><div class="portada-wrap"><div class="portada-copy">
   <span class="portada-kicker">U. Católica &middot; Seguimiento 2027-1</span>
-  <h1>Especialización en <em>Administración Financiera</em></h1>
+  <p class="db-doc">Especialización en Administración Financiera</p>
+  <h1>El costo por lead <span class="db-line">bajó 45%</span> frente a 2026-3.</h1>
   <p class="portada-lede">Universidad Católica de Colombia. Resultados del periodo 2026-3 y avance de 2027-1, Meta Ads y Google Ads. <b>Datos al 19 de octubre de 2026.</b></p>
   <dl class="portada-cifras">
     <div><dt>Inversión 2027-1</dt><dd>$1.401.206<small>Meta <b>$722.699</b> &middot; Google <b>$678.507</b></small></dd></div>
@@ -671,5 +477,6 @@ $('ld-form').addEventListener('submit',function(e){e.preventDefault();st.v='typ'
 render();
 })();
 </script>
+<div class="db-foot"><div class="db-foot__in"><span>Católica · Especialización en Administración Financiera · Datos al 19 de octubre de 2026</span><span>Adcom · Brand Group</span></div></div>
 </body>
 </html>
